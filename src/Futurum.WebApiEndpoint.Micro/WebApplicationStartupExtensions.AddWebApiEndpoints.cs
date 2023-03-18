@@ -1,0 +1,54 @@
+using Asp.Versioning;
+
+using Futurum.Microsoft.Extensions.DependencyInjection;
+
+using Microsoft.Extensions.Options;
+
+using Swashbuckle.AspNetCore.SwaggerGen;
+
+namespace Futurum.WebApiEndpoint.Micro;
+
+public static partial class WebApplicationStartupExtensions
+{
+    /// <summary>
+    /// Adds services for WebApiEndpoints
+    /// </summary>
+    public static IServiceCollection AddWebApiEndpoints(this IServiceCollection serviceCollection, WebApiEndpointConfiguration configuration) =>
+        serviceCollection.AddWebApiEndpoints<WebApiVersionConfigurationService>(configuration);
+
+    /// <summary>
+    /// Adds services for WebApiEndpoints
+    /// <para>Allowing you to provide your own <see cref="IWebApiVersionConfigurationService"/></para>
+    /// </summary>
+    public static IServiceCollection AddWebApiEndpoints<TWebApiVersionConfigurationService>(this IServiceCollection serviceCollection, WebApiEndpointConfiguration configuration)
+        where TWebApiVersionConfigurationService : class, IWebApiVersionConfigurationService, new()
+    {
+        serviceCollection.AddEndpointsApiExplorer();
+        serviceCollection.AddSwaggerGen();
+        
+        serviceCollection.AddSingleton(configuration);
+
+        serviceCollection.RegisterModule<FuturumWebApiEndpointMicroModule>();
+
+        var webApiVersionConfigurationService = new TWebApiVersionConfigurationService();
+
+        serviceCollection.AddApiVersioning(webApiVersionConfigurationService, configuration, configuration.DefaultWebApiEndpointVersion);
+
+        return serviceCollection;
+    }
+
+    private static IServiceCollection AddApiVersioning(this IServiceCollection serviceCollection, IWebApiVersionConfigurationService webApiVersionConfigurationService,
+                                                       WebApiEndpointConfiguration configuration, ApiVersion defaultWebApiVersion)
+    {
+        serviceCollection.AddSingleton<IConfigureOptions<SwaggerGenOptions>, WebApiOpenApiSwaggerOptions>();
+
+        serviceCollection.AddSingleton<IWebApiOpenApiVersionConfigurationService, WebApiOpenApiVersionConfigurationService>();
+        serviceCollection.AddSingleton<IWebApiOpenApiVersionUIConfigurationService, WebApiOpenApiVersionUIConfigurationService>();
+
+        serviceCollection.AddApiVersioning(options => webApiVersionConfigurationService.ConfigureApiVersioning(options, defaultWebApiVersion))
+                         .AddApiExplorer(options => webApiVersionConfigurationService.ConfigureApiExplorer(options, configuration))
+                         .EnableApiVersionBinding();
+
+        return serviceCollection;
+    }
+}

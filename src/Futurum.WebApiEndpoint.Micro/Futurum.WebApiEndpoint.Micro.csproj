@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <OutputType>Library</OutputType>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageId>Futurum.WebApiEndpoint.Micro</PackageId>
+        <PackageIcon>dotnet-logo.png</PackageIcon>
+        <Description>A dotnet library that allows you to build WebApiEndpoints using a vertical slice architecture approach. Built on dotnet 7 and minimal apis.</Description>
+        <PackageProjectUrl>https://www.futurum.dev/projects/dotnet-futurum.html</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\assets\dotnet-logo.png" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <DocumentationFile>bin\Debug\net7.0\Futurum.WebApiEndpoint.Micro.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <DocumentationFile>bin\Release\net7.0\Futurum.WebApiEndpoint.Micro.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Asp.Versioning.Http" Version="7.0.0" />
+        <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.0.0" />
+        <PackageReference Include="FluentValidation" Version="11.5.1" />
+        <PackageReference Include="Futurum.Core" Version="1.0.14" />
+        <PackageReference Include="Futurum.Microsoft.Extensions.DependencyInjection" Version="1.0.3" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\Futurum.WebApiEndpoint.Micro.Generator\bin\$(Configuration)\netstandard2.0\Futurum.WebApiEndpoint.Micro.Generator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    </ItemGroup>
+
+</Project>
