@@ -5,10 +5,6 @@ namespace Futurum.WebApiEndpoint.Micro.Sample.Todo;
 [WebApiEndpoint("api/todos", "todos")]
 public class TodoApiWebApiEndpoint : IWebApiEndpoint
 {
-    public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
-    {
-    }
-
     public void Register(IEndpointRouteBuilder builder)
     {
         builder.MapGet("/", GetAllHandler)

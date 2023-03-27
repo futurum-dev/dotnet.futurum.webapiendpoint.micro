@@ -22,7 +22,9 @@ public interface IWebApiEndpoint
     /// <summary>
     /// Configure the <see cref="RouteGroupBuilder"/>, can be individually configured for each <see cref="WebApiEndpointVersion"/>
     /// </summary>
-    void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion);
+    void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
+    {
+    }
 
     /// <summary>
     /// Register RouteEndpoint(s) to the IEndpointRouteBuilder

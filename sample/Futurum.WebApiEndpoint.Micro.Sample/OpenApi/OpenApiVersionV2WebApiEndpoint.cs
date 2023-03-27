@@ -6,10 +6,6 @@ namespace Futurum.WebApiEndpoint.Micro.Sample.OpenApi;
 [WebApiEndpointVersions.V2_0]
 public class OpenApiVersionV2WebApiEndpoint : IWebApiEndpoint
 {
-    public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
-    {
-    }
-
     public void Register(IEndpointRouteBuilder builder)
     {
         builder.MapGet("/", GetHandler);

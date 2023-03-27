@@ -20,17 +20,17 @@ public static partial class WebApplicationStartupExtensions
     /// Adds services for WebApiEndpoints
     /// <para>Allowing you to provide your own <see cref="IWebApiVersionConfigurationService"/></para>
     /// </summary>
-    public static IServiceCollection AddWebApiEndpoints<TWebApiVersionConfigurationService>(this IServiceCollection serviceCollection, WebApiEndpointConfiguration configuration)
-        where TWebApiVersionConfigurationService : class, IWebApiVersionConfigurationService, new()
+    public static IServiceCollection AddWebApiEndpoints<TVersionConfigurationService>(this IServiceCollection serviceCollection, WebApiEndpointConfiguration configuration)
+        where TVersionConfigurationService : class, IWebApiVersionConfigurationService, new()
     {
         serviceCollection.AddEndpointsApiExplorer();
         serviceCollection.AddSwaggerGen();
-        
+
         serviceCollection.AddSingleton(configuration);
 
         serviceCollection.RegisterModule<FuturumWebApiEndpointMicroModule>();
 
-        var webApiVersionConfigurationService = new TWebApiVersionConfigurationService();
+        var webApiVersionConfigurationService = new TVersionConfigurationService();
 
         serviceCollection.AddApiVersioning(webApiVersionConfigurationService, configuration, configuration.DefaultWebApiEndpointVersion);
 
@@ -42,8 +42,10 @@ public static partial class WebApplicationStartupExtensions
     {
         serviceCollection.AddSingleton<IConfigureOptions<SwaggerGenOptions>, WebApiOpenApiSwaggerOptions>();
 
-        serviceCollection.AddSingleton<IWebApiOpenApiVersionConfigurationService, WebApiOpenApiVersionConfigurationService>();
-        serviceCollection.AddSingleton<IWebApiOpenApiVersionUIConfigurationService, WebApiOpenApiVersionUIConfigurationService>();
+        serviceCollection.AddWebApiEndpointOpenApiVersionConfigurationService<WebApiOpenApiVersionConfigurationService>();
+        serviceCollection.AddWebApiEndpointOpenApiVersionUIConfigurationService<WebApiOpenApiVersionUIConfigurationService>();
+
+        serviceCollection.AddWebApiEndpointMetadataStrategy<WebApiEndpointMetadataAttributeStrategy>();
 
         serviceCollection.AddApiVersioning(options => webApiVersionConfigurationService.ConfigureApiVersioning(options, defaultWebApiVersion))
                          .AddApiExplorer(options => webApiVersionConfigurationService.ConfigureApiExplorer(options, configuration))

@@ -3,10 +3,6 @@ namespace Futurum.WebApiEndpoint.Micro.Sample.Blog;
 [WebApiEndpoint("blog")]
 public class BlogWebApiEndpoint : IWebApiEndpoint
 {
-    public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
-    {
-    }
-
     public void Register(IEndpointRouteBuilder builder)
     {
         builder.MapGet("/", GetHandler);

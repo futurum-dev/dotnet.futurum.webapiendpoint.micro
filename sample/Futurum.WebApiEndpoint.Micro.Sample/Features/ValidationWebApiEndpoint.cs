@@ -7,10 +7,6 @@ namespace Futurum.WebApiEndpoint.Micro.Sample.Features;
 [WebApiEndpoint("validation")]
 public class ValidationWebApiEndpoint : IWebApiEndpoint
 {
-    public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
-    {
-    }
-
     public void Register(IEndpointRouteBuilder builder)
     {
         builder.MapPost("/fluent-validation", FluentValidationHandler);

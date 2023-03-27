@@ -3,10 +3,6 @@ namespace Futurum.WebApiEndpoint.Micro.Sample.Features;
 [WebApiEndpoint("data-collection", "feature")]
 public class DataCollectionWebApiEndpoint : IWebApiEndpoint
 {
-    public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
-    {
-    }
-
     public void Register(IEndpointRouteBuilder builder)
     {
         builder.MapGet("/", GetHandler);

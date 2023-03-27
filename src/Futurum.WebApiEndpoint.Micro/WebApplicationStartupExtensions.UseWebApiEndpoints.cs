@@ -1,5 +1,3 @@
-using System.Reflection;
-
 using Asp.Versioning;
 using Asp.Versioning.Builder;
 
@@ -15,38 +13,23 @@ public static partial class WebApplicationStartupExtensions
         var webApiEndpoints = app.Services.GetServices<IWebApiEndpoint>();
 
         var configuration = app.Services.GetService<WebApiEndpointConfiguration>()!;
+        
+        var metadataStrategy = app.Services.GetService<IWebApiEndpointMetadataStrategy>()!;
 
         foreach (var webApiEndpoint in webApiEndpoints)
         {
-            var webApiVersionAttributes = webApiEndpoint.GetType().GetCustomAttributes<WebApiEndpointVersionAttribute>();
-
-            if (!webApiVersionAttributes.Any())
+            foreach (var webApiEndpointMetadata in metadataStrategy.Get(configuration, webApiEndpoint))
             {
-                CreateWebApiEndpoint(app, webApiEndpoint, configuration, configuration.DefaultWebApiEndpointVersion, null);
-            }
-            else
-            {
-                foreach (var webApiVersionAttribute in webApiVersionAttributes)
-                {
-                    CreateWebApiEndpoint(app, webApiEndpoint, configuration, configuration.DefaultWebApiEndpointVersion, webApiVersionAttribute);
-                }
+                CreateWebApiEndpoint(app, webApiEndpoint, configuration, webApiEndpointMetadata.WebApiEndpointVersion, webApiEndpointMetadata.PrefixRoute, webApiEndpointMetadata.Tag);
             }
         }
 
         return app;
     }
 
-    private static void CreateWebApiEndpoint(WebApplication app, IWebApiEndpoint webApiEndpoint, WebApiEndpointConfiguration configuration,
-                                             WebApiEndpointVersion defaultWebApiEndpointVersion, WebApiEndpointVersionAttribute? webApiVersionAttribute)
+    private static void CreateWebApiEndpoint(WebApplication app, IWebApiEndpoint webApiEndpoint, WebApiEndpointConfiguration configuration, WebApiEndpointVersion webApiEndpointVersion, string route,
+                                             string tag)
     {
-        var webApiEndpointAttribute = webApiEndpoint.GetType().GetCustomAttribute<WebApiEndpointAttribute>();
-
-        var tag = GetTag(webApiEndpointAttribute);
-
-        var webApiEndpointVersion = GetVersion(defaultWebApiEndpointVersion, webApiVersionAttribute);
-
-        var route = GetRoute(configuration, webApiEndpointAttribute);
-
         var routeGroupBuilder = CreateRouteGroupBuilder(app, configuration, webApiEndpointVersion, route, tag);
 
         webApiEndpoint.Configure(routeGroupBuilder, webApiEndpointVersion);
@@ -84,31 +67,4 @@ public static partial class WebApplicationStartupExtensions
 
         return app.NewVersionedApi($"{configuration.VersionPrefix}{formattedVersion}");
     }
-
-    private static string GetRoute(WebApiEndpointConfiguration configuration, WebApiEndpointAttribute? webApiEndpointAttribute)
-    {
-        var prefixRoute = webApiEndpointAttribute?.PrefixRoute ?? string.Empty;
-
-        return $"{configuration.VersionPrefix}{{version:apiVersion}}/{prefixRoute}";
-    }
-
-    private static string GetTag(WebApiEndpointAttribute? webApiEndpointAttribute)
-    {
-        if (webApiEndpointAttribute?.Group != null)
-        {
-            return webApiEndpointAttribute.Group;
-        }
-
-        if (webApiEndpointAttribute?.PrefixRoute != null)
-        {
-            return webApiEndpointAttribute.PrefixRoute;
-        }
-
-        return string.Empty;
-    }
-
-    private static WebApiEndpointVersion GetVersion(WebApiEndpointVersion webApiEndpointVersion, WebApiEndpointVersionAttribute? webApiVersionAttribute) =>
-        webApiVersionAttribute != null
-            ? new WebApiEndpointVersion(webApiVersionAttribute.MajorVersion, webApiVersionAttribute.MinorVersion)
-            : webApiEndpointVersion;
 }

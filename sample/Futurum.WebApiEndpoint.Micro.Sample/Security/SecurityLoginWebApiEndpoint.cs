@@ -9,10 +9,6 @@ namespace Futurum.WebApiEndpoint.Micro.Sample.Security;
 [WebApiEndpoint("security")]
 public class SecurityLoginWebApiEndpoint : IWebApiEndpoint
 {
-    public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
-    {
-    }
-
     public void Register(IEndpointRouteBuilder builder)
     {
         builder.MapGet("login", LoginHandler);
