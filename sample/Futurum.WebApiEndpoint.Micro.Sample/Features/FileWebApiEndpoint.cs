@@ -6,10 +6,6 @@ namespace Futurum.WebApiEndpoint.Micro.Sample.Features;
 [WebApiEndpoint(prefixRoute: "file", group: "feature")]
 public class FileWebApiEndpoint : IWebApiEndpoint
 {
-    public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
-    {
-    }
-
     public void Register(IEndpointRouteBuilder builder)
     {
         builder.MapPost("upload", UploadHandler)

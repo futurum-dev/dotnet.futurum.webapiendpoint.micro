@@ -9,44 +9,37 @@ A dotnet library that allows you to build WebApiEndpoints using a vertical slice
 
 - [x] Vertical Slice Architecture, giving you the ability to add new features without changing existing ones
 - [x] Autodiscovery of WebApiEndpoint, based on Source Generators
+- [x] [Easy setup](#easy-setup)
 - [x] Full support and built on top of [minimal apis](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0)
 - [x] Full support for OpenApi
-- [x] Full support for TypedResults
-- [x] Full compatibility with [Futurum.Core](https://www.nuget.org/packages/Futurum.Core)
-  - [x] [WebApiResultsExtensions.ToWebApi](#webapiresultsextensionstowebapi)
-- [x] Supports uploading file(s) with additional JSON payload
+- [x] Full support for [TypedResults](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0)
+- [x] [Full compatibility](#full-compatibility-with-futurumcore) with [Futurum.Core](https://www.nuget.org/packages/Futurum.Core)
+- [x] [Supports uploading file(s) with additional JSON payload](#uploading-file--s--with-additional-json-payload)
 - [x] Api Versioning baked-in
 - [x] [Built in Validation support](#validation)
   - [x] [Integrated FluentValidation](#fluentvalidationservice)
   - [x] [Integrated DataAnnotations](#dataannotationsservice)
-- [x] [Easy setup](#easy-setup)
 - [x] Built on dotnet 7
 - [x] Built in use of [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) support
 - [x] [Tested solution](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint.micro)
 - [x] [Comprehensive samples](#comprehensive-samples)
+- [x] [Convention Customisation](#convention-customisation)
 
 ## What is a WebApiEndpoint?
 - It's a vertical slice / feature of your application
 - The vertical slice is a self-contained unit of functionality
-- It's a class that inherits implements IWebApiEndpoint
-- They share a route prefix and version
-
-```csharp
-[WebApiEndpoint("weather")]
-```
-- Can have one or many API versions
-
-```csharp
-[WebApiEndpointVersion(1)]
-```
-
+- Collection of WebApis that share a route prefix and version
 
 ## Easy setup
+- [x] Add the [NuGet package](https://www.nuget.org/packages/futurum.webapiendpoint.micro) to your project
+- [x] Update *program.cs* as per [here](#programcs)
+- [x] Create a new class that implements *IWebApiEndpoint*
+- [x] Add the *WebApiEndpoint* attribute to the class, if you want to specify a specific *route prefix* and *tag*
+- [x] Add the *WebApiEndpointVersion* attribute to the class, if you want to specify a specific *ApiVersion*
+- [x] Implement the *Register* and add *minimal api* as per usual
 
 ### program.cs
-
 #### AddWebApiEndpoints
-
 Allows you to configure:
 - DefaultApiVersion *(mandatory)*
   - This is used if a specific ApiVersion is not provided for a specific WebApiEndpoint
@@ -124,9 +117,7 @@ app.Run();
 ```
 
 ### IWebApiEndpoint
-
 ### Configure
-
 You can configure the WebApiEndpoint in the *Configure* method
 
 ```csharp
@@ -138,6 +129,24 @@ public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webA
 This allows you to set properties on the RouteGroupBuilder.
 
 You can also configure it differently per ApiVersion.
+
+**NOTE:** this is optional
+
+**NOTE:** this ia a good place to add *EndpointFilter*
+```csharp
+public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
+{
+    groupBuilder.AddEndpointFilter<CustomEndpointFilter>();
+}
+```
+
+**NOTE:** this ia a good place to add *Security*
+```csharp
+public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
+{
+    groupBuilder.RequireAuthorization(Authorization.Permission.Admin);
+}
+```
 
 ### Register
 You can register the WebApiEndpoint in the *Register* method
@@ -159,10 +168,6 @@ public class WeatherWebApiEndpoint : IWebApiEndpoint
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-    public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
-    {
-    }
-
     public void Register(IEndpointRouteBuilder builder)
     {
         builder.MapGet("/", GetHandler);
@@ -180,10 +185,6 @@ public class WeatherWebApiEndpoint : IWebApiEndpoint
 [WebApiEndpoint("bytes", "feature")]
 public class BytesWebApiEndpoint : IWebApiEndpoint
 {
-    public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
-    {
-    }
-
     public void Register(IEndpointRouteBuilder builder)
     {
         builder.MapGet("download", DownloadHandler);
@@ -209,26 +210,6 @@ public class BytesWebApiEndpoint : IWebApiEndpoint
     }
 }
 ```
-
-## Comprehensive samples
-There are examples showing the following:
-- [x] A basic blog CRUD implementation
-- [x] The *ToDo* sample from Damian Edwards [here](https://github.com/DamianEdwards/TrimmedTodo)
-- [x] AsyncEnumerable
-- [x] Bytes file download
-- [x] EndpointFilter on a specific WebApiEndpoint
-- [x] Exception handling
-- [x] [Result](https://docs.futurum.dev/dotnet.futurum.core/result/overview.html) error handling
-- [x] File(s) upload
-- [x] File(s) upload with Payload
-- [x] File download
-- [x] OpenApi version support
-- [x] Security with a basic JWT example on a specific WebApiEndpoint
-- [x] Validation - DataAnnotations and FluentValidation and both combined
-- [x] Weather Forecast
-- [x] Addition project containing WebApiEndpoints
-
-![Futurum.WebApiEndpoint.Micro.Sample-openapi.png](docs%2FFuturum.WebApiEndpoint.Micro.Sample-openapi.png)
 
 ## Validation
 ### ValidationService
@@ -286,10 +267,56 @@ private static Results<Ok<ArticleDto>, ValidationProblem, BadRequest<ProblemDeta
                                     .ToWebApi(context, ToOk, ToValidationProblem);
 ```
 
+## Uploading file(s) with additional JSON payload
+### Upload single file and payload
+Use the *FormFileWithPayload* type to upload a file and a JSON payload
+
+```csharp
+    private static Task<Results<Ok<FileDetailsWithPayloadDto>, BadRequest<ProblemDetails>>> UploadWithPayloadHandler(HttpContext context, FormFileWithPayload<PayloadDto> fileWithPayload)
+    {
+        return Result.TryAsync(Execute, () => "Failed to read file")
+                     .ToWebApiAsync(context, ToOk);
+
+        async Task<FileDetailsWithPayloadDto> Execute()
+        {
+            var tempFile = Path.GetTempFileName();
+            await using var stream = File.OpenWrite(tempFile);
+            await fileWithPayload.File.CopyToAsync(stream);
+
+            return new FileDetailsWithPayloadDto(fileWithPayload.File.FileName, fileWithPayload.Payload.Name);
+        }
+    }
+```
+
+### Upload single file and payload
+Use the *FormFilesWithPayload* type to upload files and a JSON payload
+
+```csharp
+    private static Task<Results<Ok<IEnumerable<FileDetailsWithPayloadDto>>, BadRequest<ProblemDetails>>> UploadsWithPayloadHandler(
+        HttpContext context, FormFilesWithPayload<PayloadDto> filesWithPayload)
+    {
+        return Result.TryAsync(Execute, () => "Failed to read file")
+                     .ToWebApiAsync(context, ToOk);
+
+        async Task<IEnumerable<FileDetailsWithPayloadDto>> Execute()
+        {
+            var fileDetails = new List<FileDetailsWithPayloadDto>();
+
+            foreach (var file in filesWithPayload.Files)
+            {
+                var tempFile = Path.GetTempFileName();
+                await using var stream = File.OpenWrite(tempFile);
+                await file.CopyToAsync(stream);
+
+                fileDetails.Add(new FileDetailsWithPayloadDto(file.FileName, filesWithPayload.Payload.Name));
+            }
+
+            return fileDetails;
+        }
+    }
+```
+
 ## Full compatibility with [Futurum.Core](https://www.nuget.org/packages/Futurum.Core)
-
-### WebApiResultsExtensions.ToWebApi
-
 Comprehensive set of extension methods to transform a [Result](https://docs.futurum.dev/dotnet.futurum.core/result/overview.html) and [Result&lt;T&gt;](https://docs.futurum.dev/dotnet.futurum.core/result/overview.html) to an *TypedResult*.
 
 #### Result&lt;IResult&gt; -> Results&lt;IResult, BadRequest&lt;ProblemDetails&gt;&gt;
@@ -449,4 +476,81 @@ If a *ResultErrorValidation* has occured then it will convert it to a *Validatio
 
 ```csharp
 ToValidationProblem
+```
+
+## Comprehensive samples
+There are examples showing the following:
+- [x] A basic blog CRUD implementation
+- [x] The *ToDo* sample from Damian Edwards [here](https://github.com/DamianEdwards/TrimmedTodo)
+- [x] AsyncEnumerable
+- [x] Bytes file download
+- [x] EndpointFilter on a specific WebApiEndpoint
+- [x] Exception handling
+- [x] [Result](https://docs.futurum.dev/dotnet.futurum.core/result/overview.html) error handling
+- [x] File(s) upload
+- [x] File(s) upload with Payload
+- [x] File download
+- [x] OpenApi version support
+- [x] Security with a basic JWT example on a specific WebApiEndpoint
+- [x] Validation - DataAnnotations and FluentValidation and both combined
+- [x] Weather Forecast
+- [x] Addition project containing WebApiEndpoints
+
+![Futurum.WebApiEndpoint.Micro.Sample-openapi.png](docs/Futurum.WebApiEndpoint.Micro.Sample-openapi.png)
+
+## Convention Customisation
+Although the default conventions are good enough for most cases, you can customise them.
+
+### IWebApiOpenApiVersionConfigurationService
+This is used to get the *OpenApiInfo* for each *WebApiEndpointVersion*.
+
+```csharp
+serviceCollection.AddWebApiEndpointOpenApiVersionConfigurationService<WebApiOpenApiVersionConfigurationService>();
+```
+
+### IWebApiOpenApiVersionUIConfigurationService
+This is used to configure the *OpenApi JSON endpoint* for each *WebApiEndpointVersion*.
+
+```csharp
+serviceCollection.AddWebApiEndpointOpenApiVersionUIConfigurationService<WebApiOpenApiVersionUIConfigurationService>();
+```
+
+### IWebApiVersionConfigurationService
+This is used to configure *ApiVersioning* and *ApiExplorer*.
+
+There is an overload of *AddWebApiEndpoints* that takes a generic type of *IWebApiVersionConfigurationService*.
+```csharp
+builder.Services.AddWebApiEndpoints<CustomWebApiVersionConfigurationService>(
+```
+
+Use this instead
+```csharp
+builder.Services.AddWebApiEndpoints(
+```
+
+### IWebApiEndpointMetadataStrategy
+This is used to get the *metadata* for each *WebApiEndpoint*.
+
+The *metadata* contains:
+- PrefixRoute
+- Tag
+- WebApiEndpointVersion
+
+```csharp
+serviceCollection.AddWebApiEndpointMetadataStrategy<WebApiEndpointMetadataAttributeStrategy>();
+```
+
+The default strategy is *WebApiEndpointMetadataAttributeStrategy*.
+
+#### WebApiEndpointMetadataAttributeStrategy
+This uses the following attributes:
+- WebApiEndpointAttribute - for 'PrefixRoute' and 'Tag'
+- WebApiEndpointVersionAttribute - for 'WebApiEndpointVersion', can have multiple
+
+```csharp
+[WebApiEndpoint("weather")]
+```
+
+```csharp
+[WebApiEndpointVersion(1)]
 ```

@@ -5,10 +5,6 @@ namespace Futurum.WebApiEndpoint.Micro.Sample.Features;
 [WebApiEndpoint("bytes", "feature")]
 public class BytesWebApiEndpoint : IWebApiEndpoint
 {
-    public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
-    {
-    }
-
     public void Register(IEndpointRouteBuilder builder)
     {
         builder.MapGet("download", DownloadHandler);

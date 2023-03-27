@@ -3,10 +3,6 @@ namespace Futurum.WebApiEndpoint.Micro.Sample.Features;
 [WebApiEndpoint(prefixRoute: "error", group: "feature")]
 public class ErrorWebApiEndpoint : IWebApiEndpoint
 {
-    public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
-    {
-    }
-
     public void Register(IEndpointRouteBuilder builder)
     {
         builder.MapGet("exception", ExceptionHandler);
