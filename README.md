@@ -18,7 +18,7 @@ A dotnet library that allows you to build WebApiEndpoints using a vertical slice
 - [x] Api Versioning baked-in
 - [x] [Built in Validation support](#validation)
   - [x] [Integrated FluentValidation](#fluentvalidationservice)
-  - [x] [Integrated DataAnnotations](#dataannotationsservice)
+  - [x] [Integrated DataAnnotations](#dataannotationsvalidationservice)
 - [x] Built on dotnet 7
 - [x] Built in use of [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) support
 - [x] [Tested solution](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint.micro)
@@ -251,8 +251,8 @@ public class ArticleDtoValidator : AbstractValidator<ArticleDto>
 }
 ```
 
-### DataAnnotationsService
-
+### DataAnnotationsValidationService
+Calls DataAnnotations validation
 ```csharp
 IDataAnnotationsValidationService dataAnnotationsValidationService
 ```
@@ -269,7 +269,7 @@ private static Results<Ok<ArticleDto>, ValidationProblem, BadRequest<ProblemDeta
 
 ## Uploading file(s) with additional JSON payload
 ### Upload single file and payload
-Use the *FormFileWithPayload* type to upload a file and a JSON payload
+Use the *FormFileWithPayload* type to upload a single file and a JSON payload
 
 ```csharp
     private static Task<Results<Ok<FileDetailsWithPayloadDto>, BadRequest<ProblemDetails>>> UploadWithPayloadHandler(HttpContext context, FormFileWithPayload<PayloadDto> fileWithPayload)
@@ -288,8 +288,8 @@ Use the *FormFileWithPayload* type to upload a file and a JSON payload
     }
 ```
 
-### Upload single file and payload
-Use the *FormFilesWithPayload* type to upload files and a JSON payload
+### Upload multiple files and payload
+Use the *FormFilesWithPayload* type to upload multiple files and a JSON payload
 
 ```csharp
     private static Task<Results<Ok<IEnumerable<FileDetailsWithPayloadDto>>, BadRequest<ProblemDetails>>> UploadsWithPayloadHandler(
