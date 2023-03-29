@@ -23,8 +23,7 @@ public class FileWebApiEndpoint : IWebApiEndpoint
 
     private static Task<Results<Ok<FileDetailsDto>, BadRequest<ProblemDetails>>> UploadHandler(HttpContext context, IFormFile file)
     {
-        return Result.TryAsync(Execute, () => "Failed to read file")
-                     .ToWebApiAsync(context, ToOk);
+        return RunAsync(Execute, context, ToOk, "Failed to read file");
 
         async Task<FileDetailsDto> Execute()
         {
@@ -38,8 +37,7 @@ public class FileWebApiEndpoint : IWebApiEndpoint
 
     private static Task<Results<Ok<IEnumerable<FileDetailsDto>>, BadRequest<ProblemDetails>>> UploadsHandler(HttpContext context, IFormFileCollection files)
     {
-        return Result.TryAsync(Execute, () => "Failed to read file")
-                     .ToWebApiAsync(context, ToOk);
+        return RunAsync(Execute, context, ToOk, "Failed to read file");
 
         async Task<IEnumerable<FileDetailsDto>> Execute()
         {
@@ -60,8 +58,7 @@ public class FileWebApiEndpoint : IWebApiEndpoint
 
     private static Task<Results<Ok<FileDetailsWithPayloadDto>, BadRequest<ProblemDetails>>> UploadWithPayloadHandler(HttpContext context, FormFileWithPayload<PayloadDto> fileWithPayload)
     {
-        return Result.TryAsync(Execute, () => "Failed to read file")
-                     .ToWebApiAsync(context, ToOk);
+        return RunAsync(Execute, context, ToOk, "Failed to read file");
 
         async Task<FileDetailsWithPayloadDto> Execute()
         {
@@ -76,8 +73,7 @@ public class FileWebApiEndpoint : IWebApiEndpoint
     private static Task<Results<Ok<IEnumerable<FileDetailsWithPayloadDto>>, BadRequest<ProblemDetails>>> UploadsWithPayloadHandler(
         HttpContext context, FormFilesWithPayload<PayloadDto> filesWithPayload)
     {
-        return Result.TryAsync(Execute, () => "Failed to read file")
-                     .ToWebApiAsync(context, ToOk);
+        return RunAsync(Execute, context, ToOk, "Failed to read file");
 
         async Task<IEnumerable<FileDetailsWithPayloadDto>> Execute()
         {
@@ -98,8 +94,7 @@ public class FileWebApiEndpoint : IWebApiEndpoint
 
     private static Results<NotFound, FileStreamHttpResult, BadRequest<ProblemDetails>> DownloadHandler(HttpContext context)
     {
-        return Result.Try(Execute, () => "Failed to read file")
-                     .ToWebApi(context);
+        return Run(Execute, context, "Failed to read file");
 
         Results<NotFound, FileStreamHttpResult> Execute()
         {
