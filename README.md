@@ -527,6 +527,7 @@ There are examples showing the following:
 - [x] File(s) upload with Payload
 - [x] File download
 - [x] OpenApi version support
+- [x] RateLimiting
 - [x] Security with a basic JWT example on a specific WebApiEndpoint
 - [x] Validation - DataAnnotations and FluentValidation and both combined
 - [x] Weather Forecast
@@ -556,12 +557,12 @@ This is used to configure *ApiVersioning* and *ApiExplorer*.
 
 There is an overload of *AddWebApiEndpoints* that takes a generic type of *IWebApiVersionConfigurationService*.
 ```csharp
-builder.Services.AddWebApiEndpoints<CustomWebApiVersionConfigurationService>(
+builder.Services.AddWebApiEndpoints<CustomWebApiVersionConfigurationService>();
 ```
 
 Use this instead
 ```csharp
-builder.Services.AddWebApiEndpoints(
+builder.Services.AddWebApiEndpoints();
 ```
 
 ### IWebApiEndpointMetadataStrategy
