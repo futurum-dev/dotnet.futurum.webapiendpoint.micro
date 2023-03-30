@@ -11,7 +11,7 @@ namespace Futurum.WebApiEndpoint.Micro.Tests;
 public class FormFileWithPayloadTests
 {
     [Fact]
-    public async Task check()
+    public async Task success()
     {
         await using var fileStream = File.OpenRead("./Data/hello-world.txt");
 
@@ -19,7 +19,7 @@ public class FormFileWithPayloadTests
 
         var id = Guid.NewGuid().ToString();
         var payload = new PayloadDto(id);
-        
+
         var payloadJson = JsonSerializer.Serialize(payload, new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
         var httpContext = new DefaultHttpContext();
@@ -37,6 +37,43 @@ public class FormFileWithPayloadTests
         result.File.Length.Should().Be(fileStream.Length);
 
         result.Payload.Name.Should().Be(id);
+    }
+
+    [Fact]
+    public async Task when_Payload_missing_return_null()
+    {
+        await using var fileStream = File.OpenRead("./Data/hello-world.txt");
+
+        var formFile = new FormFile(fileStream, 0, fileStream.Length, "hello-world.txt", "hello-world.txt");
+
+        var httpContext = new DefaultHttpContext();
+        httpContext.Request.Form = new FormCollection(new Dictionary<string, StringValues>(), new FormFileCollection { formFile });
+
+        var services = new ServiceCollection();
+        httpContext.RequestServices = services.BuildServiceProvider();
+
+        var result = await FormFileWithPayload<PayloadDto>.BindAsync(httpContext, null);
+
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task when_File_missing_return_null()
+    {
+        var id = Guid.NewGuid().ToString();
+        var payload = new PayloadDto(id);
+
+        var payloadJson = JsonSerializer.Serialize(payload, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+
+        var httpContext = new DefaultHttpContext();
+        httpContext.Request.Form = new FormCollection(new Dictionary<string, StringValues> { { "payload", payloadJson } }, new FormFileCollection());
+
+        var services = new ServiceCollection();
+        httpContext.RequestServices = services.BuildServiceProvider();
+
+        var result = await FormFileWithPayload<PayloadDto>.BindAsync(httpContext, null);
+
+        result.Should().BeNull();
     }
 
     public record PayloadDto(string Name);

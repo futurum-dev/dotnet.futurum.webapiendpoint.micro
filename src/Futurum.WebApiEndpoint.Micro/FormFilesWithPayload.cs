@@ -23,22 +23,36 @@ public class FormFilesWithPayload<TPayload> : IBindableFromHttpContext<FormFiles
 
         var form = await context.Request.ReadFormAsync();
 
-        var payloadStringValues = form[nameof(Payload).ToLower()].ToString();
-        var payload = JsonSerializer.Deserialize<TPayload>(payloadStringValues, jsonOptions);
+        var payload = GetPayload(form, jsonOptions);
 
-        if (payload == null)
+        var files = GetFiles(form);
+
+        return payload != null && files != null
+            ? new FormFilesWithPayload<TPayload>
+            {
+                Payload = payload,
+                Files = files
+            }
+            : null;
+    }
+
+    private static TPayload? GetPayload(IFormCollection form, JsonSerializerOptions jsonOptions)
+    {
+        if (form.TryGetValue(nameof(Payload).ToLower(), out var payloadStringValues))
         {
-            throw new JsonException($"Failed to deserialize {nameof(Payload).ToLower()}: '{payloadStringValues}' as type '{typeof(TPayload).Name}'");
+            var payloadString = payloadStringValues.ToString();
+            var payload = JsonSerializer.Deserialize<TPayload>(payloadString, jsonOptions);
+
+            return payload;
         }
 
-        var files = form.Files;
-
-        return new FormFilesWithPayload<TPayload>
-        {
-            Payload = payload,
-            Files = files
-        };
+        return default;
     }
+
+    private static IFormFileCollection? GetFiles(IFormCollection form) =>
+        !form.Files.Any()
+            ? null
+            : form.Files;
 
     public static void PopulateMetadata(ParameterInfo parameter, EndpointBuilder builder)
     {

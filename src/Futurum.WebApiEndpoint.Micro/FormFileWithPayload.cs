@@ -23,27 +23,36 @@ public class FormFileWithPayload<TPayload> : IBindableFromHttpContext<FormFileWi
 
         var form = await context.Request.ReadFormAsync();
 
-        var payloadStringValues = form[nameof(Payload).ToLower()].ToString();
-        var payload = JsonSerializer.Deserialize<TPayload>(payloadStringValues, jsonOptions);
+        var payload = GetPayload(form, jsonOptions);
 
-        if (payload == null)
-        {
-            throw new JsonException($"Failed to deserialize {nameof(Payload).ToLower()}: '{payloadStringValues}' as type '{typeof(TPayload).Name}'");
-        }
+        var file = GetFile(form);
 
-        if (!form.Files.Any())
-        {
-            throw new InvalidOperationException("No file found in request");
-        }
-
-        var file = form.Files.Single();
-
-        return new FormFileWithPayload<TPayload>
-        {
-            Payload = payload,
-            File = file
-        };
+        return payload != null && file != null
+            ? new FormFileWithPayload<TPayload>
+            {
+                Payload = payload,
+                File = file
+            }
+            : null;
     }
+
+    private static TPayload? GetPayload(IFormCollection form, JsonSerializerOptions jsonOptions)
+    {
+        if (form.TryGetValue(nameof(Payload).ToLower(), out var payloadStringValues))
+        {
+            var payloadString = payloadStringValues.ToString();
+            var payload = JsonSerializer.Deserialize<TPayload>(payloadString, jsonOptions);
+
+            return payload;
+        }
+
+        return default;
+    }
+
+    private static IFormFile? GetFile(IFormCollection form) =>
+        !form.Files.Any()
+            ? default
+            : form.Files.Single();
 
     public static void PopulateMetadata(ParameterInfo parameter, EndpointBuilder builder)
     {
