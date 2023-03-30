@@ -12,8 +12,7 @@ public class BytesWebApiEndpoint : IWebApiEndpoint
 
     private static Results<NotFound, FileContentHttpResult, BadRequest<ProblemDetails>> DownloadHandler(HttpContext context)
     {
-        return Result.Try(Execute, () => "Failed to read file")
-                     .ToWebApi(context);
+        return Run(Execute, context, "Failed to read file");
 
         Results<NotFound, FileContentHttpResult> Execute()
         {

@@ -7,8 +7,7 @@
 
 A dotnet library that allows you to build WebApiEndpoints using a vertical slice architecture approach. Built on dotnet 7 and minimal apis.
 
-- [x] Vertical Slice Architecture, giving you the ability to add new features without changing existing ones
-- [x] Autodiscovery of WebApiEndpoint, based on Source Generators
+- [x] Vertical Slice Architecture, gives you the ability to add new features without changing existing code
 - [x] [Easy setup](#easy-setup)
 - [x] Full support and built on top of [minimal apis](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0)
 - [x] Full support for OpenApi
@@ -24,6 +23,7 @@ A dotnet library that allows you to build WebApiEndpoints using a vertical slice
 - [x] [Tested solution](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint.micro)
 - [x] [Comprehensive samples](#comprehensive-samples)
 - [x] [Convention Customisation](#convention-customisation)
+- [x] Autodiscovery of WebApiEndpoint, based on Source Generators
 
 ## What is a WebApiEndpoint?
 - It's a vertical slice / feature of your application
@@ -31,12 +31,12 @@ A dotnet library that allows you to build WebApiEndpoints using a vertical slice
 - Collection of WebApis that share a route prefix and version
 
 ## Easy setup
-- [x] Add the [NuGet package](https://www.nuget.org/packages/futurum.webapiendpoint.micro) to your project
+- [x] Add the [NuGet package](https://www.nuget.org/packages/futurum.webapiendpoint.micro) ( futurum.webapiendpoint.micro ) to your project
 - [x] Update *program.cs* as per [here](#programcs)
 - [x] Create a new class that implements *IWebApiEndpoint*
 - [x] Add the *WebApiEndpoint* attribute to the class, if you want to specify a specific *route prefix* and *tag*
 - [x] Add the *WebApiEndpointVersion* attribute to the class, if you want to specify a specific *ApiVersion*
-- [x] Implement the *Register* and add *minimal api* as per usual
+- [x] Implement the *Register* and add *minimal api(s)* as per usual
 
 ### program.cs
 #### AddWebApiEndpoints
@@ -68,6 +68,8 @@ builder.Services.AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpoi
 ```
 
 #### AddWebApiEndpointsFor... (per project containing WebApiEndpoints)
+This will be automatically created by the source generator.
+
 e.g.
 ```csharp
 builder.Services.AddWebApiEndpointsForFuturumWebApiEndpointMicroSample();
@@ -117,39 +119,13 @@ app.Run();
 ```
 
 ### IWebApiEndpoint
-### Configure
-You can configure the WebApiEndpoint in the *Configure* method
-
-```csharp
-public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
-{
-}
-```
-
-This allows you to set properties on the RouteGroupBuilder.
-
-You can also configure it differently per ApiVersion.
-
-**NOTE:** this is optional
-
-**NOTE:** this ia a good place to add *EndpointFilter*
-```csharp
-public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
-{
-    groupBuilder.AddEndpointFilter<CustomEndpointFilter>();
-}
-```
-
-**NOTE:** this ia a good place to add *Security*
-```csharp
-public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
-{
-    groupBuilder.RequireAuthorization(Authorization.Permission.Admin);
-}
-```
-
 ### Register
-You can register the WebApiEndpoint in the *Register* method
+You can *map* your minimal apis for this WebApiEndpoint in the *Register* method.
+
+The *builder* parameter is already:
+- configured with the API versioning
+- configured with the route prefix
+- gone through the *Configure* method in the same class (if there is one)
 
 ```csharp
 public void Register(IEndpointRouteBuilder builder)
@@ -208,6 +184,37 @@ public class BytesWebApiEndpoint : IWebApiEndpoint
             return TypedResults.Bytes(bytes, MediaTypeNames.Application.Octet, "hello-world.txt");
         }
     }
+}
+```
+
+### Configure
+You can configure the WebApiEndpoint in the *Configure* method
+
+```csharp
+public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
+{
+}
+```
+
+This allows you to set properties on the RouteGroupBuilder.
+
+You can also configure it differently per ApiVersion.
+
+**NOTE:** this is optional
+
+**NOTE:** this ia a good place to add *EndpointFilter*
+```csharp
+public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
+{
+    groupBuilder.AddEndpointFilter<CustomEndpointFilter>();
+}
+```
+
+**NOTE:** this ia a good place to add *Security*
+```csharp
+public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
+{
+    groupBuilder.RequireAuthorization(Authorization.Permission.Admin);
 }
 ```
 
@@ -316,27 +323,27 @@ Use the *FormFilesWithPayload* type to upload multiple files and a JSON payload
     }
 ```
 
-## Full compatibility with [Futurum.Core](https://www.nuget.org/packages/Futurum.Core)
-Comprehensive set of extension methods to transform a [Result](https://docs.futurum.dev/dotnet.futurum.core/result/overview.html) and [Result&lt;T&gt;](https://docs.futurum.dev/dotnet.futurum.core/result/overview.html) to an *TypedResult*.
+## Results&lt;...&gt; -> Results&lt;..., BadRequest&lt;ProblemDetails&gt;&gt;
+Comprehensive set of extension methods - *WebApiEndpointRunner.Run* and *WebApiEndpointRunner.RunAsync* - to run a method and if it throws an *exception* it will catch and transform it into a *BadRequest&lt;ProblemDetails&gt;*.
 
-#### Result&lt;IResult&gt; -> Results&lt;IResult, BadRequest&lt;ProblemDetails&gt;&gt;
-- If the Result&lt;IResult&gt; is a *Success&lt;IResult&gt;* then the *IResult* will be returned.
-- If the Result&lt;T&gt; is a *Failure&lt;T&gt;* then the *BadRequest&lt;ProblemDetails&gt;* will be returned, with the appropriate details set on the ProblemDetails. The *error message* will be safe to return to the client, that is, it will not contain any sensitive information e.g. StackTrace.
+The *Run* and *RunAsync* methods will:
+- If the method passed in **does not** throw an exception, then the existing return remains the same.
+- If the method passed in **does** throw an exception, then a *BadRequest&lt;ProblemDetails&gt;* will be returned, with the appropriate details set on the ProblemDetails. The *error message* will be safe to return to the client, that is, it will not contain any sensitive information e.g. StackTrace.
 
-This works for:
+The returned type from *Run* and *RunAsync* is always augmented to additionally include *BadRequest&lt;ProblemDetails&gt;*
 
 ```csharp
-Result<IResult>
+T -> Results<T, BadRequest<ProblemDetails>>
 
-Result<Results<IResult, IResult>>
+Results<TIResult1, TIResult2> -> Results<TIResult1, TIResult2, BadRequest<ProblemDetails>>
 
-Result<Results<IResult, IResult, IResult>>
+Results<TIResult1, TIResult2, TIResult3> -> Results<TIResult1, TIResult2, TIResult3, BadRequest<ProblemDetails>>
 
-Result<Results<IResult, IResult, IResult, IResult>>
+Results<TIResult1, TIResult2, TIResult3, TIResult4> -> Results<TIResult1, TIResult2, TIResult3, TIResult4, BadRequest<ProblemDetails>>
 
-Result<Results<IResult, IResult, IResult, IResult, IResult>>
-
+Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5> -> Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5, BadRequest<ProblemDetails>>
 ```
+
 *Results* has a maximum of 6 types. So 5 are allowed leaving one space left for the *BadRequest&lt;ProblemDetails&gt;*.
 
 ##### Example use
@@ -348,7 +355,7 @@ In this example the *Execute* method will return:
 Results<NotFound, FileStreamHttpResult>
 ```
 
-The *ToWebApi* extension method will change this to add *BadRequest&lt;ProblemDetails&gt;*.
+The *Run* / *RunAsync* extension method will change this to add *BadRequest&lt;ProblemDetails&gt;*.
 
 ```csharp
 Results<NotFound, FileStreamHttpResult, BadRequest<ProblemDetails>>
@@ -358,8 +365,7 @@ Results<NotFound, FileStreamHttpResult, BadRequest<ProblemDetails>>
 ```csharp
 private static Results<NotFound, FileStreamHttpResult, BadRequest<ProblemDetails>> DownloadHandler(HttpContext context)
 {
-    return Result.Try(Execute, () => "Failed to read file")
-                 .ToWebApi(context);
+    return Run(Execute, context, "Failed to read file");
 
     Results<NotFound, FileStreamHttpResult> Execute()
     {
@@ -375,6 +381,35 @@ private static Results<NotFound, FileStreamHttpResult, BadRequest<ProblemDetails
     }
 }
 ```
+
+**Note:** It is recommended to add the following to your *GlobalUsings.cs* file.
+```csharp
+global using static Futurum.WebApiEndpoint.Micro.WebApiEndpointRunner;
+```
+
+This means you can use the helper functions without having to specify the namespace. As in the examples.
+
+## Full compatibility with [Futurum.Core](https://www.nuget.org/packages/Futurum.Core)
+Comprehensive set of extension methods to transform a [Result](https://docs.futurum.dev/dotnet.futurum.core/result/overview.html) and [Result&lt;T&gt;](https://docs.futurum.dev/dotnet.futurum.core/result/overview.html) to an *TypedResult*.
+
+- If the method passed in is a *success*, then the *IResult* will be returned.
+- If the method passed in is a *failure*, then a *BadRequest&lt;ProblemDetails&gt;* will be returned, with the appropriate details set on the ProblemDetails. The *error message* will be safe to return to the client, that is, it will not contain any sensitive information e.g. StackTrace.
+
+The returned type from *ToWebApi* is always augmented to additionally include *BadRequest&lt;ProblemDetails&gt;*
+
+```csharp
+Result<T> -> Results<T, BadRequest<ProblemDetails>>
+
+Result<Results<TIResult1, TIResult2>> -> Results<TIResult1, TIResult2, BadRequest<ProblemDetails>>
+
+Result<Results<TIResult1, TIResult2, TIResult3>> -> Results<TIResult1, TIResult2, TIResult3, BadRequest<ProblemDetails>>
+
+Result<Results<TIResult1, TIResult2, TIResult3, TIResult4>> -> Results<TIResult1, TIResult2, TIResult3, TIResult4, BadRequest<ProblemDetails>>
+
+Result<Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>> -> Results<TIResult1, TIResult2, TIResult3, TIResult5, BadRequest<ProblemDetails>>
+```
+
+*Results* has a maximum of 6 types. So 5 are allowed leaving one space left for the *BadRequest&lt;ProblemDetails&gt;*.
 
 #### How to handle *successful* and *failure* cases in a typed way with *TypedResult*
 You can optionally specify which TypedResult success cases you want to handle. This is useful if you want to handle a specific successes case differently.
@@ -413,6 +448,7 @@ There can only be 1 *success* helper function, but there can be multiple *failur
 ```csharp
 global using static Futurum.WebApiEndpoint.Micro.WebApiResultsExtensions;
 ```
+
 This means you can use the helper functions without having to specify the namespace. As in the examples.
 
 #### Success

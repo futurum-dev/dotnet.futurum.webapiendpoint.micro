@@ -43,8 +43,7 @@ public class TodoApiWebApiEndpoint : IWebApiEndpoint
 
     private static Results<Ok<IAsyncEnumerable<Todo>>, BadRequest<ProblemDetails>> GetAllHandler(HttpContext context, SqliteConnection db)
     {
-        return Result.Try(Execute, "Failed to get todos")
-                     .ToWebApi(context, ToOk);
+        return Run(Execute, context, ToOk, "Failed to get todos");
 
         IAsyncEnumerable<Todo> Execute() =>
             db.QueryAsync<Todo>("SELECT * FROM Todos");
@@ -52,8 +51,7 @@ public class TodoApiWebApiEndpoint : IWebApiEndpoint
 
     private static Results<Ok<IAsyncEnumerable<Todo>>, BadRequest<ProblemDetails>> GetCompleteHandler(HttpContext context, SqliteConnection db)
     {
-        return Result.Try(Execute, "Failed to get complete todos")
-                     .ToWebApi(context, ToOk);
+        return Run(Execute, context, ToOk, "Failed to get complete todos");
 
         IAsyncEnumerable<Todo> Execute() =>
             db.QueryAsync<Todo>("SELECT * FROM Todos WHERE IsComplete = true");
@@ -61,8 +59,7 @@ public class TodoApiWebApiEndpoint : IWebApiEndpoint
 
     private static Results<Ok<IAsyncEnumerable<Todo>>, BadRequest<ProblemDetails>> GetIncompleteHandler(HttpContext context, SqliteConnection db)
     {
-        return Result.Try(Execute, "Failed to get incomplete todos")
-                     .ToWebApi(context, ToOk);
+        return Run(Execute, context, ToOk, "Failed to get incomplete todos");
 
         IAsyncEnumerable<Todo> Execute() =>
             db.QueryAsync<Todo>("SELECT * FROM Todos WHERE IsComplete = false");
@@ -70,8 +67,7 @@ public class TodoApiWebApiEndpoint : IWebApiEndpoint
 
     private static Task<Results<Ok<Todo>, NotFound, BadRequest<ProblemDetails>>> GetByIdHandler(HttpContext context, SqliteConnection db, int id)
     {
-        return Result.TryAsync(Execute, $"Failed to find todo with id '{id}'")
-                     .ToWebApiAsync(context);
+        return RunAsync(Execute, context, () => $"Failed to find todo with id '{id}'");
 
         async Task<Results<Ok<Todo>, NotFound>> Execute() =>
             await db.QuerySingleAsync<Todo>("SELECT * FROM Todos WHERE Id = @id", id.AsDbParameter()) is Todo todo
@@ -81,8 +77,7 @@ public class TodoApiWebApiEndpoint : IWebApiEndpoint
 
     private static Task<Results<Ok<Todo>, NoContent, BadRequest<ProblemDetails>>> FindHandler(HttpContext context, SqliteConnection db, string title, bool? isComplete)
     {
-        return Result.TryAsync(Execute, $"Failed to find todo with title '{title}'")
-                     .ToWebApiAsync(context);
+        return RunAsync(Execute, context, () => $"Failed to find todo with title '{title}'");
 
         async Task<Results<Ok<Todo>, NoContent>> Execute() =>
             await db.QuerySingleAsync<Todo>("SELECT * FROM Todos WHERE Title = @title COLLATE NOCASE AND (@isComplete is NULL OR IsComplete = @isComplete)",
@@ -126,8 +121,7 @@ public class TodoApiWebApiEndpoint : IWebApiEndpoint
 
     private static Task<Results<NoContent, NotFound, BadRequest<ProblemDetails>>> MarkCompleteHandler(HttpContext context, SqliteConnection db, int id)
     {
-        return Result.TryAsync(Execute, $"Failed to mark todo with id '{id}' as incomplete")
-                     .ToWebApiAsync(context);
+        return RunAsync(Execute, context, () => $"Failed to mark todo with id '{id}' as incomplete");
 
         async Task<Results<NoContent, NotFound>> Execute() =>
             await db.ExecuteAsync("UPDATE Todos SET IsComplete = true WHERE Id = @id", id.AsDbParameter()) == 1
@@ -137,8 +131,7 @@ public class TodoApiWebApiEndpoint : IWebApiEndpoint
 
     private static Task<Results<NoContent, NotFound, BadRequest<ProblemDetails>>> MarkIncompleteHandler(HttpContext context, SqliteConnection db, int id)
     {
-        return Result.TryAsync(Execute, $"Failed to mark todo with id '{id}' as incomplete")
-                     .ToWebApiAsync(context);
+        return RunAsync(Execute, context, () => $"Failed to mark todo with id '{id}' as incomplete");
 
         async Task<Results<NoContent, NotFound>> Execute() =>
             await db.ExecuteAsync("UPDATE Todos SET IsComplete = false WHERE Id = @id", id.AsDbParameter()) == 1
@@ -148,8 +141,7 @@ public class TodoApiWebApiEndpoint : IWebApiEndpoint
 
     private static Task<Results<NoContent, NotFound, BadRequest<ProblemDetails>>> DeleteHandler(HttpContext context, SqliteConnection db, int id)
     {
-        return Result.TryAsync(Execute, $"Failed to delete todo with id '{id}'")
-                     .ToWebApiAsync(context);
+        return RunAsync(Execute, context, () => $"Failed to delete todo with id '{id}'");
 
         async Task<Results<NoContent, NotFound>> Execute() =>
             await db.ExecuteAsync("DELETE FROM Todos WHERE Id = @id", id.AsDbParameter()) == 1
@@ -159,8 +151,7 @@ public class TodoApiWebApiEndpoint : IWebApiEndpoint
 
     private static Task<Results<Ok<int>, BadRequest<ProblemDetails>>> DeleteAllHandler(HttpContext context, SqliteConnection db)
     {
-        return Result.TryAsync(Execute, "Failed to delete all todos")
-                     .ToWebApiAsync(context, ToOk);
+        return RunAsync(Execute, context, ToOk, "Failed to delete all todos");
 
         Task<int> Execute() =>
             db.ExecuteAsync("DELETE FROM Todos");
