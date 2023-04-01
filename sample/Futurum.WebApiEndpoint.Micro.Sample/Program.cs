@@ -11,6 +11,8 @@ builder.Services.RegisterModule(new ApplicationModule(builder.Configuration));
 
 builder.AddAuthentication();
 
+builder.Services.AddRateLimiter(RateLimiting.SlidingWindow.Options);
+
 builder.Services
        .AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0)
        {
@@ -33,6 +35,8 @@ builder.Services
        .AddWebApiEndpointsForFuturumWebApiEndpointMicroSampleAddition();
 
 var app = builder.Build();
+
+app.UseRateLimiter();
 
 app.UseWebApiEndpoints();
 
