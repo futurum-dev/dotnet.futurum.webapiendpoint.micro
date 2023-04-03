@@ -1,11 +1,11 @@
 namespace Futurum.WebApiEndpoint.Micro.Sample.Features;
 
-[WebApiEndpoint("rate-limiting")]
-public class RateLimitingWebApiEndpoint : IWebApiEndpoint
+[WebApiEndpoint("output-caching")]
+public class OutputCachingWebApiEndpoint : IWebApiEndpoint
 {
     public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
     {
-        groupBuilder.RequireRateLimiting(RateLimiting.SlidingWindow.Policy);
+        groupBuilder.CacheOutput(OutputCaching.ExpiryIn10Seconds.Policy);
     }
 
     public void Register(IEndpointRouteBuilder builder)
