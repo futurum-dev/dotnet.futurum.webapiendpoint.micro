@@ -7,13 +7,20 @@ namespace Futurum.WebApiEndpoint.Micro.Sample;
 
 public static class RateLimiting
 {
+    public static IServiceCollection AddRateLimiters(this IServiceCollection services)
+    {
+        services.AddRateLimiter(options => { SlidingWindow.Options(options); });
+
+        return services;
+    }
+
     public static class SlidingWindow
     {
-        public const string PolicyName = "SlidingWindowPolicy";
+        public const string Policy = "SlidingWindowRateLimitingPolicy";
 
         public static readonly Action<RateLimiterOptions> Options = options =>
         {
-            options.AddSlidingWindowLimiter(PolicyName,
+            options.AddSlidingWindowLimiter(Policy,
                                             slidingWindowRateLimiterOptions =>
                                             {
                                                 slidingWindowRateLimiterOptions.PermitLimit = 2;

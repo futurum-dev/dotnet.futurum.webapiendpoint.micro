@@ -11,7 +11,8 @@ builder.Services.RegisterModule(new ApplicationModule(builder.Configuration));
 
 builder.AddAuthentication();
 
-builder.Services.AddRateLimiter(RateLimiting.SlidingWindow.Options);
+builder.Services.AddRateLimiters();
+builder.Services.AddOutputCaches();
 
 builder.Services
        .AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0)
@@ -52,7 +53,7 @@ if (app.Environment.IsDevelopment())
     app.UseExceptionHandler("/error");
     app.MapGet("/error", () => Results.Problem("An error occurred.", statusCode: 500))
        .ExcludeFromDescription();
-    
+
     app.UseWebApiEndpointsOpenApi();
 }
 
