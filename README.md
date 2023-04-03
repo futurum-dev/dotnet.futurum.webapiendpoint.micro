@@ -5,30 +5,51 @@
 [![Coverage Status](https://img.shields.io/coveralls/github/futurum-dev/dotnet.futurum.webapiendpoint.micro?style=for-the-badge)](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint.micro?branch=main)
 [![NuGet version](https://img.shields.io/nuget/v/futurum.webapiendpoint.micro?style=for-the-badge)](https://www.nuget.org/packages/futurum.webapiendpoint.micro)
 
-A dotnet library that allows you to build WebApiEndpoints using a vertical slice architecture approach. Built on dotnet 7 and minimal apis.
+A dotnet library that allows you to build WebApiEndpoints using a vertical slice architecture approach in a structured way. It's built on top of dotnet 7 and minimal apis.
+
+```csharp
+[WebApiEndpoint("greeting")]
+public class GreetingWebApiEndpoint : IWebApiEndpoint
+{
+    public void Register(IEndpointRouteBuilder builder)
+    {
+        builder.MapGet("/hello", HelloHandler);
+        builder.MapGet("/goodbye", GoodbyeHandler);
+    }
+
+    private static Ok<string> HelloHandler(HttpContext context, string name) =>
+        $"Hello {name}".ToOk();
+
+    private static Ok<string> GoodbyeHandler(HttpContext context, string name) =>
+        $"Goodbye {name}".ToOk();
+}
+```
 
 - [x] Vertical Slice Architecture, gives you the ability to add new features without changing existing code
+- [x] Structured way of building WebApiEndpoints using [minimal apis](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0)
 - [x] [Easy setup](#easy-setup)
+- [x] Developer friendly 
 - [x] Full support and built on top of [minimal apis](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0)
 - [x] Full support for OpenApi
 - [x] Full support for [TypedResults](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0)
 - [x] [Full compatibility](#full-compatibility-with-futurumcore) with [Futurum.Core](https://www.nuget.org/packages/Futurum.Core)
 - [x] [Supports uploading file(s) with additional JSON payload](#uploading-file--s--with-additional-json-payload)
 - [x] Api Versioning baked-in
+- [x] Built in [sandbox runner](#sandbox-runner) with full [TypedResults support](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0), catching unhandled exceptions and returning a [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) response
 - [x] [Built in Validation support](#validation)
   - [x] [Integrated FluentValidation](#fluentvalidationservice)
   - [x] [Integrated DataAnnotations](#dataannotationsvalidationservice)
+- [x] Autodiscovery of WebApiEndpoint(s), based on Source Generators
 - [x] Built on dotnet 7
 - [x] Built in use of [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) support
 - [x] [Tested solution](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint.micro)
 - [x] [Comprehensive samples](#comprehensive-samples)
 - [x] [Convention Customisation](#convention-customisation)
-- [x] Autodiscovery of WebApiEndpoint, based on Source Generators
 
 ## What is a WebApiEndpoint?
 - It's a vertical slice / feature of your application
 - The vertical slice is a self-contained unit of functionality
-- Collection of WebApis that share a route prefix and version
+- Collection of WebApi's that share a route prefix and version. They can also share things like EndpointFilters, RateLimiting, etc.
 
 ## Easy setup
 - [x] Add the [NuGet package](https://www.nuget.org/packages/futurum.webapiendpoint.micro) ( futurum.webapiendpoint.micro ) to your project
@@ -36,9 +57,32 @@ A dotnet library that allows you to build WebApiEndpoints using a vertical slice
 - [x] Create a new class that implements *IWebApiEndpoint*
 - [x] Add the *WebApiEndpoint* attribute to the class, if you want to specify a specific *route prefix* and *tag*
 - [x] Add the *WebApiEndpointVersion* attribute to the class, if you want to specify a specific *ApiVersion*
-- [x] Implement the *Register* and add *minimal api(s)* as per usual
+- [x] Implement the *Register* method and add *minimal api(s)* as per usual
+- [x] *Optionally* implement the *Configure* method to configuration the *WebApiEndpoint*
 
 ### program.cs
+```csharp
+using Futurum.WebApiEndpoint.Micro;
+using Futurum.WebApiEndpoint.Micro.Sample;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services
+       .AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0))
+       .AddWebApiEndpointsForFuturumWebApiEndpointMicroSample();
+
+var app = builder.Build();
+
+app.UseWebApiEndpoints();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseWebApiEndpointsOpenApi();
+}
+
+app.Run();
+```
+
 #### AddWebApiEndpoints
 Allows you to configure:
 - DefaultApiVersion *(mandatory)*
@@ -54,6 +98,10 @@ Allows you to configure:
 ```csharp
 builder.Services.AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0)
 {
+    DefaultOpenApiInfo = new OpenApiInfo
+    {
+        Title = "Futurum.WebApiEndpoint.Micro.Sample",
+    },
     OpenApiDocumentVersions =
     {
         {
@@ -87,45 +135,14 @@ Register the OpenApi UI (Swagger and SwaggerUI) middleware
 app.UseWebApiEndpointsOpenApi();
 ```
 
-#### Full example
-```csharp
-using Futurum.WebApiEndpoint.Micro;
-using Futurum.WebApiEndpoint.Micro.Sample;
-
-using Microsoft.OpenApi.Models;
-
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services
-       .AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0)
-       {
-           DefaultOpenApiInfo = new OpenApiInfo
-           {
-               Title = "Futurum.WebApiEndpoint.Micro.Sample",
-           }
-       })
-       .AddWebApiEndpointsForFuturumWebApiEndpointMicroSample();
-
-var app = builder.Build();
-
-app.UseWebApiEndpoints();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseWebApiEndpointsOpenApi();
-}
-
-app.Run();
-```
-
 ### IWebApiEndpoint
 ### Register
 You can *map* your minimal apis for this WebApiEndpoint in the *Register* method.
 
-The *builder* parameter is already:
+The *IEndpointRouteBuilder* parameter is already:
 - configured with the API versioning
 - configured with the route prefix
-- gone through the *Configure* method in the same class (if there is one)
+- been through the *optional* *Configure* method in the same class
 
 ```csharp
 public void Register(IEndpointRouteBuilder builder)
@@ -168,8 +185,7 @@ public class BytesWebApiEndpoint : IWebApiEndpoint
 
     private static Results<NotFound, FileContentHttpResult, BadRequest<ProblemDetails>> DownloadHandler(HttpContext context)
     {
-        return Result.Try(Execute, () => "Failed to read file")
-                     .ToWebApi(context);
+        return Run(Execute, context, "Failed to read file");
 
         Results<NotFound, FileContentHttpResult> Execute()
         {
@@ -188,7 +204,7 @@ public class BytesWebApiEndpoint : IWebApiEndpoint
 ```
 
 ### Configure
-You can configure the WebApiEndpoint in the *Configure* method
+You can *optionally* configure the WebApiEndpoint in the *Configure* method
 
 ```csharp
 public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
@@ -196,27 +212,137 @@ public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webA
 }
 ```
 
-This allows you to set properties on the RouteGroupBuilder.
+This allows you to set properties on the RouteGroupBuilder. This will effect all minimal apis in the *Register* method.
 
 You can also configure it differently per ApiVersion.
 
-**NOTE:** this is optional
-
-**NOTE:** this ia a good place to add *EndpointFilter*
+#### This ia a good place to add a *EndpointFilter*
 ```csharp
-public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
+groupBuilder.AddEndpointFilter<CustomEndpointFilter>();
+```
+#### This ia a good place to add a *RateLimiting*
+```csharp
+groupBuilder.RequireRateLimiting(RateLimiting.SlidingWindow.Policy);
+```
+#### This ia a good place to add a *OutputCache*
+    
+```csharp
+groupBuilder.CacheOutput(OutputCaching.ExpiryIn10Seconds.Policy);
+```
+
+#### This ia a good place to add *Security*
+```csharp
+groupBuilder.RequireAuthorization(Authorization.Permission.Admin);
+```
+
+## Sandbox runner
+### Run and RunAsync - Results&lt;...&gt; -> Results&lt;..., BadRequest&lt;ProblemDetails&gt;&gt;
+Comprehensive set of extension methods - *WebApiEndpointRunner.Run* and *WebApiEndpointRunner.RunAsync* - to run a method that returns *Results&lt;...&gt;* in a sandbox. If an unhandled *exception* is thrown it will be caught and transformed it into a *BadRequest&lt;ProblemDetails&gt;*.
+
+The *Run* and *RunAsync* methods will:
+- If the method passed in **does not** throw an unhandled exception, then the existing return remains the same.
+- If the method passed in **does** throw an unhandled exception, then a *BadRequest&lt;ProblemDetails&gt;* will be returned, with the appropriate details set on the ProblemDetails. The *error message* will be safe to return to the client, that is, it will not contain any sensitive information e.g. StackTrace.
+
+The returned *Results&lt;...&gt;* type from *Run* and *RunAsync* is always augmented to additionally include *BadRequest&lt;ProblemDetails&gt;*
+
+```csharp
+Results<TIResult1, TIResult2> -> Results<TIResult1, TIResult2, BadRequest<ProblemDetails>>
+
+Results<TIResult1, TIResult2, TIResult3> -> Results<TIResult1, TIResult2, TIResult3, BadRequest<ProblemDetails>>
+
+Results<TIResult1, TIResult2, TIResult3, TIResult4> -> Results<TIResult1, TIResult2, TIResult3, TIResult4, BadRequest<ProblemDetails>>
+
+Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5> -> Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5, BadRequest<ProblemDetails>>
+```
+
+*Results* has a maximum of 6 types. So 5 are allowed leaving one space left for the *BadRequest&lt;ProblemDetails&gt;*.
+
+#### Example use
+```csharp
+private static Results<NotFound, FileStreamHttpResult, BadRequest<ProblemDetails>> DownloadHandler(HttpContext context)
 {
-    groupBuilder.AddEndpointFilter<CustomEndpointFilter>();
+    return Run(Execute, context, "Failed to read file");
+
+    Results<NotFound, FileStreamHttpResult> Execute()
+    {
+        var path = "./Data/hello-world.txt";
+
+        if (!File.Exists(path))
+        {
+            return TypedResults.NotFound();
+        }
+
+        var fileStream = File.OpenRead(path);
+        return TypedResults.File(fileStream, MediaTypeNames.Application.Octet, "hello-world.txt");
+    }
 }
 ```
 
-**NOTE:** this ia a good place to add *Security*
+In this example the *Execute* method will return:
+- a *NotFound* if the file does not exist
+- a *FileStreamHttpResult* if the file exists
+
 ```csharp
-public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
+Results<NotFound, FileStreamHttpResult>
+```
+
+The *Run* / *RunAsync* extension method will change this to add *BadRequest&lt;ProblemDetails&gt;*.
+
+```csharp
+Results<NotFound, FileStreamHttpResult, BadRequest<ProblemDetails>>
+```
+
+**Note:** It is recommended to add the following to your *GlobalUsings.cs* file.
+```csharp
+global using static Futurum.WebApiEndpoint.Micro.WebApiEndpointRunner;
+```
+
+This means you can use the helper functions without having to specify the namespace. As in the examples.
+
+### Run and RunAsync - (T, Func&lt;T, IResult&gt;) -> Results&lt;IResult, BadRequest&lt;ProblemDetails&gt;&gt;
+Extension methods - *WebApiEndpointRunner.Run* and *WebApiEndpointRunner.RunAsync* - to run a method that returns *T* in a sandbox. If an unhandled *exception* is thrown it will be caught and transformed it into a *BadRequest&lt;ProblemDetails&gt;*.
+
+The *Run* and *RunAsync* methods will:
+- If the method passed in **does not** throw an unhandled exception, then the *Func&lt;T, IResult&gt;* will be called with the return value.
+- If the method passed in **does** throw an unhandled exception, then a *BadRequest&lt;ProblemDetails&gt;* will be returned, with the appropriate details set on the ProblemDetails. The *error message* will be safe to return to the client, that is, it will not contain any sensitive information e.g. StackTrace.
+
+The returned *T* type from *Run* and *RunAsync* is always augmented to additionally include *BadRequest&lt;ProblemDetails&gt;*
+
+```csharp
+(T, Func<T, TResult>) -> Results<TResult, BadRequest<ProblemDetails>> where TResult : IResult
+```
+
+For the *Func&lt;T, IResult&gt;*, there are a number of built-in [success helper functions](#success-helper-functions) that can be used. Or you can use your own.
+
+#### Example use
+```csharp
+private static Results<Ok<IAsyncEnumerable<Todo>>, BadRequest<ProblemDetails>> GetAllHandler(HttpContext context, SqliteConnection db)
 {
-    groupBuilder.RequireAuthorization(Authorization.Permission.Admin);
+    return Run(Execute, context, ToOk, "Failed to get todos");
+
+    IAsyncEnumerable<Todo> Execute() =>
+        db.QueryAsync<Todo>("SELECT * FROM Todos");
 }
 ```
+
+In this example the *Execute* method returns *IAsyncEnumerable&lt;Todo&gt;*
+
+```csharp
+IAsyncEnumerable<Todo>
+```
+
+The *Run* / *RunAsync* extension method with *ToOk* [success helper function](#success-helper-functions) passed in will change this to:
+
+```csharp
+Results<Ok<IAsyncEnumerable<Todo>>, BadRequest<ProblemDetails>>
+```
+
+**Note:** It is recommended to add the following to your *GlobalUsings.cs* file.
+```csharp
+global using static Futurum.WebApiEndpoint.Micro.WebApiEndpointRunner;
+```
+
+This means you can use the helper functions without having to specify the namespace. As in the examples.
 
 ## Validation
 ### ValidationService
@@ -225,6 +351,7 @@ Executes FluentValidation and DataAnnotations
 IValidationService<ArticleDto> validationService
 ```
 
+e.g.
 ```csharp
 private static Results<Ok<ArticleDto>, ValidationProblem, BadRequest<ProblemDetails>> ValidationHandler(HttpContext context, IValidationService<ArticleDto> validationService,
                                                                                                         ArticleDto articleDto) =>
@@ -264,6 +391,7 @@ Calls DataAnnotations validation
 IDataAnnotationsValidationService dataAnnotationsValidationService
 ```
 
+e.g.
 ```csharp
 private static Results<Ok<ArticleDto>, ValidationProblem, BadRequest<ProblemDetails>> DataAnnotationsValidationHandler(HttpContext context,
                                                                                                                        IDataAnnotationsValidationService dataAnnotationsValidationService,
@@ -323,72 +451,6 @@ Use the *FormFilesWithPayload* type to upload multiple files and a JSON payload
     }
 ```
 
-## Results&lt;...&gt; -> Results&lt;..., BadRequest&lt;ProblemDetails&gt;&gt;
-Comprehensive set of extension methods - *WebApiEndpointRunner.Run* and *WebApiEndpointRunner.RunAsync* - to run a method and if it throws an *exception* it will catch and transform it into a *BadRequest&lt;ProblemDetails&gt;*.
-
-The *Run* and *RunAsync* methods will:
-- If the method passed in **does not** throw an exception, then the existing return remains the same.
-- If the method passed in **does** throw an exception, then a *BadRequest&lt;ProblemDetails&gt;* will be returned, with the appropriate details set on the ProblemDetails. The *error message* will be safe to return to the client, that is, it will not contain any sensitive information e.g. StackTrace.
-
-The returned type from *Run* and *RunAsync* is always augmented to additionally include *BadRequest&lt;ProblemDetails&gt;*
-
-```csharp
-T -> Results<T, BadRequest<ProblemDetails>>
-
-Results<TIResult1, TIResult2> -> Results<TIResult1, TIResult2, BadRequest<ProblemDetails>>
-
-Results<TIResult1, TIResult2, TIResult3> -> Results<TIResult1, TIResult2, TIResult3, BadRequest<ProblemDetails>>
-
-Results<TIResult1, TIResult2, TIResult3, TIResult4> -> Results<TIResult1, TIResult2, TIResult3, TIResult4, BadRequest<ProblemDetails>>
-
-Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5> -> Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5, BadRequest<ProblemDetails>>
-```
-
-*Results* has a maximum of 6 types. So 5 are allowed leaving one space left for the *BadRequest&lt;ProblemDetails&gt;*.
-
-##### Example use
-In this example the *Execute* method will return:
-- a *NotFound* if the file does not exist
-- a *FileStreamHttpResult* if the file exists
-
-```csharp
-Results<NotFound, FileStreamHttpResult>
-```
-
-The *Run* / *RunAsync* extension method will change this to add *BadRequest&lt;ProblemDetails&gt;*.
-
-```csharp
-Results<NotFound, FileStreamHttpResult, BadRequest<ProblemDetails>>
-```
-
-#### Full Example
-```csharp
-private static Results<NotFound, FileStreamHttpResult, BadRequest<ProblemDetails>> DownloadHandler(HttpContext context)
-{
-    return Run(Execute, context, "Failed to read file");
-
-    Results<NotFound, FileStreamHttpResult> Execute()
-    {
-        var path = "./Data/hello-world.txt";
-
-        if (!File.Exists(path))
-        {
-            return TypedResults.NotFound();
-        }
-
-        var fileStream = File.OpenRead(path);
-        return TypedResults.File(fileStream, MediaTypeNames.Application.Octet, "hello-world.txt");
-    }
-}
-```
-
-**Note:** It is recommended to add the following to your *GlobalUsings.cs* file.
-```csharp
-global using static Futurum.WebApiEndpoint.Micro.WebApiEndpointRunner;
-```
-
-This means you can use the helper functions without having to specify the namespace. As in the examples.
-
 ## Full compatibility with [Futurum.Core](https://www.nuget.org/packages/Futurum.Core)
 Comprehensive set of extension methods to transform a [Result](https://docs.futurum.dev/dotnet.futurum.core/result/overview.html) and [Result&lt;T&gt;](https://docs.futurum.dev/dotnet.futurum.core/result/overview.html) to an *TypedResult*.
 
@@ -439,7 +501,7 @@ private static Results<Ok<ArticleDto>, ValidationProblem, BadRequest<ProblemDeta
                      .ToWebApi(context, ToOk, ToValidationProblem);
 ```
 
-### Success and Failure helper functions
+## Success and Failure helper functions
 If you have a *success* case, you must pass in the the *success* helper function first, then the *failure* helper functions.
 
 There can only be 1 *success* helper function, but there can be multiple *failure* helper functions.
@@ -451,15 +513,15 @@ global using static Futurum.WebApiEndpoint.Micro.WebApiResultsExtensions;
 
 This means you can use the helper functions without having to specify the namespace. As in the examples.
 
-#### Success
-##### ToOk
+### Success helper functions
+#### ToOk
 Converts a *T* to an *Ok&lt;T&gt;*.
 
 ```csharp
 ToOk
 ```
 
-##### ToCreated
+#### ToCreated
 Converts a *()* to a *Created*.
 
 ```csharp
@@ -478,7 +540,7 @@ This can be overridden by passing in a *string*.
 ToCreated<T>("/api/articles")
 ```
 
-##### ToAccepted
+#### ToAccepted
 Converts a *()* to a *Accepted*.
 
 ```csharp
@@ -499,15 +561,15 @@ This can be overridden by passing in a *string*.
 ToAccepted<T>("/api/articles")
 ```
 
-#### Failure
-##### ToNotFound
+### Failure helper functions
+#### ToNotFound
 If a *ResultErrorKeyNotFound* has occured then it will convert it to a *NotFound&lt;ProblemDetails&gt;*, with the correct information set on the *ProblemDetails*.
 
 ```csharp
 ToNotFound
 ```
 
-##### ToValidationProblem
+#### ToValidationProblem
 If a *ResultErrorValidation* has occured then it will convert it to a *ValidationProblem*, with the correct information set on the *HttpValidationProblemDetails*.
 
 ```csharp
@@ -526,8 +588,9 @@ There are examples showing the following:
 - [x] File(s) upload
 - [x] File(s) upload with Payload
 - [x] File download
-- [x] OpenApi version support
-- [x] RateLimiting
+- [x] OpenApi versioning
+- [x] Output Caching
+- [x] Rate Limiting
 - [x] Security with a basic JWT example on a specific WebApiEndpoint
 - [x] Validation - DataAnnotations and FluentValidation and both combined
 - [x] Weather Forecast
