@@ -1,9 +1,9 @@
-﻿using System.Collections.Immutable;
-using System.Text;
+﻿using System.Text;
+using System.Text.RegularExpressions;
+
+using Futurum.WebApiEndpoint.Micro.Generator.Core;
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
 namespace Futurum.WebApiEndpoint.Micro.Generator;
@@ -13,183 +13,54 @@ public class FuturumWebApiEndpointMicroGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        var webApiEndpointSyntaxNodes = context.SyntaxProvider
-                                               .CreateSyntaxProvider(static (node, _) => node.IsKind(SyntaxKind.ClassDeclaration),
-                                                                     (generatorSyntaxContext, ct) =>
-                                                                         GetInstanceTypeSyntaxThatImplementInterface(generatorSyntaxContext, ct, "Futurum.WebApiEndpoint.Micro.IWebApiEndpoint"))
-                                               .Where(node => node is not null);
+        var webApiEndpointData = context.SyntaxProvider
+                                        .CreateSyntaxProvider(WebApiEndpointSourceGenerator.SemanticPredicate, WebApiEndpointSourceGenerator.SemanticTransform)
+                                        .Where(node => node is not null);
 
-        var fluentValidatorSyntaxNodes = context.SyntaxProvider
-                                                .CreateSyntaxProvider(static (node, _) => node.IsKind(SyntaxKind.ClassDeclaration),
-                                                                      (generatorSyntaxContext, ct) =>
-                                                                          GetInstanceTypeSyntaxThatImplementGenericInterface(generatorSyntaxContext, ct, "FluentValidation", "IValidator`1"))
-                                                .Where(node => node is not null);
+        var fluentValidatorData = context.SyntaxProvider
+                                         .CreateSyntaxProvider(FluentValidatorSourceGenerator.SemanticPredicate, FluentValidatorSourceGenerator.SemanticTransform)
+                                         .Where(node => node is not null);
 
-        var compilationWithWebApiEndpoints = context.CompilationProvider
-                                                    .Combine(webApiEndpointSyntaxNodes.Collect());
+        // Emit the diagnostics, if needed
+        var webApiEndpointDiagnostics = webApiEndpointData
+                                        .Select(static (item, _) => item.Diagnostics)
+                                        .Where(static item => item.Count > 0);
 
-        var compilationWithFluentValidators = context.CompilationProvider
-                                                     .Combine(fluentValidatorSyntaxNodes.Collect());
+        context.RegisterSourceOutput(webApiEndpointDiagnostics, ReportDiagnostic);
 
-        context.RegisterSourceOutput(compilationWithWebApiEndpoints,
-                                     static (spc, source) => Execute(source.Left, source.Right, spc));
+        // Emit the diagnostics, if needed
+        var fluentValidatorDiagnostics = fluentValidatorData
+                                         .Select(static (item, _) => item.Diagnostics)
+                                         .Where(static item => item.Count > 0);
 
-        context.RegisterSourceOutput(compilationWithWebApiEndpoints,
-                                     static (spc, source) => ExecuteWebApiEndpoint(source.Left, source.Right, spc));
+        context.RegisterSourceOutput(fluentValidatorDiagnostics, ReportDiagnostic);
 
-        context.RegisterSourceOutput(compilationWithFluentValidators,
-                                     static (spc, source) => ExecuteFluentValidator(source.Left, source.Right, spc));
+        // include config options
+        var assemblyName = context.CompilationProvider
+                                  .Select(static (c, _) => c.AssemblyName);
+
+        context.RegisterSourceOutput(assemblyName,
+                                     static (productionContext, assemblyName) => ExecuteGeneration(productionContext, assemblyName));
+
+        context.RegisterSourceOutput(webApiEndpointData.Collect().Combine(assemblyName),
+                                     static (productionContext, source) => WebApiEndpointSourceGenerator.ExecuteGeneration(productionContext, source.Left, source.Right));
+
+        context.RegisterSourceOutput(fluentValidatorData.Collect().Combine(assemblyName),
+                                     static (productionContext, source) => FluentValidatorSourceGenerator.ExecuteGeneration(productionContext, source.Left, source.Right));
     }
 
-    private static void Execute(Compilation compilation, ImmutableArray<TypeDeclarationSyntax> webApiEndpointTypeDeclarations, SourceProductionContext context)
+    private static void ReportDiagnostic(SourceProductionContext context, EquatableArray<Diagnostic> diagnostics)
     {
-        var firstWebApiEndpointTypeDeclarationSyntax = webApiEndpointTypeDeclarations.First();
-        var rootNamespace = GetNamespaceRecursively(compilation.GetSemanticModel(firstWebApiEndpointTypeDeclarationSyntax.SyntaxTree).GetDeclaredSymbol(firstWebApiEndpointTypeDeclarationSyntax)
-                                                               .ContainingNamespace);
-
-        var projectName = rootNamespace.Replace(".", string.Empty);
-
-        var source = new StringBuilder();
-
-        source.AppendLine($@"// <auto-generated/>
-using Futurum.Microsoft.Extensions.DependencyInjection;
-
-namespace Futurum.WebApiEndpoint.Micro;
-
-public static partial class WebApplicationStartupExtensions
-{{
-        public static IServiceCollection AddWebApiEndpointsFor{projectName}(this IServiceCollection serviceCollection)
-        {{
-");
-
-        source.AppendLine("            serviceCollection.RegisterWebApiEndpoints();");
-        source.AppendLine("            serviceCollection.RegisterFluentValidators();");
-
-        source.AppendLine(@"
-            return serviceCollection;
-        }
-}
-");
-
-        context.AddSource("Futurum.WebApiEndpoint.Micro.Generator.g.cs", SourceText.From(source.ToString(), Encoding.UTF8));
+        foreach (var diagnostic in diagnostics)
+            context.ReportDiagnostic(diagnostic);
     }
 
-    private static void ExecuteWebApiEndpoint(Compilation compilation, ImmutableArray<TypeDeclarationSyntax> webApiEndpointTypeDeclarations, SourceProductionContext context)
+    private static void ExecuteGeneration(SourceProductionContext context, string assemblyName)
     {
-        var source = new StringBuilder();
+        var methodName = Regex.Replace(assemblyName, "\\W", "");
 
-        source.AppendLine(@"// <auto-generated/>
-namespace Futurum.WebApiEndpoint.Micro;
+        var codeBuilder = SourceGeneratorWriter.Write(assemblyName, methodName);
 
-public static partial class WebApplicationStartupExtensions
-{
-        internal static IServiceCollection RegisterWebApiEndpoints(this IServiceCollection serviceCollection)
-        {
-");
-
-        foreach (var webApiEndpointTypeDeclaration in webApiEndpointTypeDeclarations)
-        {
-            var semanticModel = compilation.GetSemanticModel(webApiEndpointTypeDeclaration.SyntaxTree);
-            if (semanticModel.GetDeclaredSymbol(webApiEndpointTypeDeclaration) is not INamedTypeSymbol webApiEndpointTypeSymbol)
-            {
-                continue;
-            }
-
-            source.AppendLine($"            serviceCollection.AddSingleton(typeof(global::Futurum.WebApiEndpoint.Micro.IWebApiEndpoint), typeof(global::{webApiEndpointTypeSymbol}));");
-        }
-
-        source.AppendLine(@"
-
-            return serviceCollection;
-        }
-}
-");
-
-        context.AddSource("Futurum.WebApiEndpoint.Micro.Generator.WebApiEndpoint.g.cs", SourceText.From(source.ToString(), Encoding.UTF8));
-    }
-
-    private static void ExecuteFluentValidator(Compilation compilation, ImmutableArray<TypeDeclarationSyntax> fluentValidatorTypeDeclarations, SourceProductionContext context)
-    {
-        var source = new StringBuilder();
-
-        source.AppendLine(@"// <auto-generated/>
-namespace Futurum.WebApiEndpoint.Micro;
-
-public static partial class WebApplicationStartupExtensions
-{
-        internal static IServiceCollection RegisterFluentValidators(this IServiceCollection serviceCollection)
-        {
-");
-
-        foreach (var fluentValidatorTypeDeclaration in fluentValidatorTypeDeclarations)
-        {
-            var semanticModel = compilation.GetSemanticModel(fluentValidatorTypeDeclaration.SyntaxTree);
-            if (semanticModel.GetDeclaredSymbol(fluentValidatorTypeDeclaration) is not INamedTypeSymbol fluentValidatorTypeSymbol)
-            {
-                continue;
-            }
-
-            var interfaceNamedTypeSymbol = fluentValidatorTypeSymbol.AllInterfaces
-                                                                    .First(t => t.ContainingNamespace.MetadataName == "FluentValidation" && t.MetadataName == "IValidator`1");
-
-            source.AppendLine($"            serviceCollection.AddSingleton(typeof(global::{interfaceNamedTypeSymbol}), typeof(global::{fluentValidatorTypeSymbol}));");
-        }
-
-        source.AppendLine(@"
-
-            return serviceCollection;
-        }
-}
-");
-
-        context.AddSource("Futurum.WebApiEndpoint.Micro.Generator.FluentValidator.g.cs", SourceText.From(source.ToString(), Encoding.UTF8));
-    }
-
-    private static TypeDeclarationSyntax GetInstanceTypeSyntaxThatImplementInterface(GeneratorSyntaxContext context, CancellationToken ct, string typeName)
-    {
-        var classDeclaration = (ClassDeclarationSyntax)context.Node;
-        var semanticModel = context.SemanticModel;
-        var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration, ct);
-        var interfaceTypeSymbol = semanticModel.Compilation.GetTypeByMetadataName(typeName);
-        if (classSymbol is not null && interfaceTypeSymbol is not null)
-        {
-            var implementsInterface = classSymbol.AllInterfaces.Contains(interfaceTypeSymbol);
-
-
-            if (implementsInterface)
-            {
-                return classDeclaration;
-            }
-        }
-
-        return null;
-    }
-
-    private static TypeDeclarationSyntax GetInstanceTypeSyntaxThatImplementGenericInterface(GeneratorSyntaxContext context, CancellationToken ct, string namespaceName, string typeName)
-    {
-        if (context.Node is ClassDeclarationSyntax classDeclarationSyntax)
-        {
-            var semanticModel = context.SemanticModel;
-            var classSymbol = semanticModel.GetDeclaredSymbol(classDeclarationSyntax, ct);
-
-            if (classSymbol != null && classSymbol.AllInterfaces.Any(t => t.ContainingNamespace.MetadataName == namespaceName && t.MetadataName == typeName))
-            {
-                return classDeclarationSyntax;
-            }
-
-            return null;
-        }
-
-        return null;
-    }
-
-    private static string GetNamespaceRecursively(INamespaceSymbol symbol)
-    {
-        if (symbol.ContainingNamespace == null)
-        {
-            return symbol.Name;
-        }
-
-        return (GetNamespaceRecursively(symbol.ContainingNamespace) + "." + symbol.Name).Trim('.');
+        context.AddSource("Generator.g.cs", SourceText.From(codeBuilder.ToString(), Encoding.UTF8));
     }
 }
