@@ -1,6 +1,7 @@
 using Futurum.Microsoft.Extensions.DependencyInjection;
 using Futurum.WebApiEndpoint.Micro;
 using Futurum.WebApiEndpoint.Micro.Sample;
+using Futurum.WebApiEndpoint.Micro.Sample.Addition;
 
 using Microsoft.OpenApi.Models;
 
@@ -32,7 +33,7 @@ builder.Services
                }
            }
        })
-       .AddWebApiEndpointsForFuturumWebApiEndpointMicroSampleBlog()
+       .AddWebApiEndpointsForFuturumWebApiEndpointMicroSample()
        .AddWebApiEndpointsForFuturumWebApiEndpointMicroSampleAddition();
 
 var app = builder.Build();
