@@ -28,18 +28,19 @@ public class GreetingWebApiEndpoint : IWebApiEndpoint
 - [x] Vertical Slice Architecture, gives you the ability to add new features without changing existing code
 - [x] Structured way of building WebApiEndpoints using [minimal apis](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0)
 - [x] [Easy setup](#easy-setup)
-- [x] Developer friendly 
+- [x] Developer friendly, with a simple API and with a full suite of samples and tests
 - [x] Full support and built on top of [minimal apis](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0)
 - [x] Full support for OpenApi
 - [x] Full support for [TypedResults](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0)
 - [x] [Full compatibility](#full-compatibility-with-futurumcore) with [Futurum.Core](https://www.nuget.org/packages/Futurum.Core)
-- [x] [Supports uploading file(s) with additional JSON payload](#uploading-file--s--with-additional-json-payload)
+- [x] [Supports uploading file(s) with additional JSON payload](#uploading-files-with-additional-json-payload)
 - [x] Api Versioning baked-in
 - [x] Built in [sandbox runner](#sandbox-runner) with full [TypedResults support](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0), catching unhandled exceptions and returning a [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) response
 - [x] [Built in Validation support](#validation)
   - [x] [Integrated FluentValidation](#fluentvalidationservice)
   - [x] [Integrated DataAnnotations](#dataannotationsvalidationservice)
 - [x] Autodiscovery of WebApiEndpoint(s), based on Source Generators
+- [x] [Roslyn Analysers](#roslyn-analysers) to help build your WebApiEndpoint(s), using best practices
 - [x] Built on dotnet 7
 - [x] Built in use of [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) support
 - [x] [Tested solution](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint.micro)
@@ -596,7 +597,7 @@ There are examples showing the following:
 - [x] Weather Forecast
 - [x] Addition project containing WebApiEndpoints
 
-![Futurum.WebApiEndpoint.Micro.Sample-openapi.png](docs/Futurum.WebApiEndpoint.Micro.Sample-openapi.png)
+![Futurum.WebApiEndpoint.Micro.Sample-openapi.png](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/raw/main/docs/Futurum.WebApiEndpoint.Micro.Sample-openapi.png)
 
 ## Convention Customisation
 Although the default conventions are good enough for most cases, you can customise them.
@@ -654,3 +655,7 @@ This uses the following attributes:
 ```csharp
 [WebApiEndpointVersion(1)]
 ```
+
+## Roslyn Analysers
+- FWAEM0001 - Non empty constructor found on WebApiEndpoint
+- FWAEM0002 - BadRequest without 'ProblemDetails' use found on WebApiEndpoint
