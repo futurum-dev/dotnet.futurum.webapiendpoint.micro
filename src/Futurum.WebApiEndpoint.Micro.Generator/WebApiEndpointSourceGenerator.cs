@@ -21,15 +21,21 @@ public static class WebApiEndpointSourceGenerator
         var classDeclaration = (ClassDeclarationSyntax)context.Node;
         var semanticModel = context.SemanticModel;
         var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration, ct);
-        var interfaceTypeSymbol = semanticModel.Compilation.GetTypeByMetadataName("Futurum.WebApiEndpoint.Micro.IWebApiEndpoint");
-        if (classSymbol is not null && interfaceTypeSymbol is not null)
+
+        var webApiEndpointInterfaceType = Diagnostics.GetWebApiEndpointInterfaceType(semanticModel.Compilation);
+
+        if (classSymbol is not null && webApiEndpointInterfaceType is not null)
         {
-            var implementsInterface = classSymbol.AllInterfaces.Contains(interfaceTypeSymbol);
+            var implementsInterface = classSymbol.AllInterfaces.Contains(webApiEndpointInterfaceType);
 
             if (implementsInterface)
             {
+                var diagnostics = new List<Diagnostic>();
+                diagnostics.AddRange(Diagnostics.WebApiEndpointNonEmptyConstructor.Check(classSymbol));
+
                 var webApiEndpointData = new WebApiEndpointDatum(classSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
-                return new WebApiEndpointContext(webApiEndpointData: new[] { webApiEndpointData });
+
+                return new WebApiEndpointContext(diagnostics, new[] { webApiEndpointData });
             }
         }
 
