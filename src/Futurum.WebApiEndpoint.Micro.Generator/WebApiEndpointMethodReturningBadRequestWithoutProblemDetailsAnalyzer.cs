@@ -25,13 +25,17 @@ public class WebApiEndpointMethodReturningBadRequestWithoutProblemDetailsAnalyze
             return;
 
         var webApiEndpointInterfaceType = Diagnostics.GetWebApiEndpointInterfaceType(context.Compilation);
-        if (methodSymbol.ContainingType.AllInterfaces.Contains(webApiEndpointInterfaceType))
-        {
-            var diagnostics = Diagnostics.WebApiEndpointMethodReturningBadRequestWithoutProblemDetails.Check(methodSymbol);
 
-            foreach (var diagnostic in diagnostics)
+        if (webApiEndpointInterfaceType is not null)
+        {
+            if (methodSymbol.ContainingType.AllInterfaces.Contains(webApiEndpointInterfaceType))
             {
-                context.ReportDiagnostic(diagnostic);
+                var diagnostics = Diagnostics.WebApiEndpointMethodReturningBadRequestWithoutProblemDetails.Check(methodSymbol);
+
+                foreach (var diagnostic in diagnostics)
+                {
+                    context.ReportDiagnostic(diagnostic);
+                }
             }
         }
     }
