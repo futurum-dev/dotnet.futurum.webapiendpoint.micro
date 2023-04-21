@@ -19,7 +19,7 @@ public class TodoStartable : IStartable
         _configurationService = configurationService;
     }
 
-    public void Start()
+    public async Task StartAsync()
     {
         var connectionString = _configurationService.GetConnectionString();
 
@@ -27,7 +27,7 @@ public class TodoStartable : IStartable
         {
             _logger.LogInformation("Ensuring database exists at connection string '{connectionString}'", connectionString);
 
-            using var db = _serviceProvider.CreateScope().ServiceProvider.GetRequiredService<SqliteConnection>();
+            await using var db = _serviceProvider.CreateScope().ServiceProvider.GetRequiredService<SqliteConnection>();
             var sql = $"""
                   CREATE TABLE IF NOT EXISTS Todos (
                   {nameof(Todo.Id)} INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -35,7 +35,7 @@ public class TodoStartable : IStartable
                   {nameof(Todo.IsComplete)} INTEGER DEFAULT 0 NOT NULL CHECK({nameof(Todo.IsComplete)} IN (0, 1))
                   );
                """;
-            db.ExecuteAsync(sql).Wait();
+            await db.ExecuteAsync(sql);
         }
         else
         {

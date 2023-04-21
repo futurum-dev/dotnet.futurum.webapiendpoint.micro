@@ -28,7 +28,7 @@ public static partial class WebApplicationStartupExtensions
 
         serviceCollection.AddSingleton(configuration);
 
-        serviceCollection.RegisterModule<FuturumWebApiEndpointMicroModule>();
+        serviceCollection.AddModule<FuturumWebApiEndpointMicroModule>();
 
         var webApiVersionConfigurationService = new TVersionConfigurationService();
 

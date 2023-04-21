@@ -34,8 +34,8 @@
         <PackageReference Include="Asp.Versioning.Http" Version="7.0.0" />
         <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.0.0" />
         <PackageReference Include="FluentValidation" Version="11.5.1" />
-        <PackageReference Include="Futurum.Core" Version="1.0.14" />
-        <PackageReference Include="Futurum.Microsoft.Extensions.DependencyInjection" Version="1.0.3" />
+        <PackageReference Include="Futurum.Core" Version="1.0.16" />
+        <PackageReference Include="Futurum.Microsoft.Extensions.DependencyInjection" Version="1.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>

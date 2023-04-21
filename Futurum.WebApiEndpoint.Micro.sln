@@ -30,6 +30,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Futurum.WebApiEndpoint.Micr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Futurum.WebApiEndpoint.Micro.Sample.Addition", "sample\Futurum.WebApiEndpoint.Micro.Sample.Addition\Futurum.WebApiEndpoint.Micro.Sample.Addition.csproj", "{F4BA916B-A0A8-485E-8ACC-D5698B4D3632}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests", "test\Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests\Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests.csproj", "{5AD57853-5EEB-4960-98B5-6AC4D75CF7ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Futurum.WebApiEndpoint.Micro.Generator.Tests", "test\Futurum.WebApiEndpoint.Micro.Generator.Tests\Futurum.WebApiEndpoint.Micro.Generator.Tests.csproj", "{C4BB247F-941F-41AF-B422-083E203A46FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,11 +64,21 @@ Global
 		{F4BA916B-A0A8-485E-8ACC-D5698B4D3632}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4BA916B-A0A8-485E-8ACC-D5698B4D3632}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4BA916B-A0A8-485E-8ACC-D5698B4D3632}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AD57853-5EEB-4960-98B5-6AC4D75CF7ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AD57853-5EEB-4960-98B5-6AC4D75CF7ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AD57853-5EEB-4960-98B5-6AC4D75CF7ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AD57853-5EEB-4960-98B5-6AC4D75CF7ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4BB247F-941F-41AF-B422-083E203A46FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4BB247F-941F-41AF-B422-083E203A46FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4BB247F-941F-41AF-B422-083E203A46FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4BB247F-941F-41AF-B422-083E203A46FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5A199733-F1B8-48E6-8591-776E2EC7E81E} = {3D057B76-ED4D-45EF-AC8B-7A4660ED32C2}
 		{E198A79A-EAFA-40E5-B564-0B17EC5CA69F} = {759534C0-6CAD-4645-932D-8EFEE7A3FE99}
 		{F73126B2-18F2-4848-B58A-D41592D7DAA6} = {759534C0-6CAD-4645-932D-8EFEE7A3FE99}
 		{F4BA916B-A0A8-485E-8ACC-D5698B4D3632} = {3D057B76-ED4D-45EF-AC8B-7A4660ED32C2}
+		{5AD57853-5EEB-4960-98B5-6AC4D75CF7ED} = {759534C0-6CAD-4645-932D-8EFEE7A3FE99}
+		{C4BB247F-941F-41AF-B422-083E203A46FE} = {759534C0-6CAD-4645-932D-8EFEE7A3FE99}
 	EndGlobalSection
 EndGlobal

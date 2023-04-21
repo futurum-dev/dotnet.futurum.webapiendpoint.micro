@@ -15,7 +15,7 @@ public class ApplicationModule : IModule
 
     public void Load(IServiceCollection services)
     {
-        services.RegisterModule<BlogModule>();
-        services.RegisterModule(new TodoModule(_configuration));
+        services.AddModule<BlogModule>();
+        services.AddModule(new TodoModule(_configuration));
     }
 }

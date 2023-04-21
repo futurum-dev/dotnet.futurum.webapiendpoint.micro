@@ -1,14 +1,13 @@
 using Futurum.Microsoft.Extensions.DependencyInjection;
 using Futurum.WebApiEndpoint.Micro;
 using Futurum.WebApiEndpoint.Micro.Sample;
-using Futurum.WebApiEndpoint.Micro.Sample.Addition;
 
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddProblemDetails();
 
-builder.Services.RegisterModule(new ApplicationModule(builder.Configuration));
+builder.Services.AddModule(new ApplicationModule(builder.Configuration));
 
 builder.AddAuthentication();
 

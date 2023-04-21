@@ -26,7 +26,7 @@ public class FluentValidatorDatum : IEquatable<FluentValidatorDatum>
     }
 
     public override bool Equals(object? obj) =>
-        obj is FluentValidatorDatum fluentValidatorData && Equals(fluentValidatorData);
+        obj is FluentValidatorDatum fluentValidatorDatum && Equals(fluentValidatorDatum);
 
     public override int GetHashCode() =>
         HashCode.Combine(InterfaceType, ImplementationType);
