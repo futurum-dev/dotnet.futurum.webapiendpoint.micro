@@ -27,4 +27,22 @@ public class BytesWebApiEndpoint : IWebApiEndpoint
             return TypedResults.Bytes(bytes, MediaTypeNames.Application.Octet, "hello-world.txt");
         }
     }
+
+    private static Task<Results<NotFound, FileContentHttpResult, BadRequest<ProblemDetails>>> DownloadHandlerAsync(HttpContext context)
+    {
+        return RunAsync(Execute, context, "Failed to read file");
+
+        async Task<Results<NotFound, FileContentHttpResult>> Execute()
+        {
+            var path = "./Data/hello-world.txt";
+
+            if (!File.Exists(path))
+            {
+                return TypedResults.NotFound();
+            }
+
+            var bytes = await File.ReadAllBytesAsync(path);
+            return TypedResults.Bytes(bytes, MediaTypeNames.Application.Octet, "hello-world.txt");
+        }
+    }
 }

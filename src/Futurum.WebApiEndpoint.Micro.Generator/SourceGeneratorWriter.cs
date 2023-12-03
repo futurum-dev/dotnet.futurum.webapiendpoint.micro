@@ -13,6 +13,5 @@ public static class SourceGeneratorWriter
     private static void Write(IndentedStringBuilder codeBuilder)
     {
         codeBuilder.AppendLine("serviceCollection.RegisterWebApiEndpoints();");
-        codeBuilder.AppendLine("serviceCollection.RegisterFluentValidators();");
     }
 }

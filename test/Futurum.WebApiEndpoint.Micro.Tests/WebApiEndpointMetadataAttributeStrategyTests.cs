@@ -1,5 +1,3 @@
-using FluentAssertions;
-
 using Microsoft.AspNetCore.Routing;
 
 namespace Futurum.WebApiEndpoint.Micro.Tests;

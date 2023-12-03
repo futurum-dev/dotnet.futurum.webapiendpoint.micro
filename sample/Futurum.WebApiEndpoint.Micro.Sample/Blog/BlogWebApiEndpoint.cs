@@ -16,36 +16,73 @@ public class BlogWebApiEndpoint : IWebApiEndpoint
         builder.MapPut("/", UpdateHandler);
     }
 
-    private static Task<Results<Ok<DataCollectionDto<BlogDto>>, BadRequest<ProblemDetails>>> GetHandler(HttpContext context, IBlogStorageBroker blogStorageBroker) =>
-        blogStorageBroker.GetAsync()
-                         .MapAsAsync(BlogMapper.MapToDto)
-                         .MapAsync(DataCollectionExtensions.ToDataCollectionDto)
-                         .ToWebApiAsync(context, ToOk);
+    private static Task<Results<Ok<DataCollectionDto<BlogDto>>, BadRequest<ProblemDetails>>> GetHandler(HttpContext context, IBlogStorageBroker blogStorageBroker)
+    {
+        return RunToOkAsync(Execute, context, "Failed to get blogs");
 
-    private static Task<Results<Ok<BlogDto>, BadRequest<ProblemDetails>>> GetByIdHandler(HttpContext context, IBlogStorageBroker blogStorageBroker, long id) =>
-        blogStorageBroker.GetByIdAsync(id.ToId())
-                         .MapAsync(BlogMapper.MapToDto)
-                         .ToWebApiAsync(context, ToOk);
+        async Task<DataCollectionDto<BlogDto>> Execute()
+        {
+            var blogs = await blogStorageBroker.GetAsync();
 
-    private static Task<Results<Created<BlogDto>, ValidationProblem, BadRequest<ProblemDetails>>> CreateHandler(HttpContext context, IBlogStorageBroker blogStorageBroker,
-                                                                                                                IValidationService<BlogDto> validationService,
-                                                                                                                BlogDto blogDto) =>
-        validationService.Execute(blogDto)
-                         .Map(() => new Blog(Option<Id>.None, blogDto.Url))
-                         .ThenAsync(blogStorageBroker.AddAsync)
-                         .MapAsync(BlogMapper.MapToDto)
-                         .ToWebApiAsync(context, ToCreated, ToValidationProblem);
+            var dtos = blogs.Select(BlogMapper.MapToDto);
 
-    private static Task<Results<Ok, BadRequest<ProblemDetails>>> DeleteHandler(HttpContext context, IBlogStorageBroker blogStorageBroker, long id) =>
-        blogStorageBroker.DeleteAsync(id.ToId())
-                         .ToWebApiAsync(context, ToOk);
+            return dtos.ToDataCollectionDto();
+        }
+    }
 
-    private static Task<Results<Ok<BlogDto>, BadRequest<ProblemDetails>>> UpdateHandler(HttpContext context, IBlogStorageBroker blogStorageBroker,
-                                                                                        IValidationService<BlogDto> validationService,
-                                                                                        BlogDto blogDto) =>
-        validationService.Execute(blogDto)
-                         .Map(() => new Blog(blogDto.Id.ToId(), blogDto.Url))
-                         .ThenAsync(blogStorageBroker.UpdateAsync)
-                         .MapAsync(BlogMapper.MapToDto)
-                         .ToWebApiAsync(context, ToOk);
+    private static Task<Results<Ok<BlogDto>, BadRequest<ProblemDetails>>> GetByIdHandler(HttpContext context, IBlogStorageBroker blogStorageBroker, long id)
+    {
+        return RunToOkAsync(Execute, context, "Failed to get blog by id");
+
+        async Task<BlogDto> Execute()
+        {
+            var blog = await blogStorageBroker.GetByIdAsync(id.ToId());
+
+            var dto = BlogMapper.MapToDto(blog);
+
+            return dto;
+        }
+    }
+
+    private static Task<Results<Created<BlogDto>, BadRequest<ProblemDetails>>> CreateHandler(HttpContext context, IBlogStorageBroker blogStorageBroker, BlogDto blogDto)
+    {
+        return RunAsync(Execute, context, "Failed to create blog");
+
+        async Task<Created<BlogDto>> Execute()
+        {
+            var blog = new Blog(Option<Id>.None, blogDto.Url);
+
+            var addedBlog = await blogStorageBroker.AddAsync(blog);
+
+            var dto = BlogMapper.MapToDto(addedBlog);
+
+            return dto.ToCreated(context);
+        }
+    }
+
+    private static Task<Results<Ok, BadRequest<ProblemDetails>>> DeleteHandler(HttpContext context, IBlogStorageBroker blogStorageBroker, long id)
+    {
+        return RunToOkAsync(Execute, context, $"Failed to delete blog by id '{id}'");
+
+        async Task Execute()
+        {
+            await blogStorageBroker.DeleteAsync(id.ToId());
+        }
+    }
+
+    private static Task<Results<Ok<BlogDto>, BadRequest<ProblemDetails>>> UpdateHandler(HttpContext context, IBlogStorageBroker blogStorageBroker, BlogDto blogDto)
+    {
+        return RunToOkAsync(Execute, context, $"Failed to update blog with id '{blogDto.Id}'");
+
+        async Task<BlogDto> Execute()
+        {
+            var blog = new Blog(blogDto.Id.ToId(), blogDto.Url);
+
+            var updatedBlog = await blogStorageBroker.UpdateAsync(blog);
+
+            var dto = BlogMapper.MapToDto(updatedBlog);
+
+            return dto;
+        }
+    }
 }

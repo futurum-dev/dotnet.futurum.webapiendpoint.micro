@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace Futurum.WebApiEndpoint.Micro;
 
 public static partial class WebApiResultsExtensions

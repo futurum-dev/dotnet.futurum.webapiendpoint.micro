@@ -43,7 +43,7 @@ public class TodoApiWebApiEndpoint : IWebApiEndpoint
 
     private static Results<Ok<IAsyncEnumerable<Todo>>, BadRequest<ProblemDetails>> GetAllHandler(HttpContext context, SqliteConnection db)
     {
-        return Run(Execute, context, ToOk, "Failed to get todos");
+        return RunToOk(Execute, context, "Failed to get todos");
 
         IAsyncEnumerable<Todo> Execute() =>
             db.QueryAsync<Todo>("SELECT * FROM Todos");
@@ -51,7 +51,7 @@ public class TodoApiWebApiEndpoint : IWebApiEndpoint
 
     private static Results<Ok<IAsyncEnumerable<Todo>>, BadRequest<ProblemDetails>> GetCompleteHandler(HttpContext context, SqliteConnection db)
     {
-        return Run(Execute, context, ToOk, "Failed to get complete todos");
+        return RunToOk(Execute, context, "Failed to get complete todos");
 
         IAsyncEnumerable<Todo> Execute() =>
             db.QueryAsync<Todo>("SELECT * FROM Todos WHERE IsComplete = true");
@@ -59,7 +59,7 @@ public class TodoApiWebApiEndpoint : IWebApiEndpoint
 
     private static Results<Ok<IAsyncEnumerable<Todo>>, BadRequest<ProblemDetails>> GetIncompleteHandler(HttpContext context, SqliteConnection db)
     {
-        return Run(Execute, context, ToOk, "Failed to get incomplete todos");
+        return RunToOk(Execute, context, "Failed to get incomplete todos");
 
         IAsyncEnumerable<Todo> Execute() =>
             db.QueryAsync<Todo>("SELECT * FROM Todos WHERE IsComplete = false");
@@ -87,12 +87,9 @@ public class TodoApiWebApiEndpoint : IWebApiEndpoint
                 : TypedResults.NoContent();
     }
 
-    private static Task<Results<Created<Todo>, ValidationProblem, BadRequest<ProblemDetails>>> CreateHandler(HttpContext context, IDataAnnotationsValidationService validationService,
-                                                                                                             SqliteConnection db, Todo todo)
+    private static Task<Results<Created<Todo>, BadRequest<ProblemDetails>>> CreateHandler(HttpContext context, SqliteConnection db, Todo todo)
     {
-        return validationService.Execute(todo)
-                                .ThenTryAsync(Execute, () => "Failed to update todo")
-                                .ToWebApiAsync(context, ToValidationProblem);
+        return RunAsync(Execute, context, () => "Failed to create todo");
 
         async Task<Created<Todo>> Execute()
         {
@@ -104,14 +101,11 @@ public class TodoApiWebApiEndpoint : IWebApiEndpoint
         }
     }
 
-    private static Task<Results<NoContent, NotFound, ValidationProblem, BadRequest<ProblemDetails>>> UpdateHandler(HttpContext context, IDataAnnotationsValidationService validationService,
-                                                                                                                   SqliteConnection db, int id, Todo inputTodo)
+    private static Task<Results<NoContent, NotFound, BadRequest<ProblemDetails>>> UpdateHandler(HttpContext context, SqliteConnection db, int id, Todo inputTodo)
     {
         inputTodo.Id = id;
 
-        return validationService.Execute(inputTodo)
-                                .ThenTryAsync(Execute, () => "Failed to update todo")
-                                .ToWebApiAsync(context, ToValidationProblem);
+        return RunAsync(Execute, context, () => "Failed to update todo");
 
         async Task<Results<NoContent, NotFound>> Execute() =>
             await db.ExecuteAsync("UPDATE Todos SET Title = @Title, IsComplete = @IsComplete WHERE Id = @Id", inputTodo.Title.AsDbParameter(), inputTodo.IsComplete.AsDbParameter()) == 1

@@ -1,8 +1,6 @@
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 
-using FluentAssertions;
-
 namespace Futurum.WebApiEndpoint.Micro.Tests;
 
 public class WebApiOpenApiVersionConfigurationServiceTests

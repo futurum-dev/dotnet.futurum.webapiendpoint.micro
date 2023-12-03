@@ -1,7 +1,5 @@
 using Asp.Versioning;
 
-using Futurum.Microsoft.Extensions.DependencyInjection;
-
 using Microsoft.Extensions.Options;
 
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -27,8 +25,6 @@ public static partial class WebApplicationStartupExtensions
         serviceCollection.AddSwaggerGen();
 
         serviceCollection.AddSingleton(configuration);
-
-        serviceCollection.AddModule<FuturumWebApiEndpointMicroModule>();
 
         var webApiVersionConfigurationService = new TVersionConfigurationService();
 

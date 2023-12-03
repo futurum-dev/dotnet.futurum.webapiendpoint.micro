@@ -13,12 +13,12 @@ namespace Futurum.WebApiEndpoint.Micro.EndToEndTests;
 public class FeatureEndToEndErrorsTests
 {
     [Fact]
-    public async Task ErrorResult()
+    public async Task Exception()
     {
         var httpClient = CreateClient();
 
-        var requestPath = "/v1/error/result-error";
-        
+        var requestPath = "/v1/error/exception";
+
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
@@ -27,37 +27,12 @@ public class FeatureEndToEndErrorsTests
 
         var httpResponseMessage = await httpClient.SendAsync(request);
 
-        httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
         var response = await httpResponseMessage.Content.ReadFromJsonAsync<ProblemDetails>();
 
-        response.Title.Should().Be(ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest));
-        response.Detail.Should().Be("We have a ResultError!");
-        response.Status.Should().Be((int)HttpStatusCode.BadRequest);
-        response.Instance.Should().Be(requestPath);
-    }
-    
-    [Fact]
-    public async Task ErrorResultWithException()
-    {
-        var httpClient = CreateClient();
-
-        var requestPath = "/v1/error/exception-with-result-error";
-        
-        var request = new HttpRequestMessage
-        {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri(requestPath),
-        };
-
-        var httpResponseMessage = await httpClient.SendAsync(request);
-
-        httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        var response = await httpResponseMessage.Content.ReadFromJsonAsync<ProblemDetails>();
-
-        response.Title.Should().Be(ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest));
-        response.Detail.Should().Contain("Exception to ResultError");
-        response.Status.Should().Be((int)HttpStatusCode.BadRequest);
-        response.Instance.Should().Be(requestPath);
+        response.Title.Should().Be("An error occurred while processing your request.");
+        response.Detail.Should().Be("An error occurred.");
+        response.Status.Should().Be((int)HttpStatusCode.InternalServerError);
     }
 
     private static HttpClient CreateClient() =>
