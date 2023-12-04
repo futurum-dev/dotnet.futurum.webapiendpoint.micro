@@ -17,6 +17,95 @@ public class WebApiEndpointRunnerRunTests
 
     public class Sync
     {
+        public class IResult1
+        {
+            public class ErrorMessage
+            {
+                [Fact]
+                public void result_success()
+                {
+                    var input = TypedResults.Ok();
+
+                    var results = WebApiEndpointRunner.Run(() => input,
+                                                           CreateHttpContext(),
+                                                           ErrorMessage2);
+
+                    ValidateOk(results);
+                }
+
+                [Fact]
+                public void Exception()
+                {
+                    var results = WebApiEndpointRunner.Run(() =>
+                                                           {
+                                                               throw new Exception(ErrorMessage1);
+
+                                                               return TypedResults.Ok();
+                                                           },
+                                                           CreateHttpContext(),
+                                                           ErrorMessage2);
+
+                    ValidateBadRequest(results);
+                }
+
+                private static void ValidateBadRequest(Results<Ok, BadRequest<ProblemDetails>> results)
+                {
+                    results.Result.Should().BeOfType<BadRequest<ProblemDetails>>();
+                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+                    results.Result.As<BadRequest<ProblemDetails>>().Value.Detail.Should().Be($"{ErrorMessage2};{ErrorMessage1}");
+                    results.Result.As<BadRequest<ProblemDetails>>().Value.Instance.Should().Be(REQUEST_PATH);
+                }
+
+                private static void ValidateOk(Results<Ok, BadRequest<ProblemDetails>> results)
+                {
+                    results.Result.Should().BeOfType<Ok>();
+                }
+            }
+
+            public class FuncErrorMessage
+            {
+                [Fact]
+                public void result_success()
+                {
+                    var input = TypedResults.Ok();
+
+                    var results = WebApiEndpointRunner.Run(() => input,
+                                                           CreateHttpContext(),
+                                                           () => ErrorMessage2);
+
+                    ValidateOk(results);
+                }
+
+                [Fact]
+                public void Exception()
+                {
+                    var results = WebApiEndpointRunner.Run(() =>
+                                                           {
+                                                               throw new Exception(ErrorMessage1);
+
+                                                               return TypedResults.Ok();
+                                                           },
+                                                           CreateHttpContext(),
+                                                           () => ErrorMessage2);
+
+                    ValidateBadRequest(results);
+                }
+
+                private static void ValidateBadRequest(Results<Ok, BadRequest<ProblemDetails>> results)
+                {
+                    results.Result.Should().BeOfType<BadRequest<ProblemDetails>>();
+                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+                    results.Result.As<BadRequest<ProblemDetails>>().Value.Detail.Should().Be($"{ErrorMessage2};{ErrorMessage1}");
+                    results.Result.As<BadRequest<ProblemDetails>>().Value.Instance.Should().Be(REQUEST_PATH);
+                }
+
+                private static void ValidateOk(Results<Ok, BadRequest<ProblemDetails>> results)
+                {
+                    results.Result.Should().BeOfType<Ok>();
+                }
+            }
+        }
+
         public class IResult2
         {
             public class ErrorMessage
@@ -619,7 +708,7 @@ public class WebApiEndpointRunnerRunTests
             public class ErrorMessage
             {
                 [Fact]
-                public async Task RunAsync_ReturnsExpectedResult()
+                public async Task result_success()
                 {
                     var input = TypedResults.Ok();
 
@@ -631,7 +720,7 @@ public class WebApiEndpointRunnerRunTests
                 }
 
                 [Fact]
-                public async Task RunAsync_ThrowsException_ReturnsBadRequest()
+                public async Task Exception()
                 {
                     var results = await WebApiEndpointRunner.RunAsync(async () =>
                                                                       {
@@ -662,7 +751,7 @@ public class WebApiEndpointRunnerRunTests
             public class FuncErrorMessage
             {
                 [Fact]
-                public async Task RunAsync_ReturnsExpectedResult()
+                public async Task result_success()
                 {
                     var input = TypedResults.Ok();
 
@@ -674,7 +763,7 @@ public class WebApiEndpointRunnerRunTests
                 }
 
                 [Fact]
-                public async Task RunAsync_ThrowsException_ReturnsBadRequest()
+                public async Task Exception()
                 {
                     var results = await WebApiEndpointRunner.RunAsync(async () =>
                                                                       {

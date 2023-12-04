@@ -1,9 +1,9 @@
 namespace Futurum.WebApiEndpoint.Micro.Sample.Greeting;
 
 [WebApiEndpoint("greeting")]
-public class GreetingWebApiEndpoint : IWebApiEndpoint
+public partial class GreetingWebApiEndpoint
 {
-    public void Register(IEndpointRouteBuilder builder)
+    protected override void Build(IEndpointRouteBuilder builder)
     {
         builder.MapGet("/hello", HelloHandler);
         builder.MapGet("/goodbye", GoodbyeHandler);

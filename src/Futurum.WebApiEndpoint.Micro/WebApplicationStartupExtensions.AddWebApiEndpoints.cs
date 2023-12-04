@@ -41,8 +41,6 @@ public static partial class WebApplicationStartupExtensions
         serviceCollection.AddWebApiEndpointOpenApiVersionConfigurationService<WebApiOpenApiVersionConfigurationService>();
         serviceCollection.AddWebApiEndpointOpenApiVersionUIConfigurationService<WebApiOpenApiVersionUIConfigurationService>();
 
-        serviceCollection.AddWebApiEndpointMetadataStrategy<WebApiEndpointMetadataAttributeStrategy>();
-
         serviceCollection.AddApiVersioning(options => webApiVersionConfigurationService.ConfigureApiVersioning(options, defaultWebApiVersion))
                          .AddApiExplorer(options => webApiVersionConfigurationService.ConfigureApiExplorer(options, configuration))
                          .EnableApiVersionBinding();

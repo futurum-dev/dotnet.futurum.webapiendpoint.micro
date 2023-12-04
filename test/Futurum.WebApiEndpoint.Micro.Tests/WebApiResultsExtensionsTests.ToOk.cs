@@ -21,14 +21,6 @@ public class WebApiResultsExtensionsToOkTests
     }
 
     [Fact]
-    public void ToOk_without_Value()
-    {
-        var results = ToOk(CreateHttpContext());
-
-        results.Should().BeOfType<Ok>();
-    }
-
-    [Fact]
     public void ToOk_with_Value()
     {
         var value = VALUE;

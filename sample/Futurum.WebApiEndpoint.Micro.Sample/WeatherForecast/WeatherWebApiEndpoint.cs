@@ -1,14 +1,14 @@
 namespace Futurum.WebApiEndpoint.Micro.Sample.WeatherForecast;
 
 [WebApiEndpoint("weather")]
-public class WeatherWebApiEndpoint : IWebApiEndpoint
+public partial class WeatherWebApiEndpoint
 {
     private static readonly string[] Summaries =
     {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-    public void Register(IEndpointRouteBuilder builder)
+    protected override void Build(IEndpointRouteBuilder builder)
     {
         builder.MapGet("/", GetHandler);
     }

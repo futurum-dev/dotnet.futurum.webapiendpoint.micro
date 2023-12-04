@@ -3,9 +3,9 @@ using System.Net.Mime;
 namespace Futurum.WebApiEndpoint.Micro.Sample.Features;
 
 [WebApiEndpoint("bytes", "feature")]
-public class BytesWebApiEndpoint : IWebApiEndpoint
+public partial class BytesWebApiEndpoint
 {
-    public void Register(IEndpointRouteBuilder builder)
+    protected override void Build(IEndpointRouteBuilder builder)
     {
         builder.MapGet("download", DownloadHandler);
     }

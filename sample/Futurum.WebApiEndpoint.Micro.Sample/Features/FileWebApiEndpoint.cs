@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 namespace Futurum.WebApiEndpoint.Micro.Sample.Features;
 
 [WebApiEndpoint(prefixRoute: "file", group: "feature")]
-public class FileWebApiEndpoint : IWebApiEndpoint
+public partial class FileWebApiEndpoint
 {
-    public void Register(IEndpointRouteBuilder builder)
+    protected override void Build(IEndpointRouteBuilder builder)
     {
         builder.MapPost("upload", UploadHandler)
                .Accepts<IFormFile>("multipart/form-data");
@@ -23,7 +23,7 @@ public class FileWebApiEndpoint : IWebApiEndpoint
 
     private static Task<Results<Ok<FileDetailsDto>, BadRequest<ProblemDetails>>> UploadHandler(HttpContext context, IFormFile file)
     {
-        return RunAsync(Execute, context, ToOk, "Failed to read file");
+        return RunToOkAsync(Execute, context, "Failed to read file");
 
         async Task<FileDetailsDto> Execute()
         {
@@ -37,7 +37,7 @@ public class FileWebApiEndpoint : IWebApiEndpoint
 
     private static Task<Results<Ok<IEnumerable<FileDetailsDto>>, BadRequest<ProblemDetails>>> UploadsHandler(HttpContext context, IFormFileCollection files)
     {
-        return RunAsync(Execute, context, ToOk, "Failed to read file");
+        return RunToOkAsync(Execute, context, "Failed to read file");
 
         async Task<IEnumerable<FileDetailsDto>> Execute()
         {
@@ -58,7 +58,7 @@ public class FileWebApiEndpoint : IWebApiEndpoint
 
     private static Task<Results<Ok<FileDetailsWithPayloadDto>, BadRequest<ProblemDetails>>> UploadWithPayloadHandler(HttpContext context, FormFileWithPayload<PayloadDto> fileWithPayload)
     {
-        return RunAsync(Execute, context, ToOk, "Failed to read file");
+        return RunToOkAsync(Execute, context, "Failed to read file");
 
         async Task<FileDetailsWithPayloadDto> Execute()
         {
@@ -73,7 +73,7 @@ public class FileWebApiEndpoint : IWebApiEndpoint
     private static Task<Results<Ok<IEnumerable<FileDetailsWithPayloadDto>>, BadRequest<ProblemDetails>>> UploadsWithPayloadHandler(
         HttpContext context, FormFilesWithPayload<PayloadDto> filesWithPayload)
     {
-        return RunAsync(Execute, context, ToOk, "Failed to read file");
+        return RunToOkAsync(Execute, context, "Failed to read file");
 
         async Task<IEnumerable<FileDetailsWithPayloadDto>> Execute()
         {

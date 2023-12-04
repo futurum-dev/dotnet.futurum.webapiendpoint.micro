@@ -1,9 +1,9 @@
 namespace Futurum.WebApiEndpoint.Micro.Sample.Blog;
 
 [WebApiEndpoint("blog")]
-public class BlogWebApiEndpoint : IWebApiEndpoint
+public partial class BlogWebApiEndpoint
 {
-    public void Register(IEndpointRouteBuilder builder)
+    protected override void Build(IEndpointRouteBuilder builder)
     {
         builder.MapGet("/", GetHandler);
 
@@ -50,7 +50,7 @@ public class BlogWebApiEndpoint : IWebApiEndpoint
 
         async Task<Created<BlogDto>> Execute()
         {
-            var blog = new Blog(Option<Id>.None, blogDto.Url);
+            var blog = new Blog(null, blogDto.Url);
 
             var addedBlog = await blogStorageBroker.AddAsync(blog);
 

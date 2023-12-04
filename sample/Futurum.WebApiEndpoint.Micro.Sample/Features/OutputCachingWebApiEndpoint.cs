@@ -1,14 +1,14 @@
 namespace Futurum.WebApiEndpoint.Micro.Sample.Features;
 
 [WebApiEndpoint("output-caching")]
-public class OutputCachingWebApiEndpoint : IWebApiEndpoint
+public partial class OutputCachingWebApiEndpoint
 {
-    public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
+    protected override RouteGroupBuilder Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
     {
-        groupBuilder.CacheOutput(OutputCaching.ExpiryIn10Seconds.Policy);
+        return groupBuilder.CacheOutput(OutputCaching.ExpiryIn10Seconds.Policy);
     }
 
-    public void Register(IEndpointRouteBuilder builder)
+    protected override void Build(IEndpointRouteBuilder builder)
     {
         builder.MapGet("/", GetHandler);
     }

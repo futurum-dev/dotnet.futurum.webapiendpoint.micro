@@ -7,7 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         private static global::Microsoft.Extensions.DependencyInjection.IServiceCollection RegisterWebApiEndpoints(this global::Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton(typeof(global::Futurum.WebApiEndpoint.Micro.IWebApiEndpoint), typeof(Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests.WebApiEndpoint1));
+            serviceCollection.AddSingleton(typeof(global::Futurum.WebApiEndpoint.Micro.IWebApiEndpoint), typeof(Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests.Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests.WebApiEndpoint1));
             return serviceCollection;
         }
     }

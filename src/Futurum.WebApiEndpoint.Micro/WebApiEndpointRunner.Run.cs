@@ -7,14 +7,19 @@ namespace Futurum.WebApiEndpoint.Micro;
 
 public static partial class WebApiEndpointRunner
 {
-    public static Results<TIResult, BadRequest<ProblemDetails>> Run<T, TIResult>(
-        Func<T> func, HttpContext context, Func<HttpContext, T, TIResult> resultHandler, string errorMessage)
-        where TIResult : IResult
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
+    public static Results<TIResult1, BadRequest<ProblemDetails>> Run<TIResult1>(
+        Func<TIResult1> func, HttpContext context, string errorMessage)
+        where TIResult1 : IResult
     {
         try
         {
-            var value = func();
-            return resultHandler(context, value);
+            var result = func();
+            return result;
         }
         catch (Exception exception)
         {
@@ -30,14 +35,19 @@ public static partial class WebApiEndpointRunner
         }
     }
 
-    public static Results<TIResult, BadRequest<ProblemDetails>> Run<T, TIResult>(
-        Func<T> func, HttpContext context, Func<HttpContext, T, TIResult> resultHandler, Func<string> errorMessage)
-        where TIResult : IResult
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
+    public static Results<TIResult1, BadRequest<ProblemDetails>> Run<TIResult1>(
+        Func<TIResult1> func, HttpContext context, Func<string> errorMessage)
+        where TIResult1 : IResult
     {
         try
         {
-            var value = func();
-            return resultHandler(context, value);
+            var result = func();
+            return result;
         }
         catch (Exception exception)
         {
@@ -53,6 +63,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static Results<TIResult1, TIResult2, BadRequest<ProblemDetails>> Run<TIResult1, TIResult2>(
         Func<Results<TIResult1, TIResult2>> func, HttpContext context, string errorMessage)
         where TIResult1 : IResult
@@ -82,6 +97,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static Results<TIResult1, TIResult2, BadRequest<ProblemDetails>> Run<TIResult1, TIResult2>(
         Func<Results<TIResult1, TIResult2>> func, HttpContext context, Func<string> errorMessage)
         where TIResult1 : IResult
@@ -111,6 +131,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static Results<TIResult1, TIResult2, TIResult3, BadRequest<ProblemDetails>> Run<TIResult1, TIResult2, TIResult3>(
         Func<Results<TIResult1, TIResult2, TIResult3>> func, HttpContext context, string errorMessage)
         where TIResult1 : IResult
@@ -142,6 +167,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static Results<TIResult1, TIResult2, TIResult3, BadRequest<ProblemDetails>> Run<TIResult1, TIResult2, TIResult3>(
         Func<Results<TIResult1, TIResult2, TIResult3>> func, HttpContext context, Func<string> errorMessage)
         where TIResult1 : IResult
@@ -173,6 +203,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static Results<TIResult1, TIResult2, TIResult3, TIResult4, BadRequest<ProblemDetails>> Run<TIResult1, TIResult2, TIResult3, TIResult4>(
         Func<Results<TIResult1, TIResult2, TIResult3, TIResult4>> func, HttpContext context, string errorMessage)
         where TIResult1 : IResult
@@ -206,6 +241,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static Results<TIResult1, TIResult2, TIResult3, TIResult4, BadRequest<ProblemDetails>> Run<TIResult1, TIResult2, TIResult3, TIResult4>(
         Func<Results<TIResult1, TIResult2, TIResult3, TIResult4>> func, HttpContext context, Func<string> errorMessage)
         where TIResult1 : IResult
@@ -239,6 +279,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5, BadRequest<ProblemDetails>> Run<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>(
         Func<Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>> func, HttpContext context, string errorMessage)
         where TIResult1 : IResult
@@ -274,6 +319,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5, BadRequest<ProblemDetails>> Run<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>(
         Func<Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>> func, HttpContext context, Func<string> errorMessage)
         where TIResult1 : IResult
@@ -309,29 +359,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
-    public static async Task<Results<TIResult, BadRequest<ProblemDetails>>> RunAsync<T, TIResult>(
-        Func<Task<T>> func, HttpContext context, Func<HttpContext, T, TIResult> resultHandler, string errorMessage)
-        where TIResult : IResult
-    {
-        try
-        {
-            var value = await func();
-            return resultHandler(context, value);
-        }
-        catch (Exception exception)
-        {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
-
-            return TypedResults.BadRequest(problemDetails);
-        }
-    }
-
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static async Task<Results<TIResult, BadRequest<ProblemDetails>>> RunAsync<TIResult>(
         Func<Task<TIResult>> func, HttpContext context, string errorMessage)
         where TIResult : IResult
@@ -355,37 +387,19 @@ public static partial class WebApiEndpointRunner
         }
     }
 
-    public static async Task<Results<TIResult, BadRequest<ProblemDetails>>> RunAsync<T, TIResult>(
-        Func<Task<T>> func, HttpContext context, Func<HttpContext, T, TIResult> resultHandler, Func<string> errorMessage)
-        where TIResult : IResult
-    {
-        try
-        {
-            var value = await func();
-            return resultHandler(context, value);
-        }
-        catch (Exception exception)
-        {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage()};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
-
-            return TypedResults.BadRequest(problemDetails);
-        }
-    }
-
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static async Task<Results<TIResult, BadRequest<ProblemDetails>>> RunAsync<TIResult>(
         Func<Task<TIResult>> func, HttpContext context, Func<string> errorMessage)
         where TIResult : IResult
     {
         try
         {
-            var value = await func();
-            return value;
+            var result = await func();
+            return result;
         }
         catch (Exception exception)
         {
@@ -401,6 +415,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static async Task<Results<TIResult1, TIResult2, BadRequest<ProblemDetails>>> RunAsync<TIResult1, TIResult2>(
         Func<Task<Results<TIResult1, TIResult2>>> func, HttpContext context, string errorMessage)
         where TIResult1 : IResult
@@ -430,6 +449,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static async Task<Results<TIResult1, TIResult2, BadRequest<ProblemDetails>>> RunAsync<TIResult1, TIResult2>(
         Func<Task<Results<TIResult1, TIResult2>>> func, HttpContext context, Func<string> errorMessage)
         where TIResult1 : IResult
@@ -459,6 +483,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static async Task<Results<TIResult1, TIResult2, TIResult3, BadRequest<ProblemDetails>>> RunAsync<TIResult1, TIResult2, TIResult3>(
         Func<Task<Results<TIResult1, TIResult2, TIResult3>>> func, HttpContext context, string errorMessage)
         where TIResult1 : IResult
@@ -490,6 +519,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static async Task<Results<TIResult1, TIResult2, TIResult3, BadRequest<ProblemDetails>>> RunAsync<TIResult1, TIResult2, TIResult3>(
         Func<Task<Results<TIResult1, TIResult2, TIResult3>>> func, HttpContext context, Func<string> errorMessage)
         where TIResult1 : IResult
@@ -521,6 +555,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static async Task<Results<TIResult1, TIResult2, TIResult3, TIResult4, BadRequest<ProblemDetails>>> RunAsync<TIResult1, TIResult2, TIResult3, TIResult4>(
         Func<Task<Results<TIResult1, TIResult2, TIResult3, TIResult4>>> func, HttpContext context, string errorMessage)
         where TIResult1 : IResult
@@ -554,6 +593,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static async Task<Results<TIResult1, TIResult2, TIResult3, TIResult4, BadRequest<ProblemDetails>>> RunAsync<TIResult1, TIResult2, TIResult3, TIResult4>(
         Func<Task<Results<TIResult1, TIResult2, TIResult3, TIResult4>>> func, HttpContext context, Func<string> errorMessage)
         where TIResult1 : IResult
@@ -587,6 +631,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static async Task<Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5, BadRequest<ProblemDetails>>> RunAsync<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>(
         Func<Task<Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>>> func, HttpContext context, string errorMessage)
         where TIResult1 : IResult
@@ -622,6 +671,11 @@ public static partial class WebApiEndpointRunner
         }
     }
 
+    /// <summary>
+    /// Execute the <paramref name="func"/>.
+    /// If the <paramref name="func"/> is successful, it is returned.
+    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// </summary>
     public static async Task<Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5, BadRequest<ProblemDetails>>> RunAsync<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>(
         Func<Task<Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>>> func, HttpContext context, Func<string> errorMessage)
         where TIResult1 : IResult

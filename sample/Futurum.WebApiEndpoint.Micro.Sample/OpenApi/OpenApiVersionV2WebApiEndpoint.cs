@@ -3,10 +3,10 @@ using Futurum.WebApiEndpoint.Micro.Sample.Features;
 namespace Futurum.WebApiEndpoint.Micro.Sample.OpenApi;
 
 [WebApiEndpoint("openapi")]
-[WebApiEndpointVersions.V2_0]
-public class OpenApiVersionV2WebApiEndpoint : IWebApiEndpoint
+[WebApiEndpointVersion(2, 0)]
+public partial class OpenApiVersionV2WebApiEndpoint
 {
-    public void Register(IEndpointRouteBuilder builder)
+    protected override void Build(IEndpointRouteBuilder builder)
     {
         builder.MapGet("/", GetHandler);
     }

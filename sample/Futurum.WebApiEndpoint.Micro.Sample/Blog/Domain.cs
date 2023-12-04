@@ -7,4 +7,4 @@ public static class IdExtensions
     public static Id ToId(this long id) =>
         new(id);
 }
-public record Blog(Option<Id> Id, string Url);
+public record Blog(Id? Id, string Url);

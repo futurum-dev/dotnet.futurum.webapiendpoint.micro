@@ -9,8 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Futurum.Microsoft.Extensions.DependencyInjection" Version="1.0.11" />
-        <PackageReference Include="Futurum.Test" Version="1.0.6" />
+        <PackageReference Include="Futurum.Microsoft.Extensions.DependencyInjection" Version="1.0.12-alpha.0.2" />
         <PackageReference Include="FluentAssertions" Version="6.8.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.4" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />

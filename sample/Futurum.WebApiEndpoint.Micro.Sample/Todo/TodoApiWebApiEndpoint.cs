@@ -3,9 +3,9 @@ using Microsoft.Data.Sqlite;
 namespace Futurum.WebApiEndpoint.Micro.Sample.Todo;
 
 [WebApiEndpoint("api/todos", "todos")]
-public class TodoApiWebApiEndpoint : IWebApiEndpoint
+public partial class TodoApiWebApiEndpoint
 {
-    public void Register(IEndpointRouteBuilder builder)
+    protected override void Build(IEndpointRouteBuilder builder)
     {
         builder.MapGet("/", GetAllHandler)
                .WithName("GetAllTodos");
@@ -145,7 +145,7 @@ public class TodoApiWebApiEndpoint : IWebApiEndpoint
 
     private static Task<Results<Ok<int>, BadRequest<ProblemDetails>>> DeleteAllHandler(HttpContext context, SqliteConnection db)
     {
-        return RunAsync(Execute, context, ToOk, "Failed to delete all todos");
+        return RunToOkAsync(Execute, context, "Failed to delete all todos");
 
         Task<int> Execute() =>
             db.ExecuteAsync("DELETE FROM Todos");
