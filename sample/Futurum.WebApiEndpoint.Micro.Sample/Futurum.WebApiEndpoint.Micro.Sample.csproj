@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Futurum.Microsoft.Extensions.DependencyInjection" Version="1.0.12-alpha.0.2" />
+        <PackageReference Include="Futurum.Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
         <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.0" />
