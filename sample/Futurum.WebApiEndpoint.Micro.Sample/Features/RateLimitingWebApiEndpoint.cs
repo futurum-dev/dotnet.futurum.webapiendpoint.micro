@@ -1,14 +1,14 @@
 namespace Futurum.WebApiEndpoint.Micro.Sample.Features;
 
 [WebApiEndpoint("rate-limiting")]
-public class RateLimitingWebApiEndpoint : IWebApiEndpoint
+public partial class RateLimitingWebApiEndpoint
 {
-    public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
+    protected override RouteGroupBuilder Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
     {
-        groupBuilder.RequireRateLimiting(RateLimiting.SlidingWindow.Policy);
+        return groupBuilder.RequireRateLimiting(RateLimiting.SlidingWindow.Policy);
     }
 
-    public void Register(IEndpointRouteBuilder builder)
+    protected override void Build(IEndpointRouteBuilder builder)
     {
         builder.MapGet("/", GetHandler);
     }

@@ -2,10 +2,10 @@
 
 namespace Futurum.WebApiEndpoint.Micro.Sample.Addition;
 
-[WebApiEndpoint(prefixRoute: "addition")]
-public class AdditionWebApiEndpoint : IWebApiEndpoint
+[WebApiEndpoint("addition")]
+public partial class AdditionWebApiEndpoint
 {
-    public void Register(IEndpointRouteBuilder builder)
+    protected override void Build(IEndpointRouteBuilder builder)
     {
         builder.MapGet("/", GetHandler);
     }

@@ -1,14 +1,14 @@
 namespace Futurum.WebApiEndpoint.Micro.Sample.Features;
 
 [WebApiEndpoint("endpoint-filter", "feature")]
-public class EndpointFilterWebApiEndpoint : IWebApiEndpoint
+public partial class EndpointFilterWebApiEndpoint
 {
-    public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
+    protected override RouteGroupBuilder Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
     {
-        groupBuilder.AddEndpointFilter<CustomEndpointFilter>();
+        return groupBuilder.AddEndpointFilter<CustomEndpointFilter>();
     }
 
-    public void Register(IEndpointRouteBuilder builder)
+    protected override void Build(IEndpointRouteBuilder builder)
     {
         builder.MapGet("/{id}", GetHandler);
     }
@@ -22,9 +22,9 @@ public class EndpointFilterWebApiEndpoint : IWebApiEndpoint
                                  .Select(FeatureMapper.Map)
                                  .ToDataCollectionDto()
                                  .ToOk();
-        
+
         logger.LogInformation("GetHandler finished using parameter id: {Id}", id);
-        
+
         return result;
     }
 
@@ -40,13 +40,13 @@ public class EndpointFilterWebApiEndpoint : IWebApiEndpoint
         public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
         {
             var id = context.HttpContext.GetRouteData().Values["id"];
-            
+
             _logger.LogInformation("AddEndpointFilter 'CustomEndpointFilter' before filter using parameter id: {Id}", id);
-            
+
             var result = await next(context);
-            
+
             _logger.LogInformation("AddEndpointFilter 'CustomEndpointFilter' after filter using parameter id: {Id}", id);
-            
+
             return result;
         }
     }

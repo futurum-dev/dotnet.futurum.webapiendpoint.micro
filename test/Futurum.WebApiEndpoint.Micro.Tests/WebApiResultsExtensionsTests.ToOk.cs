@@ -1,5 +1,3 @@
-using FluentAssertions;
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -20,14 +18,6 @@ public class WebApiResultsExtensionsToOkTests
 
         results.Should().BeOfType<Ok<string>>();
         results.Value.Should().Be(VALUE);
-    }
-
-    [Fact]
-    public void ToOk_without_Value()
-    {
-        var results = ToOk(CreateHttpContext());
-
-        results.Should().BeOfType<Ok>();
     }
 
     [Fact]

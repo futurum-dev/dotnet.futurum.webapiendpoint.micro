@@ -6,31 +6,37 @@ namespace Futurum.WebApiEndpoint.Micro.Generator;
 
 public class WebApiEndpointContext : IEquatable<WebApiEndpointContext>
 {
-    public WebApiEndpointContext(IEnumerable<Diagnostic>? diagnostics = null,
-                                 IEnumerable<WebApiEndpointDatum>? webApiEndpointData = null)
+    public WebApiEndpointContext(IEnumerable<Diagnostic>? diagnostics,
+                                 WebApiEndpointDatum webApiEndpointData)
     {
         Diagnostics = new EquatableArray<Diagnostic>(diagnostics);
-        WebApiEndpointData = new EquatableArray<WebApiEndpointDatum>(webApiEndpointData);
+        WebApiEndpointData = webApiEndpointData;
     }
 
     public EquatableArray<Diagnostic> Diagnostics { get; }
-    public EquatableArray<WebApiEndpointDatum> WebApiEndpointData { get; }
+    public WebApiEndpointDatum WebApiEndpointData { get; }
 
     public bool Equals(WebApiEndpointContext? other)
     {
-        if (ReferenceEquals(null, other))
-            return false;
-
-        if (ReferenceEquals(this, other))
-            return true;
-
-        return Diagnostics == other.Diagnostics
-               && WebApiEndpointData == other.WebApiEndpointData;
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return Diagnostics.Equals(other.Diagnostics) &&
+               WebApiEndpointData.Equals(other.WebApiEndpointData);
     }
 
-    public override bool Equals(object? obj) =>
-        obj is WebApiEndpointContext webApiEndpointContext && Equals(webApiEndpointContext);
+    public override bool Equals(object? obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((WebApiEndpointContext)obj);
+    }
 
-    public override int GetHashCode() =>
-        HashCode.Combine(Diagnostics, WebApiEndpointData);
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            return (Diagnostics.GetHashCode() * 397) ^ WebApiEndpointData.GetHashCode();
+        }
+    }
 }

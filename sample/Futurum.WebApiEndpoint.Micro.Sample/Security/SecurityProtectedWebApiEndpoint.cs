@@ -3,14 +3,14 @@ using Futurum.WebApiEndpoint.Micro.Sample.Features;
 namespace Futurum.WebApiEndpoint.Micro.Sample.Security;
 
 [WebApiEndpoint("security")]
-public class SecurityProtectedWebApiEndpoint : IWebApiEndpoint
+public partial class SecurityProtectedWebApiEndpoint
 {
-    public void Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
+    protected override RouteGroupBuilder Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
     {
-        groupBuilder.RequireAuthorization(Authorization.Permission.Admin);
+        return groupBuilder.RequireAuthorization(Authorization.Permission.Admin);
     }
 
-    public void Register(IEndpointRouteBuilder builder)
+    protected override void Build(IEndpointRouteBuilder builder)
     {
         builder.MapGet("protected", ProtectedHandler);
     }

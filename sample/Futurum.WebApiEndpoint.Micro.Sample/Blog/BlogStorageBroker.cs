@@ -2,28 +2,38 @@ namespace Futurum.WebApiEndpoint.Micro.Sample.Blog;
 
 public interface IBlogStorageBroker
 {
-    Task<Result<IEnumerable<Blog>>> GetAsync();
-    Task<Result<Blog>> GetByIdAsync(Id id);
+    Task<IEnumerable<Blog>> GetAsync();
+    Task<Blog> GetByIdAsync(Id id);
 
-    Task<Result<Blog>> AddAsync(Blog blog);
+    Task<Blog> AddAsync(Blog blog);
 
-    Task<Result<Blog>> UpdateAsync(Blog blog);
+    Task<Blog> UpdateAsync(Blog blog);
 
-    Task<Result> DeleteAsync(Id id);
+    Task DeleteAsync(Id id);
 }
 
 public class BlogStorageBroker : IBlogStorageBroker
 {
     private readonly List<Blog> _items = new();
 
-    public async Task<Result<IEnumerable<Blog>>> GetAsync() =>
-        _items.AsReadOnly().AsEnumerable().ToResultOk();
+    public async Task<IEnumerable<Blog>> GetAsync() =>
+        _items.AsReadOnly().AsEnumerable();
 
-    public async Task<Result<Blog>> GetByIdAsync(Id id) =>
-        _items.TrySingle(x => x.Id == id)
-              .ToResultErrorKeyNotFound(id.ToString(), typeof(Blog).FullName);
+    public async Task<Blog> GetByIdAsync(Id id)
+    {
+        try
+        {
+            var existingBlog = _items.Single(x => x.Id == id);
 
-    public async Task<Result<Blog>> AddAsync(Blog blog)
+            return existingBlog;
+        }
+        catch (Exception exception)
+        {
+            throw new KeyNotFoundException($"Unable to find {nameof(Blog)} with Id : '{id}'", exception);
+        }
+    }
+
+    public async Task<Blog> AddAsync(Blog blog)
     {
         var newBlog = blog with
         {
@@ -32,26 +42,37 @@ public class BlogStorageBroker : IBlogStorageBroker
 
         _items.Add(newBlog);
 
-        return Result.Ok(newBlog);
+        return newBlog;
     }
 
-    public async Task<Result<Blog>> UpdateAsync(Blog blog)
+    public async Task<Blog> UpdateAsync(Blog blog)
     {
-        return _items.TrySingle(x => x.Id == blog.Id)
-                     .ToResultErrorKeyNotFound(blog.Id.ToString(), typeof(Blog).FullName)
-                     .Then(existingBlog =>
-                     {
-                         _items.Remove(existingBlog);
-                         _items.Add(blog);
+        try
+        {
+            var existingBlog = _items.Single(x => x.Id == blog.Id);
 
-                         return blog.ToResultOk();
-                     });
+            _items.Remove(existingBlog);
+            _items.Add(blog);
+
+            return blog;
+        }
+        catch (Exception exception)
+        {
+            throw new KeyNotFoundException($"Unable to find {nameof(Blog)} with Id : '{blog.Id}'", exception);
+        }
     }
 
-    public async Task<Result> DeleteAsync(Id id)
+    public async Task DeleteAsync(Id id)
     {
-        return _items.TrySingle(x => x.Id == id)
-                     .ToResult(() => $"Unable to find {nameof(Blog)} with Id : '{id}'")
-                     .Do(x => _items.Remove(x));
+        try
+        {
+            var existingBlog = _items.Single(x => x.Id == id);
+
+            _items.Remove(existingBlog);
+        }
+        catch (Exception exception)
+        {
+            throw new KeyNotFoundException($"Unable to find {nameof(Blog)} with Id : '{id}'", exception);
+        }
     }
 }

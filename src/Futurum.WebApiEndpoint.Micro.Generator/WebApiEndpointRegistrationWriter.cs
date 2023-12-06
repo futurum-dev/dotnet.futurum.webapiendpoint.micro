@@ -2,9 +2,22 @@ using Futurum.WebApiEndpoint.Micro.Generator.Core;
 
 namespace Futurum.WebApiEndpoint.Micro.Generator;
 
-public static class WrapperSourceGeneratorWriter
+public static class WebApiEndpointRegistrationWriter
 {
-    public static string Write(string className, string methodName, Action<IndentedStringBuilder> writer, bool isNotMainMethod, bool skipVersion = false)
+    public static string Write(string methodName, IEnumerable<WebApiEndpointDatum> webApiEndpointData) =>
+        WriteWrapper(methodName, "RegisterWebApiEndpoints",
+                     codeBuilder => Write(codeBuilder, webApiEndpointData),
+                     true);
+
+    private static void Write(IndentedStringBuilder codeBuilder, IEnumerable<WebApiEndpointDatum> webApiEndpointData)
+    {
+        foreach (var webApiEndpointDatum in webApiEndpointData)
+        {
+            codeBuilder.AppendLine($"serviceCollection.AddSingleton(typeof(global::Futurum.WebApiEndpoint.Micro.IWebApiEndpoint), typeof({webApiEndpointDatum.NamespaceName}.{webApiEndpointDatum.ImplementationType}));");
+        }
+    }
+
+    private static string WriteWrapper(string className, string methodName, Action<IndentedStringBuilder> writer, bool isNotMainMethod, bool skipVersion = false)
     {
         var codeBuilder = new IndentedStringBuilder();
         codeBuilder
@@ -19,16 +32,6 @@ public static class WrapperSourceGeneratorWriter
 
         if (!isNotMainMethod)
         {
-            if (!skipVersion)
-            {
-                codeBuilder
-                    .Append("[global::System.CodeDom.Compiler.GeneratedCode(\"")
-                    .Append(ThisAssembly.Project.AssemblyName)
-                    .Append("\", \"")
-                    .Append(ThisAssembly.Info.Version)
-                    .AppendLine("\")]");
-            }
-
             codeBuilder
                 .AppendLine("[global::System.Diagnostics.DebuggerNonUserCodeAttribute]")
                 .AppendLine("[global::System.Diagnostics.DebuggerStepThroughAttribute]");

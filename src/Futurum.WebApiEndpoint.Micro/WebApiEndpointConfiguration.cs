@@ -9,6 +9,12 @@ namespace Futurum.WebApiEndpoint.Micro;
 public record WebApiEndpointConfiguration(WebApiEndpointVersion DefaultWebApiEndpointVersion)
 {
     /// <summary>
+    /// Global Route Prefix
+    /// e.g. "/api"
+    /// </summary>
+    public string? GlobalRoutePrefix { get; set; } = string.Empty;
+
+    /// <summary>
     /// Default OpenApiInfo for all versions. Unless overridden by <see cref="OpenApiDocumentVersions"/>.
     /// </summary>
     public OpenApiInfo? DefaultOpenApiInfo { get; set; }

@@ -1,5 +1,3 @@
-using FluentAssertions;
-
 namespace Futurum.WebApiEndpoint.Micro.Tests;
 
 public class DataCollectionDtoTests

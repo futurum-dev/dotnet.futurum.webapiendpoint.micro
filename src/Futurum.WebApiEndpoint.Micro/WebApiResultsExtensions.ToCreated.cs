@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
-
 namespace Futurum.WebApiEndpoint.Micro;
 
 public static partial class WebApiResultsExtensions
@@ -8,6 +6,9 @@ public static partial class WebApiResultsExtensions
         TypedResults.Created(context.Request.Path);
 
     public static Created<T> ToCreated<T>(HttpContext context, T value) =>
+        TypedResults.Created(context.Request.Path, value);
+
+    public static Created<T> ToCreated<T>(this T value, HttpContext context) =>
         TypedResults.Created(context.Request.Path, value);
 
     public static Func<HttpContext, T, Created<T>> ToCreated<T>(string uri) =>

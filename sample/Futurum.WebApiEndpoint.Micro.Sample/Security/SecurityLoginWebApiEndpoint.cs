@@ -7,9 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 namespace Futurum.WebApiEndpoint.Micro.Sample.Security;
 
 [WebApiEndpoint("security")]
-public class SecurityLoginWebApiEndpoint : IWebApiEndpoint
+public partial class SecurityLoginWebApiEndpoint
 {
-    public void Register(IEndpointRouteBuilder builder)
+    protected override void Build(IEndpointRouteBuilder builder)
     {
         builder.MapGet("login", LoginHandler);
     }

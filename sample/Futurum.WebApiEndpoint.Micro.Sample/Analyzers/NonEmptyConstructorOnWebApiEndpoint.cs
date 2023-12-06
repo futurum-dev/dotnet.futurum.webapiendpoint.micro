@@ -1,13 +1,13 @@
 namespace Futurum.WebApiEndpoint.Micro.Sample.Analyzers;
 
 [WebApiEndpoint("non-empty-constructor", "analyzer")]
-public class NonEmptyConstructorOnWebApiEndpoint : IWebApiEndpoint
+public partial class NonEmptyConstructorOnWebApiEndpoint
 {
     public NonEmptyConstructorOnWebApiEndpoint(IConfiguration configuration)
     {
     }
-    
-    public void Register(IEndpointRouteBuilder builder)
+
+    protected override void Build(IEndpointRouteBuilder builder)
     {
         builder.MapGet("/", GetHandler);
     }
