@@ -51,10 +51,10 @@ public class GreetingWebApiEndpoint
 ## Easy setup
 - [x] Add the [NuGet package](https://www.nuget.org/packages/futurum.webapiendpoint.micro) ( futurum.webapiendpoint.micro ) to your project
 - [x] Update *program.cs* as per [here](#programcs)
-- [x] Create a new class that implements *IWebApiEndpoint*
-- [x] Add the *WebApiEndpoint* attribute to the class, if you want to specify a specific *route prefix* and *tag*
+- [x] Create a new partial class
+- [x] Add the *WebApiEndpoint* attribute to the class, with the *route prefix* and optionally a *tag*
 - [x] Add the *WebApiEndpointVersion* attribute to the class, if you want to specify a specific *ApiVersion*
-- [x] Implement the *Register* method and add *minimal api(s)* as per usual
+- [x] Implement the *Build* method and add *minimal api(s)* as per usual
 - [x] *Optionally* implement the *Configure* method to configuration the *WebApiEndpoint*
 
 ### program.cs
@@ -212,7 +212,7 @@ protected override RouteGroupBuilder Configure(RouteGroupBuilder groupBuilder, W
 }
 ```
 
-This allows you to set properties on the RouteGroupBuilder. This will effect all minimal apis in the *Register* method.
+This allows you to set properties on the RouteGroupBuilder. This will effect all minimal apis in the *Build* method.
 
 You can also configure it differently per ApiVersion.
 
