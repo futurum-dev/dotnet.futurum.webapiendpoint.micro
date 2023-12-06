@@ -39,6 +39,7 @@ public class GreetingWebApiEndpoint
 - [x] [Roslyn Analysers](#roslyn-analysers) to help build your WebApiEndpoint(s), using best practices
 - [x] Built on dotnet 8
 - [x] Built in use of [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) support
+- [x] Built in [extendable GlobalExceptionHandler](#extendable-globalexceptionhandler)
 - [x] [Tested solution](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint.micro)
 - [x] [Comprehensive samples](#comprehensive-samples)
 - [x] [Convention Customisation](#convention-customisation)
@@ -504,6 +505,56 @@ builder.Services.AddWebApiEndpoints<CustomWebApiVersionConfigurationService>();
 Use this instead
 ```csharp
 builder.Services.AddWebApiEndpoints();
+```
+
+## Extendable GlobalExceptionHandler
+Built in support for handling unhandled exceptions, returning a *ProblemDetails* response.
+
+You can extend the *GlobalExceptionHandler* by adding your own custom exception handling and overriding the default exception handler.
+
+**NOTE: ExceptionToProblemDetailsMapperService is not thread-safe for either:**
+- **adding custom exception to ProblemDetails mapping**
+- **overriding default exception to ProblemDetails mapping**
+
+**It is recommended to do this in the *program.cs* file.**
+
+### Add to *program.cs*
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+...
+    
+var app = builder.Build();
+
+app.UseExceptionHandler();
+```
+
+### Add custom Exception to ProblemDetails mapping
+In *program.cs* add the following:
+
+```csharp
+ExceptionToProblemDetailsMapperService.Add<CustomException>((exception, httpContext, errorMessage) => new()
+{
+    Detail = "An custom error occurred.",
+    Instance = httpContext.Request.Path,
+    Status = (int)HttpStatusCode.InternalServerError,
+    Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.InternalServerError)
+});
+```
+
+### Override the Default Exception to ProblemDetails mapping
+In *program.cs* add the following:
+
+```csharp
+ExceptionToProblemDetailsMapperService.OverrideDefault((exception, httpContext, errorMessage) => new()
+{
+    Detail = "An error occurred.",
+    Instance = httpContext.Request.Path,
+    Status = (int)HttpStatusCode.InternalServerError,
+    Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.InternalServerError)
+});
 ```
 
 ## Roslyn Analysers

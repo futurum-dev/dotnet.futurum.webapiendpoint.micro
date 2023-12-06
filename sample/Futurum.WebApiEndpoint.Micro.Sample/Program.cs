@@ -5,6 +5,8 @@ using Futurum.WebApiEndpoint.Micro.Sample;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 builder.Services.AddModule(new ApplicationModule(builder.Configuration));
@@ -38,11 +40,12 @@ builder.Services
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
+
 app.UseRateLimiter();
 
 app.UseWebApiEndpoints();
 
-app.UseExceptionHandler();
 app.UseStatusCodePages();
 
 app.UseHttpsRedirection();
@@ -51,10 +54,6 @@ app.UseAuthorization();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/error");
-    app.MapGet("/error", () => Results.Problem("An error occurred.", statusCode: 500))
-       .ExcludeFromDescription();
-
     app.UseWebApiEndpointsOpenApi();
 }
 
