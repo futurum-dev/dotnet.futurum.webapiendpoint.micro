@@ -5,7 +5,7 @@
 [![Coverage Status](https://img.shields.io/coveralls/github/futurum-dev/dotnet.futurum.webapiendpoint.micro?style=for-the-badge)](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint.micro?branch=main)
 [![NuGet version](https://img.shields.io/nuget/v/futurum.webapiendpoint.micro?style=for-the-badge)](https://www.nuget.org/packages/futurum.webapiendpoint.micro)
 
-A dotnet library that allows you to build WebApiEndpoints using a vertical slice architecture approach in a structured way. It's built on top of dotnet 7 and minimal apis.
+A dotnet library that allows you to build WebApiEndpoints using a vertical slice architecture approach in a structured way. It's built on top of dotnet 8 and minimal apis.
 
 ```csharp
 [WebApiEndpoint("greeting")]
@@ -37,7 +37,7 @@ public class GreetingWebApiEndpoint
 - [x] Built in [sandbox runner](#sandbox-runner) with full [TypedResults support](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0), catching unhandled exceptions and returning a [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) response
 - [x] Autodiscovery of WebApiEndpoint(s), based on Source Generators
 - [x] [Roslyn Analysers](#roslyn-analysers) to help build your WebApiEndpoint(s), using best practices
-- [x] Built on dotnet 7
+- [x] Built on dotnet 8
 - [x] Built in use of [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) support
 - [x] [Tested solution](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint.micro)
 - [x] [Comprehensive samples](#comprehensive-samples)
@@ -457,7 +457,7 @@ There are examples showing the following:
 - [x] Weather Forecast
 - [x] Addition project containing WebApiEndpoints
 
-![Futurum.WebApiEndpoint.Micro.Sample-openapi.png](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/raw/main/docs/Futurum.WebApiEndpoint.Micro.Sample-openapi.png)
+![https://raw.githubusercontent.com/futurum-dev/dotnet.futurum.webapiendpoint.micro.core.extensions/main/docs/Futurum.WebApiEndpoint.Micro.Sample-openapi.png](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/raw/main/docs/Futurum.WebApiEndpoint.Micro.Sample-openapi.png)
 
 ### Security example
 How to use in Swagger UI:
