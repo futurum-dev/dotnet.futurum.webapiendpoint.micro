@@ -27,12 +27,12 @@ public class FeatureEndToEndErrorsTests
 
         var httpResponseMessage = await httpClient.SendAsync(request);
 
-        httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+        httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         var response = await httpResponseMessage.Content.ReadFromJsonAsync<ProblemDetails>();
 
-        response.Title.Should().Be("An error occurred while processing your request.");
-        response.Detail.Should().Be("An error occurred.");
-        response.Status.Should().Be((int)HttpStatusCode.InternalServerError);
+        response.Title.Should().Be("Bad Request");
+        response.Detail.Should().Be("We have an Exception!");
+        response.Status.Should().Be((int)HttpStatusCode.BadRequest);
     }
 
     private static HttpClient CreateClient() =>

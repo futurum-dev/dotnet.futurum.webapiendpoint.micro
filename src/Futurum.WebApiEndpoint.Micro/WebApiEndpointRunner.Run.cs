@@ -1,7 +1,4 @@
-using System.Net;
-
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
 
 namespace Futurum.WebApiEndpoint.Micro;
 
@@ -33,13 +30,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -71,13 +62,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage()};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -115,13 +100,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -159,13 +138,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage()};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -205,13 +178,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -251,13 +218,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage()};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -299,13 +260,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -347,13 +302,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage()};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -397,13 +346,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -447,13 +390,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage()};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -485,13 +422,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -523,13 +454,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage()};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -567,13 +492,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -611,13 +530,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage()};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -657,13 +570,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -703,13 +610,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage()};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -751,13 +652,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -799,13 +694,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage()};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -849,13 +738,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -899,13 +782,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = new ProblemDetails
-            {
-                Detail = $"{errorMessage()};{exception.Message}",
-                Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.BadRequest,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.BadRequest)
-            };
+            var problemDetails = exception.ToProblemDetails(context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
