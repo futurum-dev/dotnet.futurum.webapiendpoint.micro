@@ -9,8 +9,18 @@ public static partial class WebApiEndpointRunner
 {
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, a <see cref="Ok{T}"/> is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, a <see cref="Ok{T}"/> is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static Results<Ok<T>, BadRequest<ProblemDetails>> RunToOk<T>(
         Func<T> func, HttpContext context, string errorMessage)
@@ -36,8 +46,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, a <see cref="Ok{T}"/> is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, a <see cref="Ok{T}"/> is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static Results<Ok<T>, BadRequest<ProblemDetails>> RunToOk<T>(
         Func<T> func, HttpContext context, Func<string> errorMessage)
@@ -63,8 +83,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, a <see cref="Ok"/> is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, a <see cref="Ok"/> is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static Results<Ok, BadRequest<ProblemDetails>> RunToOk(
         Action func, HttpContext context, string errorMessage)
@@ -91,8 +121,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, a <see cref="Ok"/> is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, a <see cref="Ok"/> is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static Results<Ok, BadRequest<ProblemDetails>> RunToOk(
         Action func, HttpContext context, Func<string> errorMessage)
@@ -119,8 +159,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, a <see cref="Ok{T}"/> is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, a <see cref="Ok{T}"/> is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static async Task<Results<Ok<T>, BadRequest<ProblemDetails>>> RunToOkAsync<T>(
         Func<Task<T>> func, HttpContext context, string errorMessage)
@@ -146,8 +196,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, a <see cref="Ok{T}"/> is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, a <see cref="Ok{T}"/> is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static async Task<Results<Ok<T>, BadRequest<ProblemDetails>>> RunToOkAsync<T>(
         Func<Task<T>> func, HttpContext context, Func<string> errorMessage)
@@ -173,8 +233,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, a <see cref="Ok{T}"/> is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, a <see cref="Ok"/> is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static async Task<Results<Ok, BadRequest<ProblemDetails>>> RunToOkAsync(
         Func<Task> func, HttpContext context, string errorMessage)
@@ -201,8 +271,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, a <see cref="Ok{T}"/> is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, a <see cref="Ok"/> is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static async Task<Results<Ok, BadRequest<ProblemDetails>>> RunToOkAsync(
         Func<Task> func, HttpContext context, Func<string> errorMessage)

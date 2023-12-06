@@ -8,6 +8,9 @@ using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 namespace Futurum.WebApiEndpoint.Micro;
 
+/// <summary>
+/// Represents a file and payload sent with the HttpRequest.
+/// </summary>
 public class FormFileWithPayload<TPayload> : IBindableFromHttpContext<FormFileWithPayload<TPayload>>,
                                              IEndpointParameterMetadataProvider
 {
