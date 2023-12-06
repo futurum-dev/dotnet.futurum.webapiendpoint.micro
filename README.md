@@ -457,7 +457,7 @@ There are examples showing the following:
 - [x] Weather Forecast
 - [x] Addition project containing WebApiEndpoints
 
-![https://raw.githubusercontent.com/futurum-dev/dotnet.futurum.webapiendpoint.micro.core.extensions/main/docs/Futurum.WebApiEndpoint.Micro.Sample-openapi.png](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/raw/main/docs/Futurum.WebApiEndpoint.Micro.Sample-openapi.png)
+![Comprehensive samples](https://raw.githubusercontent.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/main/docs/Futurum.WebApiEndpoint.Micro.Sample-openapi.png)
 
 ### Security example
 How to use in Swagger UI:
