@@ -9,8 +9,18 @@ public static partial class WebApiEndpointRunner
 {
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static Results<TIResult1, BadRequest<ProblemDetails>> Run<TIResult1>(
         Func<TIResult1> func, HttpContext context, string errorMessage)
@@ -37,8 +47,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static Results<TIResult1, BadRequest<ProblemDetails>> Run<TIResult1>(
         Func<TIResult1> func, HttpContext context, Func<string> errorMessage)
@@ -65,8 +85,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static Results<TIResult1, TIResult2, BadRequest<ProblemDetails>> Run<TIResult1, TIResult2>(
         Func<Results<TIResult1, TIResult2>> func, HttpContext context, string errorMessage)
@@ -99,8 +129,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static Results<TIResult1, TIResult2, BadRequest<ProblemDetails>> Run<TIResult1, TIResult2>(
         Func<Results<TIResult1, TIResult2>> func, HttpContext context, Func<string> errorMessage)
@@ -133,8 +173,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static Results<TIResult1, TIResult2, TIResult3, BadRequest<ProblemDetails>> Run<TIResult1, TIResult2, TIResult3>(
         Func<Results<TIResult1, TIResult2, TIResult3>> func, HttpContext context, string errorMessage)
@@ -169,8 +219,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static Results<TIResult1, TIResult2, TIResult3, BadRequest<ProblemDetails>> Run<TIResult1, TIResult2, TIResult3>(
         Func<Results<TIResult1, TIResult2, TIResult3>> func, HttpContext context, Func<string> errorMessage)
@@ -205,8 +265,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static Results<TIResult1, TIResult2, TIResult3, TIResult4, BadRequest<ProblemDetails>> Run<TIResult1, TIResult2, TIResult3, TIResult4>(
         Func<Results<TIResult1, TIResult2, TIResult3, TIResult4>> func, HttpContext context, string errorMessage)
@@ -243,8 +313,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static Results<TIResult1, TIResult2, TIResult3, TIResult4, BadRequest<ProblemDetails>> Run<TIResult1, TIResult2, TIResult3, TIResult4>(
         Func<Results<TIResult1, TIResult2, TIResult3, TIResult4>> func, HttpContext context, Func<string> errorMessage)
@@ -281,8 +361,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5, BadRequest<ProblemDetails>> Run<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>(
         Func<Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>> func, HttpContext context, string errorMessage)
@@ -321,8 +411,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5, BadRequest<ProblemDetails>> Run<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>(
         Func<Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>> func, HttpContext context, Func<string> errorMessage)
@@ -361,8 +461,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static async Task<Results<TIResult, BadRequest<ProblemDetails>>> RunAsync<TIResult>(
         Func<Task<TIResult>> func, HttpContext context, string errorMessage)
@@ -389,8 +499,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static async Task<Results<TIResult, BadRequest<ProblemDetails>>> RunAsync<TIResult>(
         Func<Task<TIResult>> func, HttpContext context, Func<string> errorMessage)
@@ -417,8 +537,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static async Task<Results<TIResult1, TIResult2, BadRequest<ProblemDetails>>> RunAsync<TIResult1, TIResult2>(
         Func<Task<Results<TIResult1, TIResult2>>> func, HttpContext context, string errorMessage)
@@ -451,8 +581,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static async Task<Results<TIResult1, TIResult2, BadRequest<ProblemDetails>>> RunAsync<TIResult1, TIResult2>(
         Func<Task<Results<TIResult1, TIResult2>>> func, HttpContext context, Func<string> errorMessage)
@@ -485,8 +625,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static async Task<Results<TIResult1, TIResult2, TIResult3, BadRequest<ProblemDetails>>> RunAsync<TIResult1, TIResult2, TIResult3>(
         Func<Task<Results<TIResult1, TIResult2, TIResult3>>> func, HttpContext context, string errorMessage)
@@ -521,8 +671,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static async Task<Results<TIResult1, TIResult2, TIResult3, BadRequest<ProblemDetails>>> RunAsync<TIResult1, TIResult2, TIResult3>(
         Func<Task<Results<TIResult1, TIResult2, TIResult3>>> func, HttpContext context, Func<string> errorMessage)
@@ -557,8 +717,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static async Task<Results<TIResult1, TIResult2, TIResult3, TIResult4, BadRequest<ProblemDetails>>> RunAsync<TIResult1, TIResult2, TIResult3, TIResult4>(
         Func<Task<Results<TIResult1, TIResult2, TIResult3, TIResult4>>> func, HttpContext context, string errorMessage)
@@ -595,8 +765,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static async Task<Results<TIResult1, TIResult2, TIResult3, TIResult4, BadRequest<ProblemDetails>>> RunAsync<TIResult1, TIResult2, TIResult3, TIResult4>(
         Func<Task<Results<TIResult1, TIResult2, TIResult3, TIResult4>>> func, HttpContext context, Func<string> errorMessage)
@@ -633,8 +813,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static async Task<Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5, BadRequest<ProblemDetails>>> RunAsync<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>(
         Func<Task<Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>>> func, HttpContext context, string errorMessage)
@@ -673,8 +863,18 @@ public static partial class WebApiEndpointRunner
 
     /// <summary>
     /// Execute the <paramref name="func"/>.
-    /// If the <paramref name="func"/> is successful, it is returned.
-    /// If the <paramref name="func"/> throws an exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    /// <list type="bullet">
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> is successful, it is returned.
+    ///         </description>
+    ///     </item>
+    ///     <item>
+    ///         <description>
+    ///         If the <paramref name="func"/> throws an unhandled exception, a <see cref="BadRequest{ProblemDetails}"/> is returned.
+    ///         </description>
+    ///     </item>
+    /// </list>
     /// </summary>
     public static async Task<Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5, BadRequest<ProblemDetails>>> RunAsync<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>(
         Func<Task<Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5>>> func, HttpContext context, Func<string> errorMessage)
