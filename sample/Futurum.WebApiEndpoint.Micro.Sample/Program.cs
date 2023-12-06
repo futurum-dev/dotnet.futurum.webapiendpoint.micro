@@ -18,7 +18,7 @@ builder.Services.AddRateLimiters();
 builder.Services.AddOutputCaches();
 
 builder.Services
-       .AddWebApiEndpoints(new WebApiEndpointConfiguration(new WebApiEndpointVersion(1, 0))
+       .AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0.Version)
        {
            DefaultOpenApiInfo = new OpenApiInfo
            {
@@ -27,7 +27,7 @@ builder.Services
            OpenApiDocumentVersions =
            {
                {
-                   new WebApiEndpointVersion(3, 0),
+                   WebApiEndpointVersions.V3_0.Version,
                    new OpenApiInfo
                    {
                        Title = "Futurum.WebApiEndpoint.Micro.Sample v3"

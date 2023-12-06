@@ -3,7 +3,7 @@ using Futurum.WebApiEndpoint.Micro.Sample.Features;
 namespace Futurum.WebApiEndpoint.Micro.Sample.OpenApi;
 
 [WebApiEndpoint("openapi")]
-[WebApiEndpointVersion(2, 0)]
+[WebApiEndpointVersion(WebApiEndpointVersions.V2_0.Major, WebApiEndpointVersions.V2_0.Minor)]
 public partial class OpenApiVersionV2WebApiEndpoint
 {
     protected override void Build(IEndpointRouteBuilder builder)
