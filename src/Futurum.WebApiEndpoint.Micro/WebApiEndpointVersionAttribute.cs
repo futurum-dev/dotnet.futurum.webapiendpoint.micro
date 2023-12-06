@@ -13,5 +13,5 @@ public class WebApiEndpointVersionAttribute : Attribute
     }
 
     public int MajorVersion { get; }
-    public int? MinorVersion { get; }
+    public int MinorVersion { get; }
 }
