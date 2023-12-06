@@ -12,6 +12,7 @@ builder.Services.AddModule(new ApplicationModule(builder.Configuration));
 builder.AddAuthentication();
 
 builder.Services.AddRateLimiters();
+
 builder.Services.AddOutputCaches();
 
 builder.Services

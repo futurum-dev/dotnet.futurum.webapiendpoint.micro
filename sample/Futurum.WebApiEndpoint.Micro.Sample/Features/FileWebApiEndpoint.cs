@@ -9,10 +9,10 @@ public partial class FileWebApiEndpoint
     protected override void Build(IEndpointRouteBuilder builder)
     {
         builder.MapPost("upload", UploadHandler)
-               .Accepts<IFormFile>("multipart/form-data");
+               .DisableAntiforgery();
 
         builder.MapPost("uploads", UploadsHandler)
-               .Accepts<IFormFile>("multipart/form-data");
+               .DisableAntiforgery();
 
         builder.MapPost("upload-with-payload", UploadWithPayloadHandler);
 
