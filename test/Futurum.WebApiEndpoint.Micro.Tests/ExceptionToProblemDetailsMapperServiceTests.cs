@@ -1,5 +1,3 @@
-using System.Net;
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -7,7 +5,7 @@ using Microsoft.AspNetCore.WebUtilities;
 namespace Futurum.WebApiEndpoint.Micro.Tests;
 
 [Collection("Sequential")]
-public class ExceptionToProblemDetailsMapperTests
+public class ExceptionToProblemDetailsMapperServiceTests
 {
     public class default_exception
     {
@@ -15,12 +13,13 @@ public class ExceptionToProblemDetailsMapperTests
         public void without_error_message()
         {
             // Arrange
-            ExceptionToProblemDetailsMapper.OverrideDefault(ExceptionToProblemDetailsMapper.DefaultException);
+            var exceptionToProblemDetailsMapperService = ExceptionToProblemDetailsMapperService.Instance;
+            exceptionToProblemDetailsMapperService.OverrideDefault(ExceptionToProblemDetailsMapperService.DefaultException);
             var exception = new Exception("Test exception message");
             var requestPath = "/test";
 
             // Act
-            var problemDetails = ExceptionToProblemDetailsMapper.ToProblemDetails(exception, CreateHttpContext(requestPath));
+            var problemDetails = exceptionToProblemDetailsMapperService.Map(exception, CreateHttpContext(requestPath));
 
             // Assert
             problemDetails.Should().NotBeNull();
@@ -34,13 +33,14 @@ public class ExceptionToProblemDetailsMapperTests
         public void with_error_message()
         {
             // Arrange
-            ExceptionToProblemDetailsMapper.OverrideDefault(ExceptionToProblemDetailsMapper.DefaultException);
+            var exceptionToProblemDetailsMapperService = ExceptionToProblemDetailsMapperService.Instance;
+            exceptionToProblemDetailsMapperService.OverrideDefault(ExceptionToProblemDetailsMapperService.DefaultException);
             var exception = new Exception("Test exception message");
             var requestPath = "/test";
             var errorMessage = "Test error message";
 
             // Act
-            var problemDetails = ExceptionToProblemDetailsMapper.ToProblemDetails(exception, CreateHttpContext(requestPath), errorMessage);
+            var problemDetails = exceptionToProblemDetailsMapperService.Map(exception, CreateHttpContext(requestPath), errorMessage);
 
             // Assert
             problemDetails.Should().NotBeNull();
@@ -59,7 +59,7 @@ public class ExceptionToProblemDetailsMapperTests
             var exception = new KeyNotFoundException("Test exception message");
             var requestPath = "/test";
 
-            var problemDetails = ExceptionToProblemDetailsMapper.ToProblemDetails(exception, CreateHttpContext(requestPath));
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, CreateHttpContext(requestPath));
 
             problemDetails.Should().NotBeNull();
             problemDetails.Detail.Should().Be(exception.Message);
@@ -75,7 +75,7 @@ public class ExceptionToProblemDetailsMapperTests
             var requestPath = "/test";
             var errorMessage = "Test error message";
 
-            var problemDetails = ExceptionToProblemDetailsMapper.ToProblemDetails(exception, CreateHttpContext(requestPath), errorMessage);
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, CreateHttpContext(requestPath), errorMessage);
 
             problemDetails.Should().NotBeNull();
             problemDetails.Detail.Should().Be($"{errorMessage};{exception.Message}");
@@ -91,12 +91,13 @@ public class ExceptionToProblemDetailsMapperTests
         public void without_error_message()
         {
             // Arrange
-            ExceptionToProblemDetailsMapper.OverrideDefault(DefaultException);
+            var exceptionToProblemDetailsMapperService = ExceptionToProblemDetailsMapperService.Instance;
+            exceptionToProblemDetailsMapperService.OverrideDefault(DefaultException);
             var exception = new Exception("Test exception message");
             var requestPath = "/test";
 
             // Act
-            var problemDetails = ExceptionToProblemDetailsMapper.ToProblemDetails(exception, CreateHttpContext(requestPath));
+            var problemDetails = exceptionToProblemDetailsMapperService.Map(exception, CreateHttpContext(requestPath));
 
             // Assert
             problemDetails.Should().NotBeNull();
@@ -110,13 +111,14 @@ public class ExceptionToProblemDetailsMapperTests
         public void with_error_message()
         {
             // Arrange
-            ExceptionToProblemDetailsMapper.OverrideDefault(DefaultException);
+            var exceptionToProblemDetailsMapperService = ExceptionToProblemDetailsMapperService.Instance;
+            exceptionToProblemDetailsMapperService.OverrideDefault(DefaultException);
             var exception = new Exception("Test exception message");
             var requestPath = "/test";
             var errorMessage = "Test error message";
 
             // Act
-            var problemDetails = ExceptionToProblemDetailsMapper.ToProblemDetails(exception, CreateHttpContext(requestPath), errorMessage);
+            var problemDetails = exceptionToProblemDetailsMapperService.Map(exception, CreateHttpContext(requestPath), errorMessage);
 
             // Assert
             problemDetails.Should().NotBeNull();
@@ -131,8 +133,8 @@ public class ExceptionToProblemDetailsMapperTests
             {
                 Detail = !string.IsNullOrEmpty(errorMessage) ? $"{errorMessage};{exception.Message}" : exception.Message,
                 Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.InternalServerError,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.InternalServerError)
+                Status = StatusCodes.Status500InternalServerError,
+                Title = ReasonPhrases.GetReasonPhrase(StatusCodes.Status500InternalServerError)
             };
     }
 
@@ -142,12 +144,13 @@ public class ExceptionToProblemDetailsMapperTests
         public void without_error_message()
         {
             // Arrange
-            ExceptionToProblemDetailsMapper.Add<CustomException>(DefaultException);
+            var exceptionToProblemDetailsMapperService = ExceptionToProblemDetailsMapperService.Instance;
+            exceptionToProblemDetailsMapperService.Add<CustomException>(DefaultException);
             var exception = new CustomException("Test exception message");
             var requestPath = "/test";
 
             // Act
-            var problemDetails = ExceptionToProblemDetailsMapper.ToProblemDetails(exception, CreateHttpContext(requestPath));
+            var problemDetails = exceptionToProblemDetailsMapperService.Map(exception, CreateHttpContext(requestPath));
 
             // Assert
             problemDetails.Should().NotBeNull();
@@ -161,13 +164,14 @@ public class ExceptionToProblemDetailsMapperTests
         public void with_error_message()
         {
             // Arrange
-            ExceptionToProblemDetailsMapper.Add<CustomException>(DefaultException);
+            var exceptionToProblemDetailsMapperService = ExceptionToProblemDetailsMapperService.Instance;
+            exceptionToProblemDetailsMapperService.Add<CustomException>(DefaultException);
             var exception = new CustomException("Test exception message");
             var requestPath = "/test";
             var errorMessage = "Test error message";
 
             // Act
-            var problemDetails = ExceptionToProblemDetailsMapper.ToProblemDetails(exception, CreateHttpContext(requestPath), errorMessage);
+            var problemDetails = exceptionToProblemDetailsMapperService.Map(exception, CreateHttpContext(requestPath), errorMessage);
 
             // Assert
             problemDetails.Should().NotBeNull();
@@ -183,15 +187,15 @@ public class ExceptionToProblemDetailsMapperTests
         {
             if (exception is not CustomException customException)
             {
-                return ExceptionToProblemDetailsMapper.DefaultException(exception, context, errorMessage);
+                return ExceptionToProblemDetailsMapperService.DefaultException(exception, context, errorMessage);
             }
 
             return new ProblemDetails
             {
                 Detail = !string.IsNullOrEmpty(errorMessage) ? $"Processing-{errorMessage};{customException.Message}" : $"Processing-{customException.Message}",
                 Instance = context.Request.Path,
-                Status = (int)HttpStatusCode.Processing,
-                Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.Processing)
+                Status = StatusCodes.Status102Processing,
+                Title = ReasonPhrases.GetReasonPhrase(StatusCodes.Status102Processing)
             };
         }
     }
