@@ -19,7 +19,7 @@ public class FeatureEndToEndAsyncEnumerableTests
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri("/v1/async-enumerable"),
+            RequestUri = new Uri("/api/v1/async-enumerable"),
         };
 
         var httpResponseMessage = await httpClient.SendAsync(request);

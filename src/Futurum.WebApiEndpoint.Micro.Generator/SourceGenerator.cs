@@ -21,6 +21,8 @@ public class SourceGenerator : IIncrementalGenerator
         WebApiEndpoint(context, assemblyName);
 
         WebApiVersionEndpoint(context, assemblyName);
+
+        GlobalWebApiEndpoint(context, assemblyName);
     }
 
     private static void Generator(IncrementalGeneratorInitializationContext context, IncrementalValueProvider<string?> assemblyName)
@@ -56,18 +58,34 @@ public class SourceGenerator : IIncrementalGenerator
 
     private static void WebApiVersionEndpoint(IncrementalGeneratorInitializationContext context, IncrementalValueProvider<string?> assemblyName)
     {
-        var webApiEndpointData = context.SyntaxProvider
+        var webApiVersionEndpointData = context.SyntaxProvider
                                         .CreateSyntaxProvider(WebApiVersionEndpointSourceGenerator.SemanticPredicate, WebApiVersionEndpointSourceGenerator.SemanticTransform)
                                         .Where(node => node is not null);
 
-        var webApiEndpointDiagnostics = webApiEndpointData
+        var webApiVersionEndpointDiagnostics = webApiVersionEndpointData
                                         .Select(static (item, _) => item.Diagnostics)
                                         .Where(static item => item.Count > 0);
 
-        context.RegisterSourceOutput(webApiEndpointDiagnostics, ReportDiagnostic);
+        context.RegisterSourceOutput(webApiVersionEndpointDiagnostics, ReportDiagnostic);
 
-        context.RegisterSourceOutput(webApiEndpointData.Collect().Combine(assemblyName),
+        context.RegisterSourceOutput(webApiVersionEndpointData.Collect().Combine(assemblyName),
                                      static (productionContext, source) => WebApiVersionEndpointSourceGenerator.ExecuteGeneration(productionContext, source.Left, source.Right));
+    }
+
+    private static void GlobalWebApiEndpoint(IncrementalGeneratorInitializationContext context, IncrementalValueProvider<string?> assemblyName)
+    {
+        var globalWebApiEndpointData = context.SyntaxProvider
+                                        .CreateSyntaxProvider(GlobalWebApiEndpointSourceGenerator.SemanticPredicate, GlobalWebApiEndpointSourceGenerator.SemanticTransform)
+                                        .Where(node => node is not null);
+
+        var globalWebApiEndpointDiagnostics = globalWebApiEndpointData
+                                        .Select(static (item, _) => item.Diagnostics)
+                                        .Where(static item => item.Count > 0);
+
+        context.RegisterSourceOutput(globalWebApiEndpointDiagnostics, ReportDiagnostic);
+
+        context.RegisterSourceOutput(globalWebApiEndpointData.Collect().Combine(assemblyName),
+                                     static (productionContext, source) => GlobalWebApiEndpointSourceGenerator.ExecuteGeneration(productionContext, source.Left, source.Right));
     }
 
     private static void ReportDiagnostic(SourceProductionContext context, EquatableArray<Diagnostic> diagnostics)

@@ -32,9 +32,10 @@ public class GreetingWebApiEndpoint
 - [x] Full support and built on top of [minimal apis](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0)
 - [x] Full support for OpenApi
 - [x] Full support for [TypedResults](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0)
+- [x] Support for [configuring the entire API](#configuring-the-entire-api)
+- [x] Support for [configuring a specific API version](#configuring-a-specific-api-version)
 - [x] [Supports uploading file(s) with additional JSON payload](#uploading-files-with-additional-json-payload)
 - [x] Api Versioning baked-in
-- [x] Support for [configuring setting for entire API versions](#configuring-setting-for-entire-api-versions)
 - [x] Built in [sandbox runner](#sandbox-runner) with full [TypedResults support](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0), catching unhandled exceptions and returning a [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) response
 - [x] Autodiscovery of WebApiEndpoint(s), based on Source Generators
 - [x] [Roslyn Analysers](#roslyn-analysers) to help build your WebApiEndpoint(s), using best practices
@@ -84,9 +85,6 @@ app.Run();
 
 #### AddWebApiEndpoints
 Allows you to configure:
-- GlobalRoutePrefix *(optional)*
-  - This is used if you want to specify a global route prefix for all WebApiEndpoint
-  - e.g. "/api"
 - DefaultApiVersion *(mandatory)*
   - This is used if a specific ApiVersion is not provided for a specific WebApiEndpoint
 - DefaultOpenApiInfo *(optional)*
@@ -441,12 +439,42 @@ This can be overridden by passing in a *string*.
 ToAccepted<T>("/api/articles")
 ```
 
-## Configuring setting for entire API versions
-API versions can be configured, to apply setting across the entire version.
+## Configuring the entire API
+The entire API can be configured. This is a good place to configure things like:
+- Global route prefix
+- Global authorization (don't forget to set the *AllowAnonymous* on the individual WebApiEndpoint that you don't want to be secured i.e. *Login* endpoint)
 
 The class must:
-- implement *IWebApiVersionEndpoint*
+- implement *IGlobalWebApiEndpoint* interface
+- be decorated with at least one *GlobalWebApiVersionVersion* attribute
+
+** NOTE - there can only be one of these classes. **
+
+** NOTE - this is applied before the version route is created. **
+
+### Example
+```csharp
+[GlobalWebApiEndpoint]
+public class GlobalWebApiEndpoint : IGlobalWebApiEndpoint
+{
+    public IEndpointRouteBuilder Configure(IEndpointRouteBuilder builder, WebApiEndpointConfiguration configuration)
+    {
+        return builder.MapGroup("api").RequireAuthorization(Authorization.Permission.Admin);
+    }
+}
+```
+
+## Configuring a specific API version
+A specific API version can be configured. This is a good place to configure things like:
+- API version specific authorization (don't forget to set the *AllowAnonymous* on the individual WebApiEndpoint that you don't want to be secured i.e. *Login* endpoint)~~~~
+
+The class must:
+- implement *IWebApiVersionEndpoint* interface
 - be decorated with at least one *WebApiVersionEndpointVersion* attribute
+
+** NOTE - there can only be one of these classes per version. **
+
+** NOTE - this is applied after the version route is created, but before the WebApiEndpoint specific route is created. **
 
 ### Example
 ```csharp
@@ -581,3 +609,5 @@ ExceptionToProblemDetailsMapperService.OverrideDefault((exception, httpContext, 
 ## Roslyn Analysers
 - FWAEM0001 - Non empty constructor found on WebApiEndpoint
 - FWAEM0002 - BadRequest without 'ProblemDetails' use found on WebApiEndpoint
+- FWAEM0003 - Multiple instances found of GlobalWebApiEndpoint
+- FWAEM0004 - Multiple instances found of WebApiVersionEndpoint for the same version~~~~

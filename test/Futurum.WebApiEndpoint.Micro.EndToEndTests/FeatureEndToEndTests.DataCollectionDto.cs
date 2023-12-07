@@ -19,7 +19,7 @@ public class FeatureEndToEndDataCollectionDtoTests
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri("/v1/data-collection"),
+            RequestUri = new Uri("/api/v1/data-collection"),
         };
 
         var httpResponseMessage = await httpClient.SendAsync(request);

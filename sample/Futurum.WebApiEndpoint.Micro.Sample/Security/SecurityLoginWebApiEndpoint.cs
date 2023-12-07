@@ -11,7 +11,8 @@ public partial class SecurityLoginWebApiEndpoint
 {
     protected override void Build(IEndpointRouteBuilder builder)
     {
-        builder.MapGet("login", LoginHandler);
+        builder.MapGet("login", LoginHandler)
+               .AllowAnonymous();
     }
 
     private static Results<Ok<string>, UnauthorizedHttpResult> LoginHandler(HttpContext context, IConfiguration configuration, string username, string password, bool setPermission, bool setClaim, bool setRole)

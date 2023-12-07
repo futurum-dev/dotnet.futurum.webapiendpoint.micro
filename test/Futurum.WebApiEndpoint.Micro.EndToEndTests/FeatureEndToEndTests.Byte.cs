@@ -17,7 +17,7 @@ public class FeatureEndToEndByteTests
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri("/v1/bytes/download"),
+            RequestUri = new Uri("/api/v1/bytes/download"),
         };
 
         var httpResponseMessage = await httpClient.SendAsync(request);

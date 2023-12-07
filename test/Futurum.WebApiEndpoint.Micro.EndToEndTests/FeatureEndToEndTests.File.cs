@@ -27,7 +27,7 @@ public class FeatureEndToEndFileTests
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri("/v1/file/upload"),
+            RequestUri = new Uri("/api/v1/file/upload"),
             Content = multipartFormDataContent
         };
 
@@ -52,7 +52,7 @@ public class FeatureEndToEndFileTests
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri("/v1/file/uploads"),
+            RequestUri = new Uri("/api/v1/file/uploads"),
             Content = multipartFormDataContent
         };
 
@@ -64,7 +64,7 @@ public class FeatureEndToEndFileTests
         response.Count().Should().Be(1);
         response.Single().Name.Should().Be("hello-world.txt");
     }
-    
+
     [Fact]
     public async Task UploadFileWithPayload()
     {
@@ -82,7 +82,7 @@ public class FeatureEndToEndFileTests
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri("/v1/file/upload-with-payload"),
+            RequestUri = new Uri("/api/v1/file/upload-with-payload"),
             Content = multipartFormDataContent
         };
 
@@ -94,7 +94,7 @@ public class FeatureEndToEndFileTests
         response.Name.Should().Be("hello-world.txt");
         response.Payload.Should().Be(id);
     }
-    
+
     [Fact]
     public async Task UploadFilesWithPayload()
     {
@@ -112,7 +112,7 @@ public class FeatureEndToEndFileTests
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
-            RequestUri = new Uri("/v1/file/uploads-with-payload"),
+            RequestUri = new Uri("/api/v1/file/uploads-with-payload"),
             Content = multipartFormDataContent
         };
 
@@ -134,7 +134,7 @@ public class FeatureEndToEndFileTests
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Get,
-            RequestUri = new Uri("/v1/file/download"),
+            RequestUri = new Uri("/api/v1/file/download"),
         };
 
         var httpResponseMessage = await httpClient.SendAsync(request);

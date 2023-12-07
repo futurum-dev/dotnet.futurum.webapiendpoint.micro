@@ -21,4 +21,22 @@ public static class DiagnosticDescriptors
         "Futurum.WebApiEndpoint.Micro.Generator",
         DiagnosticSeverity.Warning,
         true);
+
+    public static readonly DiagnosticDescriptor GlobalWebApiEndpointMultipleInstances = new(
+        "FWAEM0003",
+        "Multiple instances found of GlobalWebApiEndpoint",
+        $"GlobalWebApiEndpoint class '{{0}}' is one of many instances.\n" +
+        $"There can only be one instance of GlobalWebApiEndpoint.",
+        "Futurum.WebApiEndpoint.Micro.Generator",
+        DiagnosticSeverity.Error,
+        true);
+
+    public static readonly DiagnosticDescriptor WebApiVersionEndpointMultipleInstances = new(
+        "FWAEM0004",
+        "Multiple instances found of WebApiVersionEndpoint for the same version",
+        $"WebApiVersionEndpoint class '{{0}}' with version '{{1}}.{{2}}' is one of many instances.\n" +
+        $"There can only be one instance of WebApiVersionEndpoint.",
+        "Futurum.WebApiEndpoint.Micro.Generator",
+        DiagnosticSeverity.Error,
+        true);
 }

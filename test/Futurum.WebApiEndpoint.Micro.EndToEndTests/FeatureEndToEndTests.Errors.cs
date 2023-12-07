@@ -17,7 +17,7 @@ public class FeatureEndToEndErrorsTests
     {
         var httpClient = CreateClient();
 
-        var requestPath = "/v1/error/exception";
+        var requestPath = "/api/v1/error/exception";
 
         var request = new HttpRequestMessage
         {
