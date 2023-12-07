@@ -19,6 +19,8 @@ public class SourceGenerator : IIncrementalGenerator
         Generator(context, assemblyName);
 
         WebApiEndpoint(context, assemblyName);
+
+        WebApiVersionEndpoint(context, assemblyName);
     }
 
     private static void Generator(IncrementalGeneratorInitializationContext context, IncrementalValueProvider<string?> assemblyName)
@@ -50,6 +52,22 @@ public class SourceGenerator : IIncrementalGenerator
 
         context.RegisterSourceOutput(webApiEndpointData.Collect().Combine(assemblyName),
                                      static (productionContext, source) => WebApiEndpointSourceGenerator.ExecuteGeneration(productionContext, source.Left, source.Right));
+    }
+
+    private static void WebApiVersionEndpoint(IncrementalGeneratorInitializationContext context, IncrementalValueProvider<string?> assemblyName)
+    {
+        var webApiEndpointData = context.SyntaxProvider
+                                        .CreateSyntaxProvider(WebApiVersionEndpointSourceGenerator.SemanticPredicate, WebApiVersionEndpointSourceGenerator.SemanticTransform)
+                                        .Where(node => node is not null);
+
+        var webApiEndpointDiagnostics = webApiEndpointData
+                                        .Select(static (item, _) => item.Diagnostics)
+                                        .Where(static item => item.Count > 0);
+
+        context.RegisterSourceOutput(webApiEndpointDiagnostics, ReportDiagnostic);
+
+        context.RegisterSourceOutput(webApiEndpointData.Collect().Combine(assemblyName),
+                                     static (productionContext, source) => WebApiVersionEndpointSourceGenerator.ExecuteGeneration(productionContext, source.Left, source.Right));
     }
 
     private static void ReportDiagnostic(SourceProductionContext context, EquatableArray<Diagnostic> diagnostics)

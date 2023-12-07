@@ -34,6 +34,7 @@ public class GreetingWebApiEndpoint
 - [x] Full support for [TypedResults](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0)
 - [x] [Supports uploading file(s) with additional JSON payload](#uploading-files-with-additional-json-payload)
 - [x] Api Versioning baked-in
+- [x] Support for [configuring setting for entire API versions](#configuring-setting-for-entire-api-versions)
 - [x] Built in [sandbox runner](#sandbox-runner) with full [TypedResults support](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0), catching unhandled exceptions and returning a [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) response
 - [x] Autodiscovery of WebApiEndpoint(s), based on Source Generators
 - [x] [Roslyn Analysers](#roslyn-analysers) to help build your WebApiEndpoint(s), using best practices
@@ -440,6 +441,25 @@ This can be overridden by passing in a *string*.
 ToAccepted<T>("/api/articles")
 ```
 
+## Configuring setting for entire API versions
+API versions can be configured, to apply setting across the entire version.
+
+The class must:
+- implement *IWebApiVersionEndpoint*
+- be decorated with at least one *WebApiVersionEndpointVersion* attribute
+
+### Example
+```csharp
+[WebApiVersionEndpointVersion(WebApiEndpointVersions.V3_0.Major, WebApiEndpointVersions.V3_0.Minor)]
+public class WebApiVersionEndpoint3_0 : IWebApiVersionEndpoint
+{
+    public IEndpointRouteBuilder Configure(IEndpointRouteBuilder builder, WebApiEndpointConfiguration configuration)
+    {
+        return builder.MapGroup("test-api").RequireAuthorization(Authorization.Permission.Admin);
+    }
+}
+```
+
 ## Comprehensive samples
 There are examples showing the following:
 - [x] A basic blog CRUD implementation
@@ -457,6 +477,7 @@ There are examples showing the following:
 - [x] [Security](#security-example) with a basic JWT example on a specific WebApiEndpoint
 - [x] Weather Forecast
 - [x] Addition project containing WebApiEndpoints
+- [x] Configuring setting for entire API versions
 
 ![Comprehensive samples](https://raw.githubusercontent.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/main/docs/Futurum.WebApiEndpoint.Micro.Sample-openapi.png)
 
