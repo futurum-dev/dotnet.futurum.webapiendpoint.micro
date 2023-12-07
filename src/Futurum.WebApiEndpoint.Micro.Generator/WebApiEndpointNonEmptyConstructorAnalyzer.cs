@@ -25,7 +25,7 @@ public class WebApiEndpointNonEmptyConstructorAnalyzer : DiagnosticAnalyzer
             return;
 
         var webApiEndpointInterfaceType = Diagnostics.GetWebApiEndpointInterfaceType(context.Compilation);
-        
+
         if (webApiEndpointInterfaceType is not null)
         {
             if (classSymbol.AllInterfaces.Contains(webApiEndpointInterfaceType))

@@ -14,6 +14,7 @@ public static class SourceGeneratorWriter
     {
         codeBuilder.AppendLine("RegisterWebApiEndpoints(serviceCollection);");
         codeBuilder.AppendLine("RegisterWebApiVersionEndpoints(serviceCollection);");
+        codeBuilder.AppendLine("RegisterGlobalWebApiEndpoint(serviceCollection);");
     }
 
     private static string WriteWrapper(string className, string methodName, Action<IndentedStringBuilder> writer, bool isNotMainMethod, bool skipVersion = false)

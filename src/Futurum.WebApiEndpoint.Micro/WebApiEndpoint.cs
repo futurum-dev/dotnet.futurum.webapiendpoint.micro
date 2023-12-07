@@ -20,14 +20,22 @@ public abstract class WebApiEndpoint : IWebApiEndpoint
     private static RouteGroupBuilder CreateRouteGroupBuilder(IEndpointRouteBuilder app, WebApiEndpointConfiguration configuration, WebApiEndpointVersion webApiEndpointVersion, string route,
                                                              string tag)
     {
-        var versionedEndpointRouteBuilder = CreateVersionedEndpointRouteBuilder(app, configuration, webApiEndpointVersion);
+        var workingEndpointRouteBuilder = CreateVersionedEndpointRouteBuilder(app, configuration, webApiEndpointVersion);
+
+        var globalWebApiEndpoint = app.ServiceProvider.GetService<IGlobalWebApiEndpoint>();
+        if (globalWebApiEndpoint != null)
+        {
+            workingEndpointRouteBuilder = globalWebApiEndpoint.Configure(workingEndpointRouteBuilder, configuration);
+        }
+
+        workingEndpointRouteBuilder = ApplyVersionedEndpointRouteBuilder(workingEndpointRouteBuilder, configuration);
 
         if (TryGetRequiredKeyedService() is IWebApiVersionEndpoint webApiVersionEndpoint)
         {
-            versionedEndpointRouteBuilder = webApiVersionEndpoint.Configure(versionedEndpointRouteBuilder, configuration);
+            workingEndpointRouteBuilder = webApiVersionEndpoint.Configure(workingEndpointRouteBuilder, configuration);
         }
 
-        return CreateRouteGroupBuilderVersioned(versionedEndpointRouteBuilder, configuration, route, tag, webApiEndpointVersion);
+        return CreateRouteGroupBuilderVersioned(workingEndpointRouteBuilder, configuration, route, tag, webApiEndpointVersion);
 
         object? TryGetRequiredKeyedService()
         {
@@ -46,7 +54,7 @@ public abstract class WebApiEndpoint : IWebApiEndpoint
     private static RouteGroupBuilder CreateRouteGroupBuilderVersioned(IEndpointRouteBuilder endpointRouteBuilder, WebApiEndpointConfiguration configuration, string route, string tag,
                                                                       WebApiEndpointVersion webApiEndpointVersion)
     {
-        var routeGroupBuilder = endpointRouteBuilder.MapGroup($"{configuration.GlobalRoutePrefix}/{configuration.VersionPrefix}{{version:apiVersion}}/{route}");
+        var routeGroupBuilder = endpointRouteBuilder.MapGroup($"{route}");
 
         if (!string.IsNullOrEmpty(tag))
         {
@@ -66,5 +74,10 @@ public abstract class WebApiEndpoint : IWebApiEndpoint
         var formattedVersion = apiVersion.ToString(configuration.VersionFormat);
 
         return app.NewVersionedApi($"{configuration.VersionPrefix}{formattedVersion}");
+    }
+
+    private static IEndpointRouteBuilder ApplyVersionedEndpointRouteBuilder(IEndpointRouteBuilder app, WebApiEndpointConfiguration configuration)
+    {
+        return app.MapGroup($"{configuration.VersionPrefix}{{version:apiVersion}}");
     }
 }
