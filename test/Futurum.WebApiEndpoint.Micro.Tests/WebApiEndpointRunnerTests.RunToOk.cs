@@ -1,5 +1,3 @@
-using System.Net;
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -46,7 +44,7 @@ public class WebApiEndpointRunnerRunToOkTests
                 private static void ValidateBadRequest(Results<Ok, BadRequest<ProblemDetails>> results)
                 {
                     results.Result.Should().BeOfType<BadRequest<ProblemDetails>>();
-                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
                     results.Result.As<BadRequest<ProblemDetails>>().Value.Detail.Should().Be($"{ErrorMessage2};{ErrorMessage1}");
                     results.Result.As<BadRequest<ProblemDetails>>().Value.Instance.Should().Be(REQUEST_PATH);
                 }
@@ -85,7 +83,7 @@ public class WebApiEndpointRunnerRunToOkTests
                 private static void ValidateBadRequest(Results<Ok, BadRequest<ProblemDetails>> results)
                 {
                     results.Result.Should().BeOfType<BadRequest<ProblemDetails>>();
-                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
                     results.Result.As<BadRequest<ProblemDetails>>().Value.Detail.Should().Be($"{ErrorMessage2};{ErrorMessage1}");
                     results.Result.As<BadRequest<ProblemDetails>>().Value.Instance.Should().Be(REQUEST_PATH);
                 }
@@ -132,7 +130,7 @@ public class WebApiEndpointRunnerRunToOkTests
                 private static void ValidateBadRequest<T>(Results<Ok<T>, BadRequest<ProblemDetails>> results)
                 {
                     results.Result.Should().BeOfType<BadRequest<ProblemDetails>>();
-                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
                     results.Result.As<BadRequest<ProblemDetails>>().Value.Detail.Should().Be($"{ErrorMessage2};{ErrorMessage1}");
                     results.Result.As<BadRequest<ProblemDetails>>().Value.Instance.Should().Be(REQUEST_PATH);
                 }
@@ -175,7 +173,7 @@ public class WebApiEndpointRunnerRunToOkTests
                 private static void ValidateBadRequest<T>(Results<Ok<T>, BadRequest<ProblemDetails>> results)
                 {
                     results.Result.Should().BeOfType<BadRequest<ProblemDetails>>();
-                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
                     results.Result.As<BadRequest<ProblemDetails>>().Value.Detail.Should().Be($"{ErrorMessage2};{ErrorMessage1}");
                     results.Result.As<BadRequest<ProblemDetails>>().Value.Instance.Should().Be(REQUEST_PATH);
                 }
@@ -221,7 +219,7 @@ public class WebApiEndpointRunnerRunToOkTests
                 private static void ValidateBadRequest(Results<Ok, BadRequest<ProblemDetails>> results)
                 {
                     results.Result.Should().BeOfType<BadRequest<ProblemDetails>>();
-                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
                     results.Result.As<BadRequest<ProblemDetails>>().Value.Detail.Should().Be($"{ErrorMessage2};{ErrorMessage1}");
                     results.Result.As<BadRequest<ProblemDetails>>().Value.Instance.Should().Be(REQUEST_PATH);
                 }
@@ -260,7 +258,7 @@ public class WebApiEndpointRunnerRunToOkTests
                 private static void ValidateBadRequest(Results<Ok, BadRequest<ProblemDetails>> results)
                 {
                     results.Result.Should().BeOfType<BadRequest<ProblemDetails>>();
-                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
                     results.Result.As<BadRequest<ProblemDetails>>().Value.Detail.Should().Be($"{ErrorMessage2};{ErrorMessage1}");
                     results.Result.As<BadRequest<ProblemDetails>>().Value.Instance.Should().Be(REQUEST_PATH);
                 }
@@ -307,7 +305,7 @@ public class WebApiEndpointRunnerRunToOkTests
                 private static void ValidateBadRequest<T>(Results<Ok<T>, BadRequest<ProblemDetails>> results)
                 {
                     results.Result.Should().BeOfType<BadRequest<ProblemDetails>>();
-                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
                     results.Result.As<BadRequest<ProblemDetails>>().Value.Detail.Should().Be($"{ErrorMessage2};{ErrorMessage1}");
                     results.Result.As<BadRequest<ProblemDetails>>().Value.Instance.Should().Be(REQUEST_PATH);
                 }
@@ -350,7 +348,7 @@ public class WebApiEndpointRunnerRunToOkTests
                 private static void ValidateBadRequest<T>(Results<Ok<T>, BadRequest<ProblemDetails>> results)
                 {
                     results.Result.Should().BeOfType<BadRequest<ProblemDetails>>();
-                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+                    results.Result.As<BadRequest<ProblemDetails>>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
                     results.Result.As<BadRequest<ProblemDetails>>().Value.Detail.Should().Be($"{ErrorMessage2};{ErrorMessage1}");
                     results.Result.As<BadRequest<ProblemDetails>>().Value.Instance.Should().Be(REQUEST_PATH);
                 }

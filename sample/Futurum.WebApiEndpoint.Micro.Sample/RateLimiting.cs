@@ -38,7 +38,7 @@ public static class RateLimiting
     {
         options.OnRejected = async (context, cancellationToken) =>
         {
-            context.HttpContext.Response.StatusCode = (int)HttpStatusCode.TooManyRequests;
+            context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
 
             if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
             {

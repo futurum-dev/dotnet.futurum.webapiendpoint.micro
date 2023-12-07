@@ -30,7 +30,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage);
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -62,7 +62,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage());
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -100,7 +100,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage);
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -138,7 +138,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage());
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -178,7 +178,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage);
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -218,7 +218,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage());
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -260,7 +260,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage);
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -302,7 +302,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage());
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -346,7 +346,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage);
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -390,7 +390,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage());
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -422,7 +422,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage);
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -454,7 +454,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage());
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -492,7 +492,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage);
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -530,7 +530,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage());
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -570,7 +570,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage);
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -610,7 +610,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage());
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -652,7 +652,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage);
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -694,7 +694,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage());
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -738,7 +738,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage);
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
 
             return TypedResults.BadRequest(problemDetails);
         }
@@ -782,7 +782,7 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var problemDetails = exception.ToProblemDetails(context, errorMessage());
+            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
 
             return TypedResults.BadRequest(problemDetails);
         }
