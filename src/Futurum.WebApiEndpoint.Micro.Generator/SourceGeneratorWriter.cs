@@ -12,7 +12,8 @@ public static class SourceGeneratorWriter
 
     private static void Write(IndentedStringBuilder codeBuilder)
     {
-        codeBuilder.AppendLine("serviceCollection.RegisterWebApiEndpoints();");
+        codeBuilder.AppendLine("RegisterWebApiEndpoints(serviceCollection);");
+        codeBuilder.AppendLine("RegisterWebApiVersionEndpoints(serviceCollection);");
     }
 
     private static string WriteWrapper(string className, string methodName, Action<IndentedStringBuilder> writer, bool isNotMainMethod, bool skipVersion = false)
@@ -28,12 +29,12 @@ public static class SourceGeneratorWriter
             .AppendLine("{")
             .IncrementIndent();
 
-        if (!isNotMainMethod)
-        {
-            codeBuilder
-                .AppendLine("[global::System.Diagnostics.DebuggerNonUserCodeAttribute]")
-                .AppendLine("[global::System.Diagnostics.DebuggerStepThroughAttribute]");
-        }
+        // if (!isNotMainMethod)
+        // {
+        //     codeBuilder
+        //         .AppendLine("[global::System.Diagnostics.DebuggerNonUserCodeAttribute]")
+        //         .AppendLine("[global::System.Diagnostics.DebuggerStepThroughAttribute]");
+        // }
 
         codeBuilder
             .AppendLine($"public static partial class {className}FuturumWebApiEndpointMicroExtensions")

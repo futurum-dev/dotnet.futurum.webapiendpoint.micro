@@ -1,5 +1,4 @@
 using Asp.Versioning;
-using Asp.Versioning.Builder;
 
 namespace Futurum.WebApiEndpoint.Micro;
 
@@ -18,14 +17,34 @@ public abstract class WebApiEndpoint : IWebApiEndpoint
                                                             string tag) =>
         CreateRouteGroupBuilder(app, configuration, webApiEndpointVersion, route, tag);
 
-    private static RouteGroupBuilder CreateRouteGroupBuilder(IEndpointRouteBuilder app, WebApiEndpointConfiguration configuration, WebApiEndpointVersion webApiEndpointVersion, string route, string tag)
+    private static RouteGroupBuilder CreateRouteGroupBuilder(IEndpointRouteBuilder app, WebApiEndpointConfiguration configuration, WebApiEndpointVersion webApiEndpointVersion, string route,
+                                                             string tag)
     {
         var versionedEndpointRouteBuilder = CreateVersionedEndpointRouteBuilder(app, configuration, webApiEndpointVersion);
 
+        if (TryGetRequiredKeyedService() is IWebApiVersionEndpoint webApiVersionEndpoint)
+        {
+            versionedEndpointRouteBuilder = webApiVersionEndpoint.Configure(versionedEndpointRouteBuilder, configuration);
+        }
+
         return CreateRouteGroupBuilderVersioned(versionedEndpointRouteBuilder, configuration, route, tag, webApiEndpointVersion);
+
+        object? TryGetRequiredKeyedService()
+        {
+            try
+            {
+                return app.ServiceProvider.GetRequiredKeyedService(typeof(IWebApiVersionEndpoint), webApiEndpointVersion);
+            }
+            catch (Exception)
+            {
+                // Can't find a way to check if the service exists without throwing an exception
+                return null;
+            }
+        }
     }
 
-    private static RouteGroupBuilder CreateRouteGroupBuilderVersioned(IEndpointRouteBuilder endpointRouteBuilder, WebApiEndpointConfiguration configuration, string route, string tag, WebApiEndpointVersion webApiEndpointVersion)
+    private static RouteGroupBuilder CreateRouteGroupBuilderVersioned(IEndpointRouteBuilder endpointRouteBuilder, WebApiEndpointConfiguration configuration, string route, string tag,
+                                                                      WebApiEndpointVersion webApiEndpointVersion)
     {
         var routeGroupBuilder = endpointRouteBuilder.MapGroup($"{configuration.GlobalRoutePrefix}/{configuration.VersionPrefix}{{version:apiVersion}}/{route}");
 
@@ -40,7 +59,7 @@ public abstract class WebApiEndpoint : IWebApiEndpoint
         return routeGroupBuilder;
     }
 
-    private static IVersionedEndpointRouteBuilder CreateVersionedEndpointRouteBuilder(IEndpointRouteBuilder app, WebApiEndpointConfiguration configuration, WebApiEndpointVersion webApiEndpointVersion)
+    private static IEndpointRouteBuilder CreateVersionedEndpointRouteBuilder(IEndpointRouteBuilder app, WebApiEndpointConfiguration configuration, WebApiEndpointVersion webApiEndpointVersion)
     {
         var apiVersion = (ApiVersion)webApiEndpointVersion;
 
