@@ -44,9 +44,9 @@ public abstract class WebApiEndpoint : IWebApiEndpoint
     {
         var apiVersion = (ApiVersion)webApiEndpointVersion;
 
-        var formattedVersion = apiVersion.ToString(configuration.VersionFormat);
+        var formattedVersion = apiVersion.ToString(configuration.Version.Format);
 
-        return app.NewVersionedApi($"{configuration.VersionPrefix}{formattedVersion}");
+        return app.NewVersionedApi($"{configuration.Version.Prefix}{formattedVersion}");
     }
 
     private static IEndpointRouteBuilder ConfigureWithGlobalWebApiEndpoint(IEndpointRouteBuilder app, WebApiEndpointConfiguration configuration, IEndpointRouteBuilder workingEndpointRouteBuilder)
@@ -83,7 +83,7 @@ public abstract class WebApiEndpoint : IWebApiEndpoint
     }
 
     private static IEndpointRouteBuilder ApplyVersionedRoute(IEndpointRouteBuilder app, WebApiEndpointConfiguration configuration) =>
-        app.MapGroup($"{configuration.VersionPrefix}{{version:apiVersion}}");
+        app.MapGroup($"{configuration.Version.Prefix}{{version:apiVersion}}");
 
     private static RouteGroupBuilder ApplySpecificRouteAndTag(IEndpointRouteBuilder endpointRouteBuilder, string route, string tag, WebApiEndpointVersion webApiEndpointVersion)
     {
