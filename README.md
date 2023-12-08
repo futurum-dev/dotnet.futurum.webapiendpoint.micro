@@ -57,7 +57,7 @@ public partial class GreetingWebApiEndpoint
 
 ## Easy setup
 - [x] Add the [NuGet package](https://www.nuget.org/packages/futurum.webapiendpoint.micro) ( futurum.webapiendpoint.micro ) to your project
-- [x] Update *program.cs* as per [here](#programcs)
+- [x] Update *program.cs* as per [here](#example-programcs)
 
 ### Example program.cs
 ```csharp
@@ -113,9 +113,11 @@ app.UseWebApiEndpointsOpenApi();
 You can *map* your minimal apis for this WebApiEndpoint in the *Build* method.
 
 The *IEndpointRouteBuilder* parameter is already:
+- configured with [configuring for the entire API](#configuring-the-entire-api)
 - configured with the API versioning
-- configured with the route prefix
-- been through the *optional* *Configure* method in the same class
+- configured with [configuring a specific API version](#configuring-a-specific-api-version)
+- configured with the route prefix and tag
+- been through the *optional* *[Configure](#configure)* method in the same class
 
 ```csharp
 protected override void Build(IEndpointRouteBuilder builder)
@@ -182,6 +184,31 @@ You can *optionally* configure the WebApiEndpoint in the *Configure* method
 ```csharp
 protected override RouteGroupBuilder Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
 {
+}
+```
+
+##### Full example
+###### RateLimiting
+```csharp
+[WebApiEndpoint("rate-limiting")]
+public partial class RateLimitingWebApiEndpoint
+{
+    protected override RouteGroupBuilder Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
+    {
+        return groupBuilder.RequireRateLimiting(RateLimiting.SlidingWindow.Policy);
+    }
+
+    protected override void Build(IEndpointRouteBuilder builder)
+    {
+        builder.MapGet("/", GetHandler);
+    }
+
+    private static Ok<DataCollectionDto<FeatureDto>> GetHandler(HttpContext context) =>
+        Enumerable.Range(0, 10)
+                  .Select(i => new Feature($"Name - {i}"))
+                  .Select(FeatureMapper.Map)
+                  .ToDataCollectionDto()
+                  .ToOk();
 }
 ```
 
