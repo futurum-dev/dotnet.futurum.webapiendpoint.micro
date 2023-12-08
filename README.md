@@ -444,9 +444,7 @@ The entire API can be configured. This is a good place to configure things like:
 - Global route prefix
 - Global authorization (don't forget to set the *AllowAnonymous* on the individual WebApiEndpoint that you don't want to be secured i.e. *Login* endpoint)
 
-The class must:
-- implement *IGlobalWebApiEndpoint* interface
-- be decorated with at least one *GlobalWebApiVersionVersion* attribute
+The class must implement *IGlobalWebApiEndpoint* interface
 
 ** NOTE - there can only be one of these classes. **
 
@@ -454,7 +452,6 @@ The class must:
 
 ### Example
 ```csharp
-[GlobalWebApiEndpoint]
 public class GlobalWebApiEndpoint : IGlobalWebApiEndpoint
 {
     public IEndpointRouteBuilder Configure(IEndpointRouteBuilder builder, WebApiEndpointConfiguration configuration)
@@ -466,7 +463,7 @@ public class GlobalWebApiEndpoint : IGlobalWebApiEndpoint
 
 ## Configuring a specific API version
 A specific API version can be configured. This is a good place to configure things like:
-- API version specific authorization (don't forget to set the *AllowAnonymous* on the individual WebApiEndpoint that you don't want to be secured i.e. *Login* endpoint)~~~~
+- API version specific authorization (don't forget to set the *AllowAnonymous* on the individual WebApiEndpoint that you don't want to be secured i.e. *Login* endpoint)~~~~~~~~
 
 The class must:
 - implement *IWebApiVersionEndpoint* interface
