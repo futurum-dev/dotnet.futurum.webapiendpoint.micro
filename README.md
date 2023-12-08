@@ -9,7 +9,7 @@ A dotnet library that allows you to build WebApiEndpoints using a vertical slice
 
 ```csharp
 [WebApiEndpoint("greeting")]
-public class GreetingWebApiEndpoint
+public partial class GreetingWebApiEndpoint
 {
     protected override void Build(IEndpointRouteBuilder builder)
     {
@@ -28,20 +28,24 @@ public class GreetingWebApiEndpoint
 - [x] Vertical Slice Architecture, gives you the ability to add new features without changing existing code
 - [x] Structured way of building WebApiEndpoints using [minimal apis](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0)
 - [x] [Easy setup](#easy-setup)
-- [x] Developer friendly, with a simple API and with a full suite of samples and tests
 - [x] Full support and built on top of [minimal apis](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0)
 - [x] Full support for OpenApi
-- [x] Full support for [TypedResults](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0)
-- [x] Support for [configuring the entire API](#configuring-the-entire-api)
-- [x] Support for [configuring a specific API version](#configuring-a-specific-api-version)
-- [x] [Supports uploading file(s) with additional JSON payload](#uploading-files-with-additional-json-payload)
 - [x] Api Versioning baked-in
+- [x] Full support for [TypedResults](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0)
+- [x] Support for configuring
+  - [x] [Futurum.WebApiEndpoint.Micro](#configuring-futurumwebapiendpointmicro)
+  - [x] [entire API](#configuring-the-entire-api)
+  - [x] [specific API version](#configuring-a-specific-api-version)
+  - [x] [individual WebApiEndpoint(s)](#webapiendpoint)
+  - [x] individual REST method(s) - as per standard minimal apis
+- [x] [Supports uploading file(s) with additional JSON payload](#uploading-files-with-additional-json-payload)
 - [x] Built in [sandbox runner](#sandbox-runner) with full [TypedResults support](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0), catching unhandled exceptions and returning a [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) response
 - [x] Autodiscovery of WebApiEndpoint(s), based on Source Generators
-- [x] [Roslyn Analysers](#roslyn-analysers) to help build your WebApiEndpoint(s), using best practices
+- [x] [Roslyn Analysers](#roslyn-analysers) to help build your WebApiEndpoint(s) and ensure best practices
 - [x] Built on dotnet 8
 - [x] Built in use of [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) support
 - [x] Built in [extendable GlobalExceptionHandler](#extendable-globalexceptionhandler)
+- [x] Developer friendly, with a simple API and with a full suite of samples and tests
 - [x] [Tested solution](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint.micro)
 - [x] [Comprehensive samples](#comprehensive-samples)
 - [x] [Convention Customisation](#convention-customisation)
@@ -49,18 +53,13 @@ public class GreetingWebApiEndpoint
 ## What is a WebApiEndpoint?
 - It's a vertical slice / feature of your application
 - The vertical slice is a self-contained unit of functionality
-- Collection of WebApi's that share a route prefix and version. They can also share things like EndpointFilters, RateLimiting, etc.
+- Collection of WebApi's that share a route prefix and version. They can also share things like Security, EndpointFilters, RateLimiting, OutputCaching, etc.
 
 ## Easy setup
 - [x] Add the [NuGet package](https://www.nuget.org/packages/futurum.webapiendpoint.micro) ( futurum.webapiendpoint.micro ) to your project
 - [x] Update *program.cs* as per [here](#programcs)
-- [x] Create a new partial class
-- [x] Add the *WebApiEndpoint* attribute to the class, with the *route prefix* and optionally a *tag*
-- [x] Add the *WebApiEndpointVersion* attribute to the class, if you want to specify a specific *ApiVersion*
-- [x] Implement the *Build* method and add *minimal api(s)* as per usual
-- [x] *Optionally* implement the *Configure* method to configuration the *WebApiEndpoint*
 
-### program.cs
+### Example program.cs
 ```csharp
 using Futurum.WebApiEndpoint.Micro;
 using Futurum.WebApiEndpoint.Micro.Sample;
@@ -83,40 +82,8 @@ if (app.Environment.IsDevelopment())
 app.Run();
 ```
 
-#### AddWebApiEndpoints
-Allows you to configure:
-- DefaultApiVersion *(mandatory)*
-  - This is used if a specific ApiVersion is not provided for a specific WebApiEndpoint
-- DefaultOpenApiInfo *(optional)*
-  - This is used if a specific OpenApiInfo is not provided for a specific ApiVersion
-- OpenApiDocumentVersions *(optional)*
-  - Allowing you to have different OpenApiInfo per ApiVersion
-- VersionPrefix *(optional)*
-- VersionFormat *(optional)*
-  - uses 'Asp.Versioning.ApiVersionFormatProvider'
-
-```csharp
-builder.Services.AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0)
-{
-    DefaultOpenApiInfo = new OpenApiInfo
-    {
-        Title = "Futurum.WebApiEndpoint.Micro.Sample",
-    },
-    OpenApiDocumentVersions =
-    {
-        {
-            WebApiEndpointVersions.V1_0, 
-            new OpenApiInfo
-            {
-                Title = "Futurum.WebApiEndpoint.Micro.Sample v1"
-            }
-        }
-    }
-});
-```
-
 #### AddWebApiEndpointsFor... (per project containing WebApiEndpoints)
-This will be automatically created by the source generator.
+This will be automatically created by the source generator. You need to call this to have that project's WebApiEndpoints added to the pipeline.
 
 e.g.
 ```csharp
@@ -130,13 +97,19 @@ app.UseWebApiEndpoints();
 ```
 
 #### UseWebApiEndpointsOpenApi
-Register the OpenApi UI (Swagger and SwaggerUI) middleware
+Register the OpenApi UI (Swagger and SwaggerUI) middleware. This is usually only done in development mode.
 ```csharp
 app.UseWebApiEndpointsOpenApi();
 ```
 
 ### WebApiEndpoint
-### Build
+1. Create a new partial class
+2. Add the *WebApiEndpoint* attribute to the class, with the *route prefix* and optionally a *tag*
+3. Add the *WebApiEndpointVersion* attribute to the class, if you want to specify a specific *ApiVersion*
+4. Implement the *Build* method and add *minimal api(s)* as per usual
+5. *Optionally* implement the *Configure* method to configuration the *WebApiEndpoint*
+
+#### Build
 You can *map* your minimal apis for this WebApiEndpoint in the *Build* method.
 
 The *IEndpointRouteBuilder* parameter is already:
@@ -150,11 +123,11 @@ protected override void Build(IEndpointRouteBuilder builder)
 }
 ```
 
-### Full example
-#### Weather
+##### Full example
+###### Weather
 ```csharp
 [WebApiEndpoint("weather")]
-public class WeatherWebApiEndpoint
+public partial class WeatherWebApiEndpoint
 {
     private static readonly string[] Summaries =
     {
@@ -173,10 +146,10 @@ public class WeatherWebApiEndpoint
 }
 ```
 
-#### File download
+###### File download
 ```csharp
 [WebApiEndpoint("bytes", "feature")]
-public class BytesWebApiEndpoint
+public partial class BytesWebApiEndpoint
 {
     protected override void Build(IEndpointRouteBuilder builder)
     {
@@ -233,6 +206,86 @@ groupBuilder.CacheOutput(OutputCaching.ExpiryIn10Seconds.Policy);
 #### This ia a good place to add *Security*
 ```csharp
 groupBuilder.RequireAuthorization(Authorization.Permission.Admin);
+```
+
+## Configure
+### Configuring Futurum.WebApiEndpoint.Micro
+Allows you to configure:
+- DefaultApiVersion *(mandatory)*
+  - This is used if a specific ApiVersion is not provided for a specific WebApiEndpoint
+- DefaultOpenApiInfo *(optional)*
+  - This is used if a specific OpenApiInfo is not provided for a specific ApiVersion
+- OpenApiDocumentVersions *(optional)*
+  - Allowing you to have different OpenApiInfo per ApiVersion
+- VersionPrefix *(optional)*
+- VersionFormat *(optional)*
+  - uses 'Asp.Versioning.ApiVersionFormatProvider'
+
+#### Example in *program.cs*
+```csharp
+builder.Services.AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0)
+{
+    DefaultOpenApiInfo = new OpenApiInfo
+    {
+        Title = "Futurum.WebApiEndpoint.Micro.Sample",
+    },
+    OpenApiDocumentVersions =
+    {
+        {
+            WebApiEndpointVersions.V1_0, 
+            new OpenApiInfo
+            {
+                Title = "Futurum.WebApiEndpoint.Micro.Sample v1"
+            }
+        }
+    }
+});
+```
+
+### Configuring the entire API
+The entire API can be configured. This is a good place to configure things like:
+- Global route prefix
+- Global authorization (don't forget to set *AllowAnonymous* on the individual WebApiEndpoint that you don't want to be secured i.e. *Login* endpoint)
+
+The class must implement *IGlobalWebApiEndpoint* interface
+
+** NOTE - there can only be one of these classes. **
+
+** NOTE - this is applied before the version route is created. **
+
+#### Example
+```csharp
+public class GlobalWebApiEndpoint : IGlobalWebApiEndpoint
+{
+    public IEndpointRouteBuilder Configure(IEndpointRouteBuilder builder, WebApiEndpointConfiguration configuration)
+    {
+        return builder.MapGroup("api").RequireAuthorization(Authorization.Permission.Admin);
+    }
+}
+```
+
+### Configuring a specific API version
+A specific API version can be configured. This is a good place to configure things like:
+- API version specific authorization (don't forget to set *AllowAnonymous* on the individual WebApiEndpoint that you don't want to be secured i.e. *Login* endpoint)
+
+The class must:
+- implement *IWebApiVersionEndpoint* interface
+- be decorated with at least one *WebApiVersionEndpointVersion* attribute
+
+** NOTE - there can only be one of these classes per version. **
+
+** NOTE - this is applied after the version route is created, but before the WebApiEndpoint specific route is created. **
+
+#### Example
+```csharp
+[WebApiVersionEndpointVersion(WebApiEndpointVersions.V3_0.Major, WebApiEndpointVersions.V3_0.Minor)]
+public class WebApiVersionEndpoint3_0 : IWebApiVersionEndpoint
+{
+    public IEndpointRouteBuilder Configure(IEndpointRouteBuilder builder, WebApiEndpointConfiguration configuration)
+    {
+        return builder.MapGroup("test-api").RequireAuthorization(Authorization.Permission.Admin);
+    }
+}
 ```
 
 ## Sandbox runner
@@ -299,7 +352,7 @@ global using static Futurum.WebApiEndpoint.Micro.WebApiEndpointRunner;
 
 This means you can use the helper functions without having to specify the namespace. As in the examples.
 
-### RunToOk and RunToOkAsync - If your code returns an *T* (not a *IResult*)
+### RunToOk and RunToOkAsync - If your code returns *void* or  *T* (not a *IResult*)
 Comprehensive set of extension methods, to run your code in a sandbox
 - If your code **does not** throw an unhandled exception, then the existing return remains the same, *but* will be wrapped in an *Ok*.
 - If your code **does** throw an unhandled exception, then a *BadRequest&lt;ProblemDetails&gt;* will be returned, with the appropriate details set on the ProblemDetails.
@@ -307,7 +360,7 @@ Comprehensive set of extension methods, to run your code in a sandbox
 The returned type from *Run* and *RunAsync* is always augmented to additionally include *BadRequest&lt;ProblemDetails&gt;*
 
 ```csharp
-_ -> Results<Ok, BadRequest<ProblemDetails>>
+void -> Results<Ok, BadRequest<ProblemDetails>>
 
 T -> Results<Ok<T>, BadRequest<ProblemDetails>>
 ```
@@ -439,52 +492,6 @@ This can be overridden by passing in a *string*.
 ToAccepted<T>("/api/articles")
 ```
 
-## Configuring the entire API
-The entire API can be configured. This is a good place to configure things like:
-- Global route prefix
-- Global authorization (don't forget to set the *AllowAnonymous* on the individual WebApiEndpoint that you don't want to be secured i.e. *Login* endpoint)
-
-The class must implement *IGlobalWebApiEndpoint* interface
-
-** NOTE - there can only be one of these classes. **
-
-** NOTE - this is applied before the version route is created. **
-
-### Example
-```csharp
-public class GlobalWebApiEndpoint : IGlobalWebApiEndpoint
-{
-    public IEndpointRouteBuilder Configure(IEndpointRouteBuilder builder, WebApiEndpointConfiguration configuration)
-    {
-        return builder.MapGroup("api").RequireAuthorization(Authorization.Permission.Admin);
-    }
-}
-```
-
-## Configuring a specific API version
-A specific API version can be configured. This is a good place to configure things like:
-- API version specific authorization (don't forget to set the *AllowAnonymous* on the individual WebApiEndpoint that you don't want to be secured i.e. *Login* endpoint)~~~~~~~~
-
-The class must:
-- implement *IWebApiVersionEndpoint* interface
-- be decorated with at least one *WebApiVersionEndpointVersion* attribute
-
-** NOTE - there can only be one of these classes per version. **
-
-** NOTE - this is applied after the version route is created, but before the WebApiEndpoint specific route is created. **
-
-### Example
-```csharp
-[WebApiVersionEndpointVersion(WebApiEndpointVersions.V3_0.Major, WebApiEndpointVersions.V3_0.Minor)]
-public class WebApiVersionEndpoint3_0 : IWebApiVersionEndpoint
-{
-    public IEndpointRouteBuilder Configure(IEndpointRouteBuilder builder, WebApiEndpointConfiguration configuration)
-    {
-        return builder.MapGroup("test-api").RequireAuthorization(Authorization.Permission.Admin);
-    }
-}
-```
-
 ## Comprehensive samples
 There are examples showing the following:
 - [x] A basic blog CRUD implementation
@@ -607,4 +614,4 @@ ExceptionToProblemDetailsMapperService.OverrideDefault((exception, httpContext, 
 - FWAEM0001 - Non empty constructor found on WebApiEndpoint
 - FWAEM0002 - BadRequest without 'ProblemDetails' use found on WebApiEndpoint
 - FWAEM0003 - Multiple instances found of GlobalWebApiEndpoint
-- FWAEM0004 - Multiple instances found of WebApiVersionEndpoint for the same version~~~~
+- FWAEM0004 - Multiple instances found of WebApiVersionEndpoint for the same version
