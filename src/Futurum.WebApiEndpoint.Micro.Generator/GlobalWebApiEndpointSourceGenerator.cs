@@ -20,14 +20,13 @@ public static class GlobalWebApiEndpointSourceGenerator
         var semanticModel = context.SemanticModel;
         var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration, ct);
 
+        var globalWebApiEndpointInterfaceSymbol = context.SemanticModel.Compilation.GetTypeByMetadataName("Futurum.WebApiEndpoint.Micro.IGlobalWebApiEndpoint");
+
         if (classSymbol != null)
         {
-            var webApiVersionEndpointAttributeData = classSymbol.GetAttributes()
-                                                                .FirstOrDefault(attributeData => attributeData.AttributeClass?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
-                                                                                                              .StartsWith("global::Futurum.WebApiEndpoint.Micro.GlobalWebApiEndpoint")
-                                                                                                 ?? false);
+            var implementsInterface = classSymbol.Interfaces.Contains(globalWebApiEndpointInterfaceSymbol, SymbolEqualityComparer.Default);
 
-            if (webApiVersionEndpointAttributeData != null)
+            if (implementsInterface)
             {
                 var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
                 var className = classSymbol.Name;
