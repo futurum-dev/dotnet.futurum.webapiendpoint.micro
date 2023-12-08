@@ -213,13 +213,15 @@ groupBuilder.RequireAuthorization(Authorization.Permission.Admin);
 Allows you to configure:
 - DefaultApiVersion *(mandatory)*
   - This is used if a specific ApiVersion is not provided for a specific WebApiEndpoint
-- DefaultOpenApiInfo *(optional)*
-  - This is used if a specific OpenApiInfo is not provided for a specific ApiVersion
-- OpenApiDocumentVersions *(optional)*
-  - Allowing you to have different OpenApiInfo per ApiVersion
-- VersionPrefix *(optional)*
-- VersionFormat *(optional)*
-  - uses 'Asp.Versioning.ApiVersionFormatProvider'
+- OpenApi
+  - DefaultInfo *(optional)*
+    - This is used if a specific OpenApiInfo is not provided for a specific ApiVersion
+  - VersionedInfo *(optional)*
+    - Allowing you to have different OpenApiInfo per ApiVersion
+- Version
+  - Prefix *(optional)*
+  - Format *(optional)*
+    - uses 'Asp.Versioning.ApiVersionFormatProvider'
 
 #### Example in *program.cs*
 ```csharp
@@ -232,13 +234,13 @@ builder.Services
                {
                    Title = "Futurum.WebApiEndpoint.Micro.Sample",
                },
-               DocumentVersions =
+               VersionedInfo =
                {
                    {
-                       WebApiEndpointVersions.V1_0.Version,
+                       WebApiEndpointVersions.V3_0.Version,
                        new OpenApiInfo
                        {
-                           Title = "Futurum.WebApiEndpoint.Micro.Sample v1"
+                           Title = "Futurum.WebApiEndpoint.Micro.Sample v3"
                        }
                    }
                }
