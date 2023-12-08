@@ -12,15 +12,8 @@ public interface IWebApiOpenApiVersionConfigurationService
     OpenApiInfo CreateOpenApiInfo(ApiVersionDescription apiVersionDescription);
 }
 
-public class WebApiOpenApiVersionConfigurationService : IWebApiOpenApiVersionConfigurationService
+public class WebApiOpenApiVersionConfigurationService(WebApiEndpointConfiguration configuration) : IWebApiOpenApiVersionConfigurationService
 {
-    private readonly WebApiEndpointConfiguration _configuration;
-
-    public WebApiOpenApiVersionConfigurationService(WebApiEndpointConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
-
     public OpenApiInfo CreateOpenApiInfo(ApiVersionDescription apiVersionDescription)
     {
         var description = new StringBuilder();
@@ -44,12 +37,12 @@ public class WebApiOpenApiVersionConfigurationService : IWebApiOpenApiVersionCon
     private OpenApiInfo GetVersionedOpenApiInfo(ApiVersionDescription apiVersionDescription)
     {
         var webApiVersion = new WebApiEndpointVersion(apiVersionDescription.ApiVersion.MajorVersion ?? int.MinValue, apiVersionDescription.ApiVersion.MinorVersion ?? int.MinValue);
-        if (_configuration.OpenApiDocumentVersions.TryGetValue(webApiVersion, out var openApiDocumentVersion))
+        if (configuration.OpenApiDocumentVersions.TryGetValue(webApiVersion, out var openApiDocumentVersion))
         {
             return openApiDocumentVersion;
         }
 
-        return _configuration.DefaultOpenApiInfo ?? new OpenApiInfo();
+        return configuration.DefaultOpenApiInfo ?? new OpenApiInfo();
     }
 
     private static void ConfigureDescriptionForDeprecatedOpenApi(StringBuilder description)

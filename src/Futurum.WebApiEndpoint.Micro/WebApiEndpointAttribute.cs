@@ -4,23 +4,8 @@ namespace Futurum.WebApiEndpoint.Micro;
 /// Configures the PrefixRoute and Group for the WebApiEndpoint
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
-public sealed class WebApiEndpointAttribute : Attribute
+public sealed class WebApiEndpointAttribute(string? prefixRoute = null, string? group = null) : Attribute
 {
-    public WebApiEndpointAttribute()
-    {
-    }
-
-    public WebApiEndpointAttribute(string? prefixRoute = null)
-    {
-        PrefixRoute = prefixRoute;
-    }
-
-    public WebApiEndpointAttribute(string? prefixRoute = null, string? group = null)
-    {
-        PrefixRoute = prefixRoute;
-        Group = group;
-    }
-
-    public string? PrefixRoute { get; }
-    public string? Group { get; }
+    public string? PrefixRoute { get; } = prefixRoute;
+    public string? Group { get; } = group;
 }

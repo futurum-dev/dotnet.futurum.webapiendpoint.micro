@@ -4,14 +4,8 @@ namespace Futurum.WebApiEndpoint.Micro;
 /// Configures the version for the WebApiEndpoint
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-public class WebApiEndpointVersionAttribute : Attribute
+public class WebApiEndpointVersionAttribute(int majorVersion, int minorVersion) : Attribute
 {
-    public WebApiEndpointVersionAttribute(int majorVersion, int minorVersion)
-    {
-        MajorVersion = majorVersion;
-        MinorVersion = minorVersion;
-    }
-
-    public int MajorVersion { get; }
-    public int MinorVersion { get; }
+    public int MajorVersion { get; } = majorVersion;
+    public int MinorVersion { get; } = minorVersion;
 }
