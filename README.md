@@ -223,23 +223,27 @@ Allows you to configure:
 
 #### Example in *program.cs*
 ```csharp
-builder.Services.AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0)
-{
-    DefaultOpenApiInfo = new OpenApiInfo
-    {
-        Title = "Futurum.WebApiEndpoint.Micro.Sample",
-    },
-    OpenApiDocumentVersions =
-    {
-        {
-            WebApiEndpointVersions.V1_0, 
-            new OpenApiInfo
-            {
-                Title = "Futurum.WebApiEndpoint.Micro.Sample v1"
-            }
-        }
-    }
-});
+builder.Services
+       .AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0.Version)
+       {
+           OpenApi =
+           {
+               DefaultInfo =
+               {
+                   Title = "Futurum.WebApiEndpoint.Micro.Sample",
+               },
+               DocumentVersions =
+               {
+                   {
+                       WebApiEndpointVersions.V1_0.Version,
+                       new OpenApiInfo
+                       {
+                           Title = "Futurum.WebApiEndpoint.Micro.Sample v1"
+                       }
+                   }
+               }
+           }
+       });
 ```
 
 ### Configuring the entire API

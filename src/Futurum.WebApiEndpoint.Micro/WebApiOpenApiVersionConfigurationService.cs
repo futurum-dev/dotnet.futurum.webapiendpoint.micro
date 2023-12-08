@@ -37,12 +37,12 @@ public class WebApiOpenApiVersionConfigurationService(WebApiEndpointConfiguratio
     private OpenApiInfo GetVersionedOpenApiInfo(ApiVersionDescription apiVersionDescription)
     {
         var webApiVersion = new WebApiEndpointVersion(apiVersionDescription.ApiVersion.MajorVersion ?? int.MinValue, apiVersionDescription.ApiVersion.MinorVersion ?? int.MinValue);
-        if (configuration.OpenApiDocumentVersions.TryGetValue(webApiVersion, out var openApiDocumentVersion))
+        if (configuration.OpenApi.VersionedInfo.TryGetValue(webApiVersion, out var openApiInfoForVersion))
         {
-            return openApiDocumentVersion;
+            return openApiInfoForVersion;
         }
 
-        return configuration.DefaultOpenApiInfo ?? new OpenApiInfo();
+        return configuration.OpenApi.DefaultInfo;
     }
 
     private static void ConfigureDescriptionForDeprecatedOpenApi(StringBuilder description)

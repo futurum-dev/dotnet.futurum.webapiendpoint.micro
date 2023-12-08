@@ -20,17 +20,20 @@ builder.Services.AddOutputCaches();
 builder.Services
        .AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0.Version)
        {
-           DefaultOpenApiInfo = new OpenApiInfo
+           OpenApi =
            {
-               Title = "Futurum.WebApiEndpoint.Micro.Sample",
-           },
-           OpenApiDocumentVersions =
-           {
+               DefaultInfo =
                {
-                   WebApiEndpointVersions.V3_0.Version,
-                   new OpenApiInfo
+                   Title = "Futurum.WebApiEndpoint.Micro.Sample",
+               },
+               VersionedInfo =
+               {
                    {
-                       Title = "Futurum.WebApiEndpoint.Micro.Sample v3"
+                       WebApiEndpointVersions.V3_0.Version,
+                       new OpenApiInfo
+                       {
+                           Title = "Futurum.WebApiEndpoint.Micro.Sample v3"
+                       }
                    }
                }
            }

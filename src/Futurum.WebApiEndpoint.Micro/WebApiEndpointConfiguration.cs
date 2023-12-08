@@ -8,26 +8,38 @@ namespace Futurum.WebApiEndpoint.Micro;
 /// <param name="DefaultWebApiEndpointVersion"></param>
 public record WebApiEndpointConfiguration(WebApiEndpointVersion DefaultWebApiEndpointVersion)
 {
-    /// <summary>
-    /// Default OpenApiInfo for all versions. Unless overridden by <see cref="OpenApiDocumentVersions"/>.
-    /// </summary>
-    public OpenApiInfo? DefaultOpenApiInfo { get; set; }
+    public WebApiEndpointOpenApiConfiguration OpenApi { get; } = new();
 
-    /// <summary>
-    /// Specific OpenApiInfo for a specific version.
-    /// </summary>
-    public IDictionary<WebApiEndpointVersion, OpenApiInfo> OpenApiDocumentVersions { get; } = new Dictionary<WebApiEndpointVersion, OpenApiInfo>();
+    public WebApiEndpointVersionConfiguration Version { get; } = new();
 
-    /// <summary>
-    /// Prefix for the versioning
-    /// e.g. "v" in "v1.0"
-    /// <remarks>Defaults to "v"</remarks>
-    /// </summary>
-    public string VersionPrefix { get; set; } = "v";
+    public class WebApiEndpointOpenApiConfiguration
+    {
+        /// <summary>
+        /// Default OpenApiInfo for all versions.
+        /// <remarks>Unless overridden by <see cref="VersionedInfo"/>.</remarks>
+        /// </summary>
+        public OpenApiInfo DefaultInfo { get; } = new();
 
-    /// <summary>
-    /// See <see cref="Asp.Versioning.ApiVersionFormatProvider"/>.
-    /// <remarks>Defaults to "VVV"</remarks>
-    /// </summary>
-    public string VersionFormat { get; set; } = "VVV";
+        /// <summary>
+        /// OpenApiInfo for a specific version.
+        /// <remarks>If version is not specified, <see cref="DefaultInfo"/> is used.</remarks>
+        /// </summary>
+        public IDictionary<WebApiEndpointVersion, OpenApiInfo> VersionedInfo { get; } = new Dictionary<WebApiEndpointVersion, OpenApiInfo>();
+    }
+
+    public class WebApiEndpointVersionConfiguration
+    {
+        /// <summary>
+        /// Prefix for the versioning
+        /// e.g. "v" in "v1.0"
+        /// <remarks>Defaults to "v"</remarks>
+        /// </summary>
+        public string Prefix { get; set; } = "v";
+
+        /// <summary>
+        /// See <see cref="Asp.Versioning.ApiVersionFormatProvider"/>.
+        /// <remarks>Defaults to "VVV"</remarks>
+        /// </summary>
+        public string Format { get; set; } = "VVV";
+    }
 }
