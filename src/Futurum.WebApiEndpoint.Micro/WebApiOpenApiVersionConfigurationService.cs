@@ -36,8 +36,7 @@ public class WebApiOpenApiVersionConfigurationService(WebApiEndpointConfiguratio
 
     private OpenApiInfo GetVersionedOpenApiInfo(ApiVersionDescription apiVersionDescription)
     {
-        var webApiVersion = new WebApiEndpointVersion(apiVersionDescription.ApiVersion.MajorVersion ?? int.MinValue, apiVersionDescription.ApiVersion.MinorVersion ?? int.MinValue);
-        if (configuration.OpenApi.VersionedInfo.TryGetValue(webApiVersion, out var openApiInfoForVersion))
+        if (configuration.OpenApi.VersionedInfo.TryGetValue(apiVersionDescription.ApiVersion, out var openApiInfoForVersion))
         {
             return openApiInfoForVersion;
         }

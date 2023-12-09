@@ -7,22 +7,22 @@ namespace Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests
     {
         public override void Register(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)
         {
-            RegisterVersion00(builder, configuration);
+            RegisterVersion0(builder, configuration);
 
-            RegisterVersion10(builder, configuration);
+            RegisterVersion1(builder, configuration);
 
-            RegisterVersion20(builder, configuration);
+            RegisterVersion2(builder, configuration);
 
-            RegisterVersion30(builder, configuration);
+            RegisterVersion3(builder, configuration);
 
-            RegisterVersion40(builder, configuration);
+            RegisterVersion4(builder, configuration);
 
 
         }
 
-        private void RegisterVersion00(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)
+        private void RegisterVersion0(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)
         {
-            var webApiEndpointVersion = new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(0, 0);
+            var webApiEndpointVersion = new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(new global::Futurum.WebApiEndpoint.Micro.Generator.WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion(0d, null));
 
             var webapiEndpointRouteBuilder = CreateWebApiEndpoint(builder, configuration, webApiEndpointVersion, "/api", "group");
 
@@ -32,9 +32,9 @@ namespace Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests
 
         }
 
-        private void RegisterVersion10(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)
+        private void RegisterVersion1(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)
         {
-            var webApiEndpointVersion = new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(1, 0);
+            var webApiEndpointVersion = new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(new global::Futurum.WebApiEndpoint.Micro.Generator.WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion(1d, null));
 
             var webapiEndpointRouteBuilder = CreateWebApiEndpoint(builder, configuration, webApiEndpointVersion, "/api", "group");
 
@@ -44,9 +44,9 @@ namespace Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests
 
         }
 
-        private void RegisterVersion20(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)
+        private void RegisterVersion2(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)
         {
-            var webApiEndpointVersion = new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(2, 0);
+            var webApiEndpointVersion = new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(new global::Futurum.WebApiEndpoint.Micro.Generator.WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion(2d, null));
 
             var webapiEndpointRouteBuilder = CreateWebApiEndpoint(builder, configuration, webApiEndpointVersion, "/api", "group");
 
@@ -56,9 +56,9 @@ namespace Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests
 
         }
 
-        private void RegisterVersion30(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)
+        private void RegisterVersion3(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)
         {
-            var webApiEndpointVersion = new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(3, 0);
+            var webApiEndpointVersion = new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(new global::Futurum.WebApiEndpoint.Micro.Generator.WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion(3d, null));
 
             var webapiEndpointRouteBuilder = CreateWebApiEndpoint(builder, configuration, webApiEndpointVersion, "/api", "group");
 
@@ -68,9 +68,9 @@ namespace Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests
 
         }
 
-        private void RegisterVersion40(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)
+        private void RegisterVersion4(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)
         {
-            var webApiEndpointVersion = new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(4, 0);
+            var webApiEndpointVersion = new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(new global::Futurum.WebApiEndpoint.Micro.Generator.WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion(4d, null));
 
             var webapiEndpointRouteBuilder = CreateWebApiEndpoint(builder, configuration, webApiEndpointVersion, "/api", "group");
 

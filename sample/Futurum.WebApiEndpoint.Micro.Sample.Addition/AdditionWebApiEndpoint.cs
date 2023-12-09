@@ -3,6 +3,7 @@
 namespace Futurum.WebApiEndpoint.Micro.Sample.Addition;
 
 [WebApiEndpoint("addition")]
+[WebApiEndpointVersion(2.0d)]
 public partial class AdditionWebApiEndpoint
 {
     protected override void Build(IEndpointRouteBuilder builder)

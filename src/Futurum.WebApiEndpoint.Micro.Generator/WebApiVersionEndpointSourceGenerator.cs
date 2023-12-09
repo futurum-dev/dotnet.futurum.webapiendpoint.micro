@@ -23,9 +23,9 @@ public static class WebApiVersionEndpointSourceGenerator
         if (classSymbol != null)
         {
             var webApiVersionEndpointAttributeData = classSymbol.GetAttributes()
-                                                         .FirstOrDefault(attributeData => attributeData.AttributeClass?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
-                                                                                                       .StartsWith("global::Futurum.WebApiEndpoint.Micro.WebApiVersionEndpoint")
-                                                                                          ?? false);
+                                                                .FirstOrDefault(attributeData => attributeData.AttributeClass?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
+                                                                                                              .StartsWith("global::Futurum.WebApiEndpoint.Micro.WebApiVersionEndpointVersion")
+                                                                                                 ?? false);
 
             if (webApiVersionEndpointAttributeData != null)
             {
@@ -35,12 +35,12 @@ public static class WebApiVersionEndpointSourceGenerator
                 var diagnostics = new List<Diagnostic>();
                 diagnostics.AddRange(Diagnostics.WebApiEndpointNonEmptyConstructor.Check(classSymbol));
 
-                var versions = GetVersion(classSymbol);
+                var apiVersions = GetApiVersions(classSymbol);
 
                 var webApiEndpointData = new WebApiVersionEndpointDatum(namespaceName,
                                                                         className,
                                                                         classSymbol.Name,
-                                                                        versions.Select(version => new WebApiEndpointVersionDatum(version.majorVersion, version.minorVersion)));
+                                                                        apiVersions.Select(apiVersion => new WebApiEndpointVersionDatum(apiVersion)));
 
                 return new WebApiVersionEndpointContext(diagnostics, webApiEndpointData);
             }
@@ -49,7 +49,7 @@ public static class WebApiVersionEndpointSourceGenerator
         return null;
     }
 
-    private static IEnumerable<(int majorVersion, int minorVersion)> GetVersion(INamedTypeSymbol classSymbol)
+    private static IEnumerable<WebApiEndpointApiVersion> GetApiVersions(INamedTypeSymbol classSymbol)
     {
         var webApiEndpointVersionAttributeData = classSymbol.GetAttributes()
                                                             .Where(attributeData => attributeData.AttributeClass?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
@@ -58,38 +58,13 @@ public static class WebApiVersionEndpointSourceGenerator
 
         foreach (var webApiEndpointVersionAttributeDatum in webApiEndpointVersionAttributeData)
         {
-            int? majorVersion = null;
-            int? minorVersion = null;
+            var apiVersion = webApiEndpointVersionAttributeDatum.ToWebApiEndpointApiVersion();
 
-            if (webApiEndpointVersionAttributeData != null)
+            if (apiVersion != null)
             {
-                // Get the MajorVersion and MinorVersion property values
-                majorVersion = GetAttributeVersionArgumentValue(webApiEndpointVersionAttributeDatum, "MajorVersion");
-                minorVersion = GetAttributeVersionArgumentValue(webApiEndpointVersionAttributeDatum, "MinorVersion");
-            }
-
-            if (majorVersion.HasValue && minorVersion.HasValue)
-            {
-                yield return (majorVersion.Value, minorVersion.Value);
+                yield return apiVersion;
             }
         }
-    }
-
-    private static int? GetAttributeVersionArgumentValue(AttributeData attributeData, string argumentName)
-    {
-        int? result = default;
-
-        // Check if the argument is a positional argument
-        if (argumentName == "MajorVersion" && attributeData.ConstructorArguments.Length > 0)
-        {
-            result = attributeData.ConstructorArguments[0].Value as int?;
-        }
-        else if (argumentName == "MinorVersion" && attributeData.ConstructorArguments.Length > 1)
-        {
-            result = attributeData.ConstructorArguments[1].Value as int?;
-        }
-
-        return result;
     }
 
     public static void ExecuteGeneration(SourceProductionContext context, ImmutableArray<WebApiVersionEndpointContext> webApiVersionEndpointContexts, string assemblyName)
@@ -102,8 +77,8 @@ public static class WebApiVersionEndpointSourceGenerator
     private static void RegistrationGeneration(SourceProductionContext context, ImmutableArray<WebApiVersionEndpointContext> webApiVersionsEndpointContexts, string methodName)
     {
         var webApiVersionEndpointData = webApiVersionsEndpointContexts
-                                 .Select(webApiEndpointContext => webApiEndpointContext.WebApiVersionEndpointData)
-                                 .ToArray();
+                                        .Select(webApiEndpointContext => webApiEndpointContext.WebApiVersionEndpointData)
+                                        .ToArray();
 
         var codeBuilder = WebApiVersionEndpointRegistrationWriter.Write(methodName, webApiVersionEndpointData);
 

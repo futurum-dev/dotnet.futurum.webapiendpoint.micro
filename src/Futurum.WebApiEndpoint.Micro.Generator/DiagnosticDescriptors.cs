@@ -34,7 +34,7 @@ public static class DiagnosticDescriptors
     public static readonly DiagnosticDescriptor WebApiVersionEndpointMultipleInstances = new(
         "FWAEM0004",
         "Multiple instances found of WebApiVersionEndpoint for the same version",
-        $"WebApiVersionEndpoint class '{{0}}' with version '{{1}}.{{2}}' is one of many instances.\n" +
+        $"WebApiVersionEndpoint class '{{0}}' with version '{{1}}' is one of many instances.\n" +
         $"There can only be one instance of WebApiVersionEndpoint.",
         "Futurum.WebApiEndpoint.Micro.Generator",
         DiagnosticSeverity.Error,

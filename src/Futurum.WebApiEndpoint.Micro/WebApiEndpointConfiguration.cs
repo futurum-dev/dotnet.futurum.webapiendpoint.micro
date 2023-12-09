@@ -1,3 +1,5 @@
+using Asp.Versioning;
+
 using Microsoft.OpenApi.Models;
 
 namespace Futurum.WebApiEndpoint.Micro;
@@ -24,7 +26,7 @@ public record WebApiEndpointConfiguration(WebApiEndpointVersion DefaultWebApiEnd
         /// OpenApiInfo for a specific version.
         /// <remarks>If version is not specified, <see cref="DefaultInfo"/> is used.</remarks>
         /// </summary>
-        public IDictionary<WebApiEndpointVersion, OpenApiInfo> VersionedInfo { get; } = new Dictionary<WebApiEndpointVersion, OpenApiInfo>();
+        public IDictionary<ApiVersion, OpenApiInfo> VersionedInfo { get; } = new Dictionary<ApiVersion, OpenApiInfo>();
     }
 
     public class WebApiEndpointVersionConfiguration
@@ -38,8 +40,8 @@ public record WebApiEndpointConfiguration(WebApiEndpointVersion DefaultWebApiEnd
 
         /// <summary>
         /// See <see cref="Asp.Versioning.ApiVersionFormatProvider"/>.
-        /// <remarks>Defaults to "VVV"</remarks>
+        /// <remarks>Defaults to "VVVV"</remarks>
         /// </summary>
-        public string Format { get; set; } = "VVV";
+        public string Format { get; set; } = "VVVV";
     }
 }
