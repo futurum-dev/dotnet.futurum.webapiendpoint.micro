@@ -81,9 +81,12 @@ if (app.Environment.IsDevelopment())
 
 app.Run();
 ```
+**See *[program.cs](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Program.cs)* in sample project**
 
 #### AddWebApiEndpointsFor... (per project containing WebApiEndpoints)
-This will be automatically created by the source generator. You need to call this to have that project's WebApiEndpoints added to the pipeline.
+This will be automatically created by the source generator.
+
+You need to call this for each project that contains WebApiEndpoints, in order for them to be added to the pipeline.
 
 e.g.
 ```csharp
@@ -91,7 +94,7 @@ builder.Services.AddWebApiEndpointsForFuturumWebApiEndpointMicroSample();
 ```
 
 #### UseWebApiEndpoints
-Adds the WebApiEndpoints to the pipeline
+Adds the WebApiEndpoints to the pipeline and does various other setup needed for the WebApiEndpoints to work.
 ```csharp
 app.UseWebApiEndpoints();
 ```
@@ -102,21 +105,21 @@ Register the OpenApi UI (Swagger and SwaggerUI) middleware. This is usually only
 app.UseWebApiEndpointsOpenApi();
 ```
 
-### WebApiEndpoint
-1. Create a new partial class
-2. Add the *WebApiEndpoint* attribute to the class, with the *route prefix* and optionally a *tag*
-3. Add the *WebApiEndpointVersion* attribute to the class, if you want to specify a specific *ApiVersion*
-4. Implement the *Build* method and add *minimal api(s)* as per usual
+### How to create a WebApiEndpoint
+1. Create a new partial class.
+2. Add the *WebApiEndpoint* attribute to the class, with the *route prefix* for all the REST methods in this WebApiEndpoint. You can also optionally add a *tag*. This is used in the OpenApi documentation. If you do not specify a tag, then the route prefix is used.
+3. Add the *WebApiEndpointVersion* attribute to the class, if you want to specify a specific *ApiVersion*. If you do not specify a specific *ApiVersion*, then the default *ApiVersion* is used. You can add multiple *WebApiEndpointVersion* attributes to the class, if you want to support multiple *ApiVersions*.
+4. Implement the *Build* method and add *minimal api(s)* as per usual.
 5. *Optionally* implement the *Configure* method to configuration the *WebApiEndpoint*
 
 #### Build
 You can *map* your minimal apis for this WebApiEndpoint in the *Build* method.
 
-The *IEndpointRouteBuilder* parameter is already:
-- configured with [configuring for the entire API](#configuring-the-entire-api)
-- configured with the API versioning
-- configured with [configuring a specific API version](#configuring-a-specific-api-version)
-- configured with the route prefix and tag
+The *IEndpointRouteBuilder* that the *Build* method receives has already:
+- been configured with [configuring for the entire API](#configuring-the-entire-api)
+- been configured with the API versioning
+- been configured with [configuring a specific API version](#configuring-a-specific-api-version)
+- been configured with the route prefix and tag
 - been through the *optional* *[Configure](#configure)* method in the same class
 
 ```csharp
@@ -126,7 +129,6 @@ protected override void Build(IEndpointRouteBuilder builder)
 ```
 
 ##### Full example
-###### Weather
 ```csharp
 [WebApiEndpoint("weather")]
 public partial class WeatherWebApiEndpoint
@@ -147,39 +149,10 @@ public partial class WeatherWebApiEndpoint
                   .ToOk();
 }
 ```
+**See *[WeatherWebApiEndpoint](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/WeatherForecast/WeatherWebApiEndpoint.cs)* in sample project**
 
-###### File download
-```csharp
-[WebApiEndpoint("bytes", "feature")]
-public partial class BytesWebApiEndpoint
-{
-    protected override void Build(IEndpointRouteBuilder builder)
-    {
-        builder.MapGet("download", DownloadHandler);
-    }
-
-    private static Results<NotFound, FileContentHttpResult, BadRequest<ProblemDetails>> DownloadHandler(HttpContext context)
-    {
-        return Run(Execute, context, "Failed to read file");
-
-        Results<NotFound, FileContentHttpResult> Execute()
-        {
-            var path = "./Data/hello-world.txt";
-
-            if (!File.Exists(path))
-            {
-                return TypedResults.NotFound();
-            }
-
-            var bytes = File.ReadAllBytes(path);
-            return TypedResults.Bytes(bytes, MediaTypeNames.Application.Octet, "hello-world.txt");
-        }
-    }
-}
-```
-
-### Configure
-You can *optionally* configure the WebApiEndpoint in the *Configure* method
+#### Configure
+You can *optionally* configure the WebApiEndpoint in the *Configure* method.
 
 ```csharp
 protected override RouteGroupBuilder Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
@@ -187,64 +160,44 @@ protected override RouteGroupBuilder Configure(RouteGroupBuilder groupBuilder, W
 }
 ```
 
-##### Full example
-###### RateLimiting
-```csharp
-[WebApiEndpoint("rate-limiting")]
-public partial class RateLimitingWebApiEndpoint
-{
-    protected override RouteGroupBuilder Configure(RouteGroupBuilder groupBuilder, WebApiEndpointVersion webApiEndpointVersion)
-    {
-        return groupBuilder.RequireRateLimiting(RateLimiting.SlidingWindow.Policy);
-    }
-
-    protected override void Build(IEndpointRouteBuilder builder)
-    {
-        builder.MapGet("/", GetHandler);
-    }
-
-    private static Ok<DataCollectionDto<FeatureDto>> GetHandler(HttpContext context) =>
-        Enumerable.Range(0, 10)
-                  .Select(i => new Feature($"Name - {i}"))
-                  .Select(FeatureMapper.Map)
-                  .ToDataCollectionDto()
-                  .ToOk();
-}
-```
-
-This allows you to set properties on the RouteGroupBuilder. This will effect all minimal apis in the *Build* method.
+This allows you to setup the RouteGroupBuilder. This will effect all minimal apis in this classes *Build* method.
 
 You can also configure it differently per ApiVersion.
 
-#### This ia a good place to add a *EndpointFilter*
+#### This ia a good place to add a WebApiEndpoint specific *EndpointFilter*
 ```csharp
 groupBuilder.AddEndpointFilter<CustomEndpointFilter>();
 ```
-#### This ia a good place to add a *RateLimiting*
+**See *[EndpointFilterWebApiEndpoint](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/EndpointFilterWebApiEndpoint.cs)* in sample project**
+
+#### This ia a good place to add a WebApiEndpoint specific *RateLimiting*
 ```csharp
 groupBuilder.RequireRateLimiting(RateLimiting.SlidingWindow.Policy);
 ```
-#### This ia a good place to add a *OutputCache*
-    
+**See *[RateLimitingWebApiEndpoint](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/RateLimitingWebApiEndpoint.cs)* in sample project**
+
+#### This ia a good place to add a WebApiEndpoint specific *OutputCache* 
 ```csharp
 groupBuilder.CacheOutput(OutputCaching.ExpiryIn10Seconds.Policy);
 ```
+**See *[OutputCachingWebApiEndpoint](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/OutputCachingWebApiEndpoint.cs)* in sample project**
 
-#### This ia a good place to add *Security*
+#### This ia a good place to add WebApiEndpoint specific *Security*
 ```csharp
 groupBuilder.RequireAuthorization(Authorization.Permission.Admin);
 ```
+**See *[SecurityProtectedWebApiEndpoint](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Security/SecurityProtectedWebApiEndpoint.cs)* in sample project**
 
-## Configure
+## Configuration
 ### Configuring Futurum.WebApiEndpoint.Micro
-Allows you to configure:
+This allows you to configure:
 - DefaultApiVersion *(mandatory)*
-  - This is used if a specific ApiVersion is not provided for a specific WebApiEndpoint
+  - This is used if a ApiVersion is not provided for a specific WebApiEndpoint.
 - OpenApi
   - DefaultInfo *(optional)*
-    - This is used if a specific OpenApiInfo is not provided for a specific ApiVersion
+    - This is used if a OpenApiInfo is not provided for a specific ApiVersion
   - VersionedInfo *(optional)*
-    - Allowing you to have different OpenApiInfo per ApiVersion
+    - Allowing you to have an OpenApiInfo per a specific ApiVersion. If you do not provide an OpenApiInfo for a specific ApiVersion, then the DefaultInfo is used.
 - Version
   - Prefix *(optional)*
   - Format *(optional)*
@@ -274,6 +227,7 @@ builder.Services
            }
        });
 ```
+**See *[program.cs](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Program.cs)* in sample project**
 
 ### Configuring the entire API
 The entire API can be configured. This is a good place to configure things like:
@@ -282,7 +236,7 @@ The entire API can be configured. This is a good place to configure things like:
 
 The class must implement *IGlobalWebApiEndpoint* interface
 
-** NOTE - there can only be one of these classes. **
+** NOTE - there can only be one of these classes. There is an [analyser](#roslyn-analysers) to check for this. **
 
 ** NOTE - this is applied before the version route is created. **
 
@@ -296,6 +250,7 @@ public class GlobalWebApiEndpoint : IGlobalWebApiEndpoint
     }
 }
 ```
+**See *[GlobalWebApiEndpoint](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/GlobalWebApiEndpoint.cs)* in sample project**
 
 ### Configuring a specific API version
 A specific API version can be configured. This is a good place to configure things like:
@@ -303,9 +258,9 @@ A specific API version can be configured. This is a good place to configure thin
 
 The class must:
 - implement *IWebApiVersionEndpoint* interface
-- be decorated with at least one *WebApiVersionEndpointVersion* attribute
+- be decorated with at least one *WebApiVersionEndpointVersion* attribute, for the version(s) it applies to
 
-** NOTE - there can only be one of these classes per version. **
+** NOTE - there can only be one of these classes per version. There is an [analyser](#roslyn-analysers) to check for this. **
 
 ** NOTE - this is applied after the version route is created, but before the WebApiEndpoint specific route is created. **
 
@@ -320,6 +275,7 @@ public class WebApiVersionEndpoint3_0 : IWebApiVersionEndpoint
     }
 }
 ```
+**See *[WebApiVersionEndpoint3_0a](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/WebApiVersionEndpoint3_0.cs)* in sample project**
 
 ## Sandbox runner
 ### Run and RunAsync - If your code returns an *IResult*
@@ -625,8 +581,8 @@ ExceptionToProblemDetailsMapperService.Add<CustomException>((exception, httpCont
 {
     Detail = "An custom error occurred.",
     Instance = httpContext.Request.Path,
-    Status = (int)HttpStatusCode.InternalServerError,
-    Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.InternalServerError)
+    Status = StatusCodes.Status500InternalServerError,
+    Title = ReasonPhrases.GetReasonPhrase(StatusCodes.Status500InternalServerError)
 });
 ```
 
@@ -638,8 +594,8 @@ ExceptionToProblemDetailsMapperService.OverrideDefault((exception, httpContext, 
 {
     Detail = "An error occurred.",
     Instance = httpContext.Request.Path,
-    Status = (int)HttpStatusCode.InternalServerError,
-    Title = ReasonPhrases.GetReasonPhrase((int)HttpStatusCode.InternalServerError)
+    Status = StatusCodes.Status500InternalServerError,
+    Title = ReasonPhrases.GetReasonPhrase(StatusCodes.Status500InternalServerError)
 });
 ```
 
