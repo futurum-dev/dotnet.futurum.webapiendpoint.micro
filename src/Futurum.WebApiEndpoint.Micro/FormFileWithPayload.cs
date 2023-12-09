@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Reflection;
 using System.Text.Json;
 
@@ -20,7 +21,9 @@ public class FormFileWithPayload<TPayload> : IBindableFromHttpContext<FormFileWi
 
     public required IFormFile File { get; init; }
 
+#pragma warning disable CA1000
     public static async ValueTask<FormFileWithPayload<TPayload>?> BindAsync(HttpContext context, ParameterInfo parameter)
+#pragma warning restore CA1000
     {
         var jsonOptions = context.RequestServices.GetService<JsonOptions>()?.SerializerOptions ?? DefaultSerializerOptions;
 
@@ -41,7 +44,7 @@ public class FormFileWithPayload<TPayload> : IBindableFromHttpContext<FormFileWi
 
     private static TPayload? GetPayload(IFormCollection form, JsonSerializerOptions jsonOptions)
     {
-        if (form.TryGetValue(nameof(Payload).ToLower(), out var payloadStringValues))
+        if (form.TryGetValue(nameof(Payload).ToLower(CultureInfo.CurrentCulture), out var payloadStringValues))
         {
             var payloadString = payloadStringValues.ToString();
             var payload = JsonSerializer.Deserialize<TPayload>(payloadString, jsonOptions);
@@ -57,7 +60,9 @@ public class FormFileWithPayload<TPayload> : IBindableFromHttpContext<FormFileWi
             ? default
             : form.Files.Single();
 
+#pragma warning disable CA1000
     public static void PopulateMetadata(ParameterInfo parameter, EndpointBuilder builder)
+#pragma warning restore CA1000
     {
         builder.Metadata.Add(new ConsumesAttribute(typeof(FormFileWithPayload<TPayload>), "multipart/form-data"));
     }
