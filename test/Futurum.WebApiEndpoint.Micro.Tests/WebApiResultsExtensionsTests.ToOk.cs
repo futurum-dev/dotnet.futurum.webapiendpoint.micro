@@ -10,7 +10,16 @@ public class WebApiResultsExtensionsToOkTests
     private const string VALUE = "Value";
 
     [Fact]
-    public void ToWebApiOk()
+    public void ToOk_without_Value()
+    {
+        var httpContext = CreateHttpContext() as HttpContext;
+        var results = ToOk(httpContext);
+
+        results.Should().BeOfType<Ok>();
+    }
+
+    [Fact]
+    public void ToOk_with_Value()
     {
         var value = VALUE;
 
@@ -21,7 +30,7 @@ public class WebApiResultsExtensionsToOkTests
     }
 
     [Fact]
-    public void ToOk_with_Value()
+    public void ToOk_with_Value_and_HttpContext()
     {
         var value = VALUE;
 
