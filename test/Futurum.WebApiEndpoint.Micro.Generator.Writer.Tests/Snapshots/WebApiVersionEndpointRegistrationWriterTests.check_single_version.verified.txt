@@ -7,7 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         private static global::Microsoft.Extensions.DependencyInjection.IServiceCollection RegisterWebApiVersionEndpoints(this global::Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection)
         {
-            serviceCollection.AddKeyedSingleton(typeof(global::Futurum.WebApiEndpoint.Micro.IWebApiVersionEndpoint), new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(1, 0), typeof(Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests.Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests.WebApiEndpoint1));
+            serviceCollection.AddKeyedSingleton(typeof(global::Futurum.WebApiEndpoint.Micro.IWebApiVersionEndpoint), new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(new global::Futurum.WebApiEndpoint.Micro.Generator.WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion(1d, null)), typeof(Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests.Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests.WebApiEndpoint1));
             return serviceCollection;
         }
     }

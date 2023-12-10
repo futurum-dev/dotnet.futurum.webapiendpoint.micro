@@ -11,7 +11,8 @@ public static class WebApiEndpointPartialClassWriter
 
     private static void Write(IndentedStringBuilder codeBuilder, WebApiEndpointDatum webApiEndpointDatum)
     {
-        codeBuilder.AppendLine("public override void Register(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)");
+        codeBuilder.AppendLine(
+            "public override void Register(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)");
         codeBuilder.AppendLine("{");
         codeBuilder.IncrementIndent();
 
@@ -24,7 +25,7 @@ public static class WebApiEndpointPartialClassWriter
         {
             foreach (var webApiEndpointVersionDatum in webApiEndpointDatum.Versions)
             {
-                codeBuilder.AppendLine($"RegisterVersion{webApiEndpointVersionDatum.MajorVersion}{webApiEndpointVersionDatum.MinorVersion}(builder, configuration);");
+                codeBuilder.AppendLine($"RegisterVersion{SanitiseWebApiEndpointApiVersion(webApiEndpointVersionDatum.ApiVersion)}(builder, configuration);");
                 codeBuilder.AppendLine();
             }
         }
@@ -50,7 +51,8 @@ public static class WebApiEndpointPartialClassWriter
 
     private static void WriteNoVersion(IndentedStringBuilder codeBuilder, WebApiEndpointDatum webApiEndpointDatum)
     {
-        codeBuilder.AppendLine($"private void RegisterNoVersion(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)");
+        codeBuilder.AppendLine(
+            $"private void RegisterNoVersion(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)");
         codeBuilder.AppendLine("{");
         codeBuilder.IncrementIndent();
 
@@ -68,13 +70,61 @@ public static class WebApiEndpointPartialClassWriter
         codeBuilder.AppendLine("}");
     }
 
+    private static string SanitiseWebApiEndpointApiVersion(WebApiEndpointApiVersion apiVersion)
+    {
+        var version = apiVersion switch
+        {
+            WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion numberApiVersion => string.IsNullOrEmpty(numberApiVersion.Status)
+                ? $"{numberApiVersion.Version}"
+                : $"{numberApiVersion.Version}_{numberApiVersion.Status}",
+            WebApiEndpointApiVersion.WebApiEndpointStringApiVersion stringApiVersion => stringApiVersion.Version,
+            _                                                                        => string.Empty
+        };
+
+        return version.Replace(".", "_")
+                      .Replace("-", "_")
+                      .Replace("(", "_")
+                      .Replace(")", "_")
+                      .Replace("[", "_")
+                      .Replace("]", "_")
+                      .Replace("{", "_")
+                      .Replace("}", "_")
+                      .Replace("!", "_")
+                      .Replace("@", "_")
+                      .Replace("£", "_")
+                      .Replace("$", "_")
+                      .Replace("%", "_")
+                      .Replace("^", "_")
+                      .Replace("&", "_")
+                      .Replace("*", "_")
+                      .Replace("+", "_")
+                      .Replace("=", "_")
+                      .Replace("~", "_")
+                      .Replace("?", "_")
+                      .Replace("/", "_")
+                      .Replace(" ", "_");
+    }
+
     private static void WriteVersion(IndentedStringBuilder codeBuilder, WebApiEndpointDatum webApiEndpointDatum, WebApiEndpointVersionDatum webApiEndpointVersionDatum)
     {
-        codeBuilder.AppendLine($"private void RegisterVersion{webApiEndpointVersionDatum.MajorVersion}{webApiEndpointVersionDatum.MinorVersion}(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)");
+        codeBuilder.AppendLine(
+            $"private void RegisterVersion{SanitiseWebApiEndpointApiVersion(webApiEndpointVersionDatum.ApiVersion)}(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)");
         codeBuilder.AppendLine("{");
         codeBuilder.IncrementIndent();
 
-        codeBuilder.AppendLine($"var webApiEndpointVersion = new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion({webApiEndpointVersionDatum.MajorVersion}, {webApiEndpointVersionDatum.MinorVersion});");
+
+        if (webApiEndpointVersionDatum.ApiVersion is WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion numberApiVersion)
+        {
+            var status = numberApiVersion.Status != null
+                ? $"\"{numberApiVersion.Status}\""
+                : "null";
+            codeBuilder.AppendLine(
+                $"var webApiEndpointVersion = new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(new global::Futurum.WebApiEndpoint.Micro.Generator.WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion({numberApiVersion.Version}d, {status}));");
+        }
+        else if(webApiEndpointVersionDatum.ApiVersion is WebApiEndpointApiVersion.WebApiEndpointStringApiVersion stringApiVersion)
+        {
+            codeBuilder.AppendLine($"var webApiEndpointVersion = new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(new global::Futurum.WebApiEndpoint.Micro.Generator.WebApiEndpointApiVersion.WebApiEndpointStringApiVersion(\"{stringApiVersion.Version}\"));");
+        }
 
         codeBuilder.AppendLine();
         var tag = !string.IsNullOrEmpty(webApiEndpointDatum.Tag) ? webApiEndpointDatum.Tag : webApiEndpointDatum.Prefix;

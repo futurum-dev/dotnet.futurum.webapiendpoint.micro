@@ -34,8 +34,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Asp.Versioning.Http" Version="7.1.0" />
-        <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.1.0" />
+        <PackageReference Include="Asp.Versioning.Http" Version="8.0.0" />
+        <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
         <PackageReference Update="Microsoft.SourceLink.GitHub" Version="8.0.0" />
@@ -44,6 +44,12 @@
 
     <ItemGroup>
         <None Include="..\Futurum.WebApiEndpoint.Micro.Generator\bin\$(Configuration)\netstandard2.0\Futurum.WebApiEndpoint.Micro.Generator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="..\Futurum.WebApiEndpoint.Micro.Generator\WebApiEndpointApiVersion.cs">
+        <Link>WebApiEndpointApiVersion.cs</Link>
+      </Compile>
     </ItemGroup>
 
 </Project>

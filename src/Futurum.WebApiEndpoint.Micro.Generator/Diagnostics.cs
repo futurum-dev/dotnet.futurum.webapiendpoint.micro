@@ -77,12 +77,12 @@ public static class Diagnostics
 
     public static class WebApiVersionEndpointMoreThanOneInstance
     {
-        public static IEnumerable<Diagnostic> Check(INamedTypeSymbol classSymbol, int majorVersion, int minorVersion)
+        public static IEnumerable<Diagnostic> Check(INamedTypeSymbol classSymbol, string apiVersion)
         {
             yield return Diagnostic.Create(DiagnosticDescriptors.WebApiVersionEndpointMultipleInstances,
                                            classSymbol.Locations.First(),
                                            classSymbol.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat),
-                                           majorVersion, minorVersion);
+                                           apiVersion);
         }
     }
 }

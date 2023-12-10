@@ -30,7 +30,7 @@ public partial class GreetingWebApiEndpoint
 - [x] [Easy setup](#easy-setup)
 - [x] Full support and built on top of [minimal apis](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0)
 - [x] Full support for OpenApi
-- [x] Api Versioning baked-in
+- [x] Full support for Api Versioning
 - [x] Full support for [TypedResults](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0)
 - [x] Support for configuring
   - [x] [Futurum.WebApiEndpoint.Micro](#configuring-futurumwebapiendpointmicro)
@@ -266,10 +266,11 @@ The class must:
 
 #### Example
 ```csharp
-[WebApiVersionEndpointVersion(WebApiEndpointVersions.V3_0.Major, WebApiEndpointVersions.V3_0.Minor)]
-public class WebApiVersionEndpoint3_0 : IWebApiVersionEndpoint
+[WebApiVersionEndpointVersion(WebApiEndpointVersions.V3_0.Number)]
+[WebApiVersionEndpointVersion(WebApiEndpointVersions.V1_20_Beta.Text)]
+public class WebApiVersionEndpoint3_0a : IWebApiVersionEndpoint
 {
-    public IEndpointRouteBuilder Configure(IEndpointRouteBuilder builder, WebApiEndpointConfiguration configuration)
+    public RouteGroupBuilder Configure(IEndpointRouteBuilder builder, WebApiEndpointConfiguration configuration)
     {
         return builder.MapGroup("test-api").RequireAuthorization(Authorization.Permission.Admin);
     }

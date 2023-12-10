@@ -2,7 +2,8 @@ using Futurum.WebApiEndpoint.Micro.Sample.Security;
 
 namespace Futurum.WebApiEndpoint.Micro.Sample;
 
-[WebApiVersionEndpointVersion(WebApiEndpointVersions.V3_0.Major, WebApiEndpointVersions.V3_0.Minor)]
+[WebApiVersionEndpointVersion(WebApiEndpointVersions.V3_0.Number)]
+[WebApiVersionEndpointVersion(WebApiEndpointVersions.V1_20_Beta.Text)]
 public class WebApiVersionEndpoint3_0a : IWebApiVersionEndpoint
 {
     public RouteGroupBuilder Configure(IEndpointRouteBuilder builder, WebApiEndpointConfiguration configuration)

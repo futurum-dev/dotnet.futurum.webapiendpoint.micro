@@ -2,21 +2,18 @@ namespace Futurum.WebApiEndpoint.Micro.Generator;
 
 public class WebApiEndpointVersionDatum : IEquatable<WebApiEndpointVersionDatum>
 {
-    public WebApiEndpointVersionDatum(int majorVersion, int minorVersion)
+    public WebApiEndpointVersionDatum(WebApiEndpointApiVersion apiVersion)
     {
-        MajorVersion = majorVersion;
-        MinorVersion = minorVersion;
+        ApiVersion = apiVersion;
     }
 
-    public int MajorVersion { get; }
-    public int MinorVersion { get; }
+    public WebApiEndpointApiVersion ApiVersion { get; }
 
     public bool Equals(WebApiEndpointVersionDatum? other)
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
-        return MajorVersion == other.MajorVersion &&
-               MinorVersion == other.MinorVersion;
+        return ApiVersion.Equals(other.ApiVersion);
     }
 
     public override bool Equals(object? obj)
@@ -27,11 +24,6 @@ public class WebApiEndpointVersionDatum : IEquatable<WebApiEndpointVersionDatum>
         return Equals((WebApiEndpointVersionDatum)obj);
     }
 
-    public override int GetHashCode()
-    {
-        unchecked
-        {
-            return (MajorVersion * 397) ^ MinorVersion;
-        }
-    }
+    public override int GetHashCode() =>
+        ApiVersion.GetHashCode();
 }

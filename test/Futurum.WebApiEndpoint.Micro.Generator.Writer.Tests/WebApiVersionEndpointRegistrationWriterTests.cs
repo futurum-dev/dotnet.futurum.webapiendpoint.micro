@@ -20,7 +20,7 @@ public class WebApiVersionEndpointRegistrationWriterTests
                 "Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests.WebApiEndpoint1",
                 new List<WebApiEndpointVersionDatum>
                 {
-                    new WebApiEndpointVersionDatum(1, 0)
+                    new(new WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion(1.0d))
                 }),
         };
 
@@ -39,8 +39,8 @@ public class WebApiVersionEndpointRegistrationWriterTests
                 "Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests.WebApiVersionEndpoint1",
                 new List<WebApiEndpointVersionDatum>
                 {
-                    new(1, 0),
-                    new(2, 0),
+                    new(new WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion(1.0d)),
+                    new(new WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion(2.0d)),
                 }),
         };
 

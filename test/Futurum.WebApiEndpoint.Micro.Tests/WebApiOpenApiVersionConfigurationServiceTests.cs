@@ -1,6 +1,8 @@
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 
+using Futurum.WebApiEndpoint.Micro.Generator;
+
 namespace Futurum.WebApiEndpoint.Micro.Tests;
 
 public class WebApiOpenApiVersionConfigurationServiceTests
@@ -8,7 +10,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
     [Fact]
     public void when_IsDeprecated()
     {
-        var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(new WebApiEndpointConfiguration(new WebApiEndpointVersion(1, 0)));
+        var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(new WebApiEndpointConfiguration(new WebApiEndpointVersion(new WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion(1.0d))));
 
         var apiVersionDescription = new ApiVersionDescription(new ApiVersion(1, 0), string.Empty, true, null);
 
@@ -20,7 +22,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
     [Fact]
     public void when_SunsetPolicy()
     {
-        var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(new WebApiEndpointConfiguration(new WebApiEndpointVersion(1, 0)));
+        var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(new WebApiEndpointConfiguration(new WebApiEndpointVersion(new WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion(1.0d))));
 
         var linkHeaderValue = new LinkHeaderValue(new Uri("https://www.google.com"), "sunset")
         {

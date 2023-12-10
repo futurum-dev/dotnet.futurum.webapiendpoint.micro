@@ -15,7 +15,18 @@ public static class WebApiVersionEndpointRegistrationWriter
         {
             foreach (var webApiEndpointVersionDatum in webApiVersionEndpointDatum.Versions)
             {
-                codeBuilder.AppendLine($"serviceCollection.AddKeyedSingleton(typeof(global::Futurum.WebApiEndpoint.Micro.IWebApiVersionEndpoint), new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion({webApiEndpointVersionDatum.MajorVersion}, {webApiEndpointVersionDatum.MinorVersion}), typeof({webApiVersionEndpointDatum.NamespaceName}.{webApiVersionEndpointDatum.ImplementationType}));");
+                var version = string.Empty;
+
+                if (webApiEndpointVersionDatum.ApiVersion is WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion webApiEndpointNumberApiVersion)
+                {
+                    version = $"new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(new global::Futurum.WebApiEndpoint.Micro.Generator.WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion({webApiEndpointNumberApiVersion.Version}d, {webApiEndpointNumberApiVersion.Status ?? "null"}))";
+                }
+                else if (webApiEndpointVersionDatum.ApiVersion is WebApiEndpointApiVersion.WebApiEndpointStringApiVersion webApiEndpointStringApiVersion)
+                {
+                    version = $"new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(new global::Futurum.WebApiEndpoint.Micro.Generator.WebApiEndpointApiVersion.WebApiEndpointStringApiVersion(\"{webApiEndpointStringApiVersion.Version}\"))";
+                }
+
+                codeBuilder.AppendLine($"serviceCollection.AddKeyedSingleton(typeof(global::Futurum.WebApiEndpoint.Micro.IWebApiVersionEndpoint), {version}, typeof({webApiVersionEndpointDatum.NamespaceName}.{webApiVersionEndpointDatum.ImplementationType}));");
             }
         }
     }

@@ -1,5 +1,3 @@
-using Futurum.WebApiEndpoint.Micro.Sample.Security;
-
 namespace Futurum.WebApiEndpoint.Micro.Sample;
 
 public class GlobalWebApiEndpoint : IGlobalWebApiEndpoint

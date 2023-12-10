@@ -3,7 +3,7 @@ using Asp.Versioning;
 namespace Futurum.WebApiEndpoint.Micro;
 
 public sealed class WebApiEndpointCreationException(WebApiEndpointVersion webApiEndpointVersion, string route, string tag, Exception innerException)
-    : Exception($"Failed to create WebApiEndpoint. Version '{webApiEndpointVersion.MajorVersion}.{webApiEndpointVersion.MinorVersion}', Route '{route}' and Tag '{tag}'", innerException);
+    : Exception($"Failed to create WebApiEndpoint. Version '{webApiEndpointVersion.ApiVersion}', Route '{route}' and Tag '{tag}'", innerException);
 
 public sealed class GlobalWebApiEndpointConfigureException(Type globalWebApiEndpointType, WebApiEndpointConfiguration configuration, Exception innerException)
     : Exception($"Failed to configure GlobalWebApiEndpoint, using '{globalWebApiEndpointType.FullName}', with configuration '{configuration}'", innerException);
@@ -42,7 +42,7 @@ public abstract class WebApiEndpoint : IWebApiEndpoint
 
     private static IEndpointRouteBuilder CreateVersionedEndpointRouteBuilder(IEndpointRouteBuilder app, WebApiEndpointConfiguration configuration, WebApiEndpointVersion webApiEndpointVersion)
     {
-        var apiVersion = (ApiVersion)webApiEndpointVersion;
+        ApiVersion apiVersion = webApiEndpointVersion;
 
         var formattedVersion = apiVersion.ToString(configuration.Version.Format, new ApiVersionFormatProvider());
 
@@ -95,7 +95,9 @@ public abstract class WebApiEndpoint : IWebApiEndpoint
             routeGroupBuilder.WithTags(tag);
         }
 
-        routeGroupBuilder.HasApiVersion(webApiEndpointVersion.MajorVersion, webApiEndpointVersion.MinorVersion);
+        ApiVersion apiVersion = webApiEndpointVersion;
+
+        routeGroupBuilder.HasApiVersion(apiVersion);
 
         return routeGroupBuilder;
     }

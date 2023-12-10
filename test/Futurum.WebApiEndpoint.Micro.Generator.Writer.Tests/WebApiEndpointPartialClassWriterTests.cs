@@ -33,7 +33,7 @@ public class WebApiEndpointPartialClassWriterTests
                                                           "Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests.WebApiEndpoint1",
                                                           "/api",
                                                           "group",
-                                                          new []{new WebApiEndpointVersionDatum(1, 0)});
+                                                          new []{new WebApiEndpointVersionDatum(new WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion(1.0d))});
 
         var result = WebApiEndpointPartialClassWriter.Write(webApiEndpointDatum);
 
@@ -48,7 +48,7 @@ public class WebApiEndpointPartialClassWriterTests
                                                           "Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests.WebApiEndpoint1",
                                                           "/api",
                                                           "group",
-                                                          Enumerable.Range(0, 5).Select(i => new WebApiEndpointVersionDatum(i, 0)));
+                                                          Enumerable.Range(0, 5).Select(i => new WebApiEndpointVersionDatum(new WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion(i))));
 
         var result = WebApiEndpointPartialClassWriter.Write(webApiEndpointDatum);
 
