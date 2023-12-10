@@ -13,4 +13,10 @@ public record WebApiEndpointVersion(WebApiEndpointApiVersion ApiVersion)
             WebApiEndpointApiVersion.WebApiEndpointStringApiVersion stringApiVersion => ApiVersionParser.Default.Parse(stringApiVersion.Version),
             _                                                                        => throw new InvalidOperationException($"Unknown {nameof(WebApiEndpointApiVersion)} type: {value.ApiVersion.GetType().FullName}")
         };
+
+    public static WebApiEndpointVersion Create(double version, string? status = default) =>
+        new(new WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion(version, status));
+
+    public static WebApiEndpointVersion Create(string version) =>
+        new(new WebApiEndpointApiVersion.WebApiEndpointStringApiVersion(version));
 }

@@ -61,7 +61,9 @@ public partial class GreetingWebApiEndpoint
 7. [Comprehensive samples](#comprehensive-samples)
 8. [Convention Customisation](#convention-customisation)
 9. [Extendable GlobalExceptionHandler](#extenable-globalexceptionhandler)
-10. [Roslyn Analysers](#roslyn-analysers)
+10. [Tips & Tricks](#tips--tricks)
+11. [Troubleshooting](#troubleshooting)
+12. [Roslyn Analysers](#roslyn-analysers)
 
 ## What is a WebApiEndpoint?
 - It's a vertical slice / feature of your application
@@ -632,6 +634,61 @@ ExceptionToProblemDetailsMapperService.OverrideDefault((exception, httpContext, 
     Title = ReasonPhrases.GetReasonPhrase(StatusCodes.Status500InternalServerError)
 });
 ```
+
+## Tips & Tricks
+### How to organise your Api Versions
+You want to avoid duplicating the Api Versions in multiple places. So it's recommended to create a class that contains all the Api Versions.
+
+```csharp
+public static class WebApiEndpointVersions
+{
+    public static class V1_0
+    {
+        public const double Number = 1.0d;
+        public static readonly WebApiEndpointVersion Version = WebApiEndpointVersion.Create(Number);
+    }
+    
+    public static class V4_0_Alpha
+    {
+        public const double Number = 4.0d;
+        public const string Status = "alpha";
+        public static readonly WebApiEndpointVersion Version = WebApiEndpointVersion.Create(Number, Status);
+    }
+
+    public static class V1_20_Beta
+    {
+        public const string Text = "1.20-beta";
+        public static readonly WebApiEndpointVersion Version = WebApiEndpointVersion.Create(Text);
+    }
+}
+```
+**See *[WebApiEndpointVersions](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/WebApiEndpointVersions.cs)* in sample project**
+
+You can use this in your *program.cs* file like this.
+
+```csharp
+builder.Services.AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0.Version)
+```
+**See *[program.cs](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Program.cs)* in sample project**
+
+You can use this in your WebApiEndpoint like this.
+
+```csharp
+[WebApiEndpoint("openapi")]
+[WebApiEndpointVersion(WebApiEndpointVersions.V1_0.Number)]
+public partial class OpenApiVersionV1WebApiEndpoint
+{
+    ...
+}
+```
+**See *[OpenApiVersionV1WebApiEndpoint.cs](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/OpenApi/OpenApiVersionV1WebApiEndpoint.cs)* in sample project**
+
+## Troubleshooting
+### *No operations defined in spec!*
+If you see this error in the SwaggerUI - No operations defined in spec! - then it means you haven't added any WebApiEndpoint projects. You need to do this for each project, including the project that contains the *program.cs* file. See [this](#addwebapiendpointsfor-per-project-containing-webapiendpoints) section for more details.
+
+### If there are Rest Api's that are not being picked up
+If there are Rest Api's that are not being picked up, then it means you haven't added a WebApiEndpoint projects. You need to do this for each project, including the project that contains the *program.cs* file. See [this](#addwebapiendpointsfor-per-project-containing-webapiendpoints) section for more details.
 
 ## Roslyn Analysers
 - FWAEM0001 - Non empty constructor found on WebApiEndpoint

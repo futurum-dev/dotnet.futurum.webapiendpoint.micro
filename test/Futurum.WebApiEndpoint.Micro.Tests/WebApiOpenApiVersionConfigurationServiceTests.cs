@@ -10,7 +10,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
     [Fact]
     public void when_IsDeprecated()
     {
-        var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(new WebApiEndpointConfiguration(new WebApiEndpointVersion(new WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion(1.0d))));
+        var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d)));
 
         var apiVersionDescription = new ApiVersionDescription(new ApiVersion(1, 0), string.Empty, true, null);
 
@@ -22,7 +22,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
     [Fact]
     public void when_SunsetPolicy()
     {
-        var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(new WebApiEndpointConfiguration(new WebApiEndpointVersion(new WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion(1.0d))));
+        var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d)));
 
         var linkHeaderValue = new LinkHeaderValue(new Uri("https://www.google.com"), "sunset")
         {
