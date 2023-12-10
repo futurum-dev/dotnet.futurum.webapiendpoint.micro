@@ -34,6 +34,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Futurum.WebApiEndpoint.Micr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Futurum.WebApiEndpoint.Micro.Generator.Tests", "test\Futurum.WebApiEndpoint.Micro.Generator.Tests\Futurum.WebApiEndpoint.Micro.Generator.Tests.csproj", "{C4BB247F-941F-41AF-B422-083E203A46FE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dev-container", "dev-container", "{A5BF6AE6-0113-4E44-99BE-4417659A15F7}"
+	ProjectSection(SolutionItems) = preProject
+		.devcontainer\devcontainer.json = .devcontainer\devcontainer.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
