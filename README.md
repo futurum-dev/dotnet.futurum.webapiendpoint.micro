@@ -1,14 +1,14 @@
 # Futurum.WebApiEndpoint.Micro
+![license](https://img.shields.io/github/license/futurum-dev/dotnet.futurum.webapiendpoint.micro?style=for-the-badge)
+![CI](https://img.shields.io/github/actions/workflow/status/futurum-dev/dotnet.futurum.webapiendpoint.micro/ci.yml?branch=main&style=for-the-badge)
+[![Coverage Status](https://img.shields.io/coveralls/github/futurum-dev/dotnet.futurum.webapiendpoint.micro?style=for-the-badge)](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint.micro?branch=main)
+[![NuGet version](https://img.shields.io/nuget/v/futurum.webapiendpoint.micro?style=for-the-badge)](https://www.nuget.org/packages/futurum.webapiendpoint.micro)
+
 The Futurum.WebApiEndpoint.Micro is a powerful .NET library that aids in the construction of WebApiEndpoints in a systematic manner.
 
 It leverages the capabilities of .NET 8 and minimal APIs to facilitate the development of your Web APIs in a well-structured and defined manner. This library not only streamlines the process of Web API development but also provides the flexibility to incorporate new features without modifying any existing code. This is achieved through the implementation of a vertical slice architecture.
 
 In the context of vertical slice architecture, each feature or functionality of the application is developed as an independent slice, from the user interface to the data storage layer. This approach enhances the modularity of the application, making it easier to add, modify, or remove features without affecting the rest of the application. The Futurum.WebApiEndpoint.Micro library embodies this architectural style, making it an excellent tool for developing robust and scalable Web APIs.
-
-![license](https://img.shields.io/github/license/futurum-dev/dotnet.futurum.webapiendpoint.micro?style=for-the-badge)
-![CI](https://img.shields.io/github/actions/workflow/status/futurum-dev/dotnet.futurum.webapiendpoint.micro/ci.yml?branch=main&style=for-the-badge)
-[![Coverage Status](https://img.shields.io/coveralls/github/futurum-dev/dotnet.futurum.webapiendpoint.micro?style=for-the-badge)](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint.micro?branch=main)
-[![NuGet version](https://img.shields.io/nuget/v/futurum.webapiendpoint.micro?style=for-the-badge)](https://www.nuget.org/packages/futurum.webapiendpoint.micro)
 
 ```csharp
 [WebApiEndpoint("greeting")]
