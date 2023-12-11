@@ -1,11 +1,14 @@
 # Futurum.WebApiEndpoint.Micro
+The Futurum.WebApiEndpoint.Micro is a powerful .NET library that aids in the construction of WebApiEndpoints in a systematic manner.
+
+It leverages the capabilities of .NET 8 and minimal APIs to facilitate the development of your Web APIs in a well-structured and defined manner. This library not only streamlines the process of Web API development but also provides the flexibility to incorporate new features without modifying any existing code. This is achieved through the implementation of a vertical slice architecture.
+
+In the context of vertical slice architecture, each feature or functionality of the application is developed as an independent slice, from the user interface to the data storage layer. This approach enhances the modularity of the application, making it easier to add, modify, or remove features without affecting the rest of the application. The Futurum.WebApiEndpoint.Micro library embodies this architectural style, making it an excellent tool for developing robust and scalable Web APIs.
 
 ![license](https://img.shields.io/github/license/futurum-dev/dotnet.futurum.webapiendpoint.micro?style=for-the-badge)
 ![CI](https://img.shields.io/github/actions/workflow/status/futurum-dev/dotnet.futurum.webapiendpoint.micro/ci.yml?branch=main&style=for-the-badge)
 [![Coverage Status](https://img.shields.io/coveralls/github/futurum-dev/dotnet.futurum.webapiendpoint.micro?style=for-the-badge)](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint.micro?branch=main)
 [![NuGet version](https://img.shields.io/nuget/v/futurum.webapiendpoint.micro?style=for-the-badge)](https://www.nuget.org/packages/futurum.webapiendpoint.micro)
-
-A dotnet library that allows you to build WebApiEndpoints using a vertical slice architecture approach in a structured way. It's built on top of dotnet 8 and minimal apis.
 
 ```csharp
 [WebApiEndpoint("greeting")]
@@ -26,7 +29,6 @@ public partial class GreetingWebApiEndpoint
 ```
 
 ## Key Features
-- [x] Vertical Slice Architecture, gives you the ability to add new features without changing existing code
 - [x] Structured way of building WebApiEndpoints using [minimal apis](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0)
 - [x] [Easy setup](#easy-setup)
 - [x] Full support and built on top of [minimal apis](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0)
@@ -43,6 +45,7 @@ public partial class GreetingWebApiEndpoint
 - [x] Built in [sandbox runner](#sandbox-runner) with full [TypedResults support](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0), catching unhandled exceptions and returning a [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) response
 - [x] Autodiscovery of WebApiEndpoint(s), based on Source Generators
 - [x] [Roslyn Analysers](#roslyn-analysers) to help build your WebApiEndpoint(s) and ensure best practices
+- [x] Enables Vertical Slice Architecture, giving you the ability to add new features without changing existing code
 - [x] Built on dotnet 8
 - [x] Built in use of [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) support
 - [x] Built in [extendable GlobalExceptionHandler](#extendable-globalexceptionhandler)
@@ -66,9 +69,9 @@ public partial class GreetingWebApiEndpoint
 12. [Roslyn Analysers](#roslyn-analysers)
 
 ## What is a WebApiEndpoint?
-- It's a vertical slice / feature of your application
-- The vertical slice is a self-contained unit of functionality
-- Collection of WebApi's that share a route prefix and version. They can also share things like Security, EndpointFilters, RateLimiting, OutputCaching, etc.
+- It represents a vertical slice or a distinct feature of your application.
+- Each vertical slice is a self-contained functional unit.
+- It's a collection of Web APIs that share a common route prefix and version. They can also share various aspects such as Security, EndpointFilters, RateLimiting, OutputCaching, and more.
 
 ## Easy setup
 Check out this section for a step-by-step guide to setting up the library for use in your development environment.
@@ -253,19 +256,33 @@ builder.Services
 The configuration is applied in the following order:
 ```mermaid
 flowchart TB
-   entire-api[entire api] --> specific-version-api[specific version api] --> endpoint-configure[web-api-endpoint 'configure' method] --> endpoint-build[web-api-endpoint 'build' method] --> minimal-api[individual minimal api]
+   classDef blackText stroke:#000,color:#000;
+   entire-api[Entire API] -->|1| specific-version-api[Specific Version API]
+   specific-version-api -->|2| endpoint-configure[Web API Endpoint 'Configure' Method]
+   endpoint-configure -->|3| endpoint-build[Web API Endpoint 'Build' Method]
+   endpoint-build -->|4| minimal-api[Individual Minimal API]
+
+   style entire-api fill:#f9d0c4
+   style specific-version-api fill:#fcbf49
+   style endpoint-configure fill:#90be6d
+   style endpoint-build fill:#43aa8b
+   style minimal-api fill:#577590
+
+   class entire-api,specific-version-api,endpoint-configure,endpoint-build,minimal-api blackText
 ```
 
 ### Configuring the entire API
-The entire API can be configured. This is a good place to configure things like:
-- Global route prefix
-- Global authorization (don't forget to set *AllowAnonymous* on the individual WebApiEndpoint that you don't want to be secured i.e. *Login* endpoint)
+The entire API can be configured to set global parameters. This is an ideal place to set configurations such as:  
+- Global route prefix: This is a common prefix for all routes in your API.
+- Global authorization: This is where you can set the authorization required for all endpoints in your API. Remember to use the AllowAnonymous attribute on individual WebApiEndpoints that should not be secured, such as a Login endpoint.
 
-The class must implement *IGlobalWebApiEndpoint* interface
+To configure the entire API, you need to create a class that implements the IGlobalWebApiEndpoint interface.
 
-** NOTE - there can only be one of these classes. There is an [analyser](#roslyn-analysers) to check for this. **
+**Note: There can only be one class that implements IGlobalWebApiEndpoint. This is enforced by an analyzer.**
 
-** NOTE - this is applied before the version route is created. **
+**Note: The configuration set in this class is applied before the version route is created.**
+
+Here is an example of how to implement this:
 
 #### Example
 ```csharp
@@ -273,6 +290,7 @@ public class GlobalWebApiEndpoint : IGlobalWebApiEndpoint
 {
     public IEndpointRouteBuilder Configure(IEndpointRouteBuilder builder, WebApiEndpointConfiguration configuration)
     {
+        // Set the global route prefix to "api" and require admin authorization for all endpoints
         return builder.MapGroup("api").RequireAuthorization(Authorization.Permission.Admin);
     }
 }
@@ -280,16 +298,18 @@ public class GlobalWebApiEndpoint : IGlobalWebApiEndpoint
 **See *[GlobalWebApiEndpoint](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/GlobalWebApiEndpoint.cs)* in sample project**
 
 ### Configuring a specific API version
-A specific API version can be configured. This is a good place to configure things like:
-- API version specific authorization (don't forget to set *AllowAnonymous* on the individual WebApiEndpoint that you don't want to be secured i.e. *Login* endpoint)
+In the context of API development, it's often necessary to configure specific API versions. This configuration can include aspects such as:  
+- Authorization specific to the API version: This is where you can set the authorization required for all endpoints in a specific API version. Don't forget to use the AllowAnonymous attribute on individual WebApiEndpoints that should not be secured, such as a Login endpoint.
 
-The class must:
-- implement *IWebApiVersionEndpoint* interface
-- be decorated with at least one *WebApiVersionEndpointVersion* attribute, for the version(s) it applies to
+To configure a specific API version, you need to create a class that:  
+- Implements the IWebApiVersionEndpoint interface.
+- Is decorated with at least one WebApiVersionEndpointVersion attribute, indicating the version(s) it applies to.
 
-** NOTE - there can only be one of these classes per version. There is an [analyser](#roslyn-analysers) to check for this. **
+**Note: There can only be one class that configures a specific API version. This is enforced by a Roslyn analyzer.**
 
-** NOTE - this is applied after the version route is created, but before the WebApiEndpoint specific route is created. **
+**Note: The configuration set in this class is applied after the version route is created, but before the specific WebApiEndpoint route is created.**
+
+Here's an example of how to implement this:
 
 #### Example
 ```csharp
@@ -299,21 +319,24 @@ public class WebApiVersionEndpoint3_0a : IWebApiVersionEndpoint
 {
     public RouteGroupBuilder Configure(IEndpointRouteBuilder builder, WebApiEndpointConfiguration configuration)
     {
+        // Set the route group to "test-api" and require admin authorization for all endpoints
         return builder.MapGroup("test-api").RequireAuthorization(Authorization.Permission.Admin);
     }
 }
 ```
 **See *[WebApiVersionEndpoint3_0a](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/WebApiVersionEndpoint3_0.cs)* in sample project**
 
+**Remember, the configuration of specific API versions is a crucial aspect of maintaining and managing your APIs, especially when dealing with different versions of the same API. It allows you to control the behavior of each version independently, providing flexibility and control over your API's functionality.**
+
 ## Sandbox runner
-In this section, learn more about the Sandbox Runner, its features, and how to utilize it optimally in your development work.
+The Sandbox Runner is a feature that provides a set of comprehensive extension methods to execute your code in a controlled environment or "sandbox".
 
-### Run and RunAsync - If your code returns an *IResult*
-Comprehensive set of extension methods, to run your code in a sandbox
-- If your code **does not** throw an unhandled exception, then the existing return remains the same.
-- If your code **does** throw an unhandled exception, then a *BadRequest&lt;ProblemDetails&gt;* will be returned, with the appropriate details set on the ProblemDetails.
+### Run and RunAsync - Handling code that returns an *IResult*
+These extension methods are designed to handle code that returns an IResult. The behavior of these methods is as follows:  
+- If your code executes without throwing an unhandled exception, the original return value remains unchanged.
+- If your code throws an unhandled exception, a BadRequest&lt;ProblemDetails&gt; is returned, containing relevant details about the exception.
 
-The returned *Results&lt;...&gt;* type is always augmented to additionally include *BadRequest&lt;ProblemDetails&gt;*
+The returned Results<...> type is always expanded to include BadRequest&lt;ProblemDetails&gt;.
 
 ```csharp
 TIResult1 -> Results<TIResult1, BadRequest<ProblemDetails>>
@@ -327,7 +350,7 @@ Results<TIResult1, TIResult2, TIResult3, TIResult4> -> Results<TIResult1, TIResu
 Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5> -> Results<TIResult1, TIResult2, TIResult3, TIResult4, TIResult5, BadRequest<ProblemDetails>>
 ```
 
-*Results* has a maximum of 6 types. So 5 are allowed leaving one space left for the *BadRequest&lt;ProblemDetails&gt;*.
+The Results type can accommodate a maximum of 6 types. Therefore, up to 5 types are allowed, reserving one space for BadRequest&lt;ProblemDetails&gt;.
 
 #### Example use
 ```csharp
@@ -350,7 +373,7 @@ private static Results<NotFound, FileStreamHttpResult, BadRequest<ProblemDetails
 }
 ```
 
-In this example the *Execute* method is being wrapped by the runner. It returns:
+In this example the *Execute* method is wrapped by the runner. It returns:
 - a *NotFound* if the file does not exist
 - a *FileStreamHttpResult* if the file exists
 
@@ -358,7 +381,7 @@ In this example the *Execute* method is being wrapped by the runner. It returns:
 Results<NotFound, FileStreamHttpResult>
 ```
 
-The *Run* / *RunAsync* extension method will change this to add *BadRequest&lt;ProblemDetails&gt;*.
+The *Run* / *RunAsync* extension method modifies this to include *BadRequest&lt;ProblemDetails&gt;*.
 
 ```csharp
 Results<NotFound, FileStreamHttpResult, BadRequest<ProblemDetails>>
@@ -369,14 +392,14 @@ Results<NotFound, FileStreamHttpResult, BadRequest<ProblemDetails>>
 global using static Futurum.WebApiEndpoint.Micro.WebApiEndpointRunner;
 ```
 
-This means you can use the helper functions without having to specify the namespace. As in the examples.
+This allows you to use the helper functions without having to specify the namespace, as demonstrated in the examples.
 
 ### RunToOk and RunToOkAsync - If your code returns *void* or  *T* (not a *IResult*)
-Comprehensive set of extension methods, to run your code in a sandbox
-- If your code **does not** throw an unhandled exception, then the existing return remains the same, *but* will be wrapped in an *Ok*.
-- If your code **does** throw an unhandled exception, then a *BadRequest&lt;ProblemDetails&gt;* will be returned, with the appropriate details set on the ProblemDetails.
+These extension methods are designed to handle code that returns *void* or *T*. The behavior of these methods is as follows:
+- If your code executes without throwing an unhandled exception, the original return value remains unchanged.
+- If your code throws an unhandled exception, a BadRequest&lt;ProblemDetails&gt; is returned, containing relevant details about the exception.
 
-The returned type from *Run* and *RunAsync* is always augmented to additionally include *BadRequest&lt;ProblemDetails&gt;*
+The returned Results<...> type is always expanded to include BadRequest&lt;ProblemDetails&gt;.
 
 ```csharp
 void -> Results<Ok, BadRequest<ProblemDetails>>
@@ -414,7 +437,7 @@ Results<Ok<IAsyncEnumerable<Todo>>, BadRequest<ProblemDetails>>
 global using static Futurum.WebApiEndpoint.Micro.WebApiEndpointRunner;
 ```
 
-This means you can use the helper functions without having to specify the namespace. As in the examples.
+This allows you to use the helper functions without having to specify the namespace, as demonstrated in the examples.
 
 ## Uploading file(s) with additional JSON payload
 This section guides you on how to upload files with additional JSON payload using Futurum.WebApiEndpoint.Micro.
