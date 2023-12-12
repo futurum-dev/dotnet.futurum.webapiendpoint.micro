@@ -29,30 +29,30 @@ public partial class GreetingWebApiEndpoint
 ```
 
 ## Key Features
-- [x] Structured way of building WebApiEndpoints using [minimal apis](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0)
-- [x] [Easy setup](#easy-setup)
-- [x] Full support and built on top of [minimal apis](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0)
-- [x] Full support for OpenApi
-- [x] Full support for Api Versioning
-- [x] Full support for [TypedResults](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0)
-- [x] Support for configuring
-  - [x] [Futurum.WebApiEndpoint.Micro](#configuring-futurumwebapiendpointmicro)
-  - [x] [entire API](#configuring-the-entire-api)
-  - [x] [specific API version](#configuring-a-specific-api-version)
-  - [x] [individual WebApiEndpoint(s)](#webapiendpoint)
-  - [x] individual REST method(s) - as per standard minimal apis
-- [x] [Supports uploading file(s) with additional JSON payload](#uploading-files-with-additional-json-payload)
-- [x] Built in [sandbox runner](#sandbox-runner) with full [TypedResults support](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0), catching unhandled exceptions and returning a [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) response
-- [x] Autodiscovery of WebApiEndpoint(s), based on Source Generators
-- [x] [Roslyn Analysers](#roslyn-analysers) to help build your WebApiEndpoint(s) and ensure best practices
-- [x] Enables Vertical Slice Architecture, giving you the ability to add new features without changing existing code
-- [x] Built on dotnet 8
-- [x] Built in use of [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) support
-- [x] Built in [extendable GlobalExceptionHandler](#extendable-globalexceptionhandler)
-- [x] Developer friendly, with a simple API and with a full suite of samples and tests
-- [x] [Tested solution](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint.micro)
-- [x] [Comprehensive samples](#comprehensive-samples)
-- [x] [Convention Customisation](#convention-customisation)
+- ✅ Structured way of building WebApiEndpoints using [minimal apis](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0)
+- ✅ [Easy setup](#easy-setup)
+- ✅ Full support and built on top of [minimal apis](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis?view=aspnetcore-7.0)
+- ✅ Full support for OpenApi
+- ✅ Full support for Api Versioning
+- ✅ Full support for [TypedResults](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0)
+- ✅ Support for configuring
+  - ✅ [Futurum.WebApiEndpoint.Micro](#configuring-futurumwebapiendpointmicro)
+  - ✅ [entire API](#1-configuring-the-entire-api)
+  - ✅ [specific API version](#2-configuring-a-specific-api-version)
+  - ✅ [individual WebApiEndpoint(s)](#how-to-create-a-webapiendpoint)
+  - ✅ individual REST method(s) - as per standard minimal apis
+- ✅ [Supports uploading file(s) with additional JSON payload](#uploading-files-with-additional-json-payload)
+- ✅ Built in [sandbox runner](#sandbox-runner) with full [TypedResults support](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.http.typedresults?view=aspnetcore-7.0), catching unhandled exceptions and returning a [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) response
+- ✅ Autodiscovery of WebApiEndpoint(s), based on Source Generators
+- ✅ [Roslyn Analysers](#roslyn-analysers) to help build your WebApiEndpoint(s) and ensure best practices
+- ✅ Enables Vertical Slice Architecture, giving you the ability to add new features without changing existing code
+- ✅ Built on dotnet 8
+- ✅ Built in use of [ProblemDetails](https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.problemdetails?view=aspnetcore-7.0) support
+- ✅ Built in [extendable GlobalExceptionHandler](#extendable-globalexceptionhandler)
+- ✅ Developer friendly, with a simple API and with a full suite of samples and tests
+- ✅ [Tested solution](https://coveralls.io/github/futurum-dev/dotnet.futurum.webapiendpoint.micro)
+- ✅ [Comprehensive samples](#comprehensive-samples)
+- ✅ [Convention Customisation](#convention-customisation)
 
 ## Table of Contents
 1. [What is a WebApiEndpoint?](#what-is-a-webapiendpoint)
@@ -63,7 +63,7 @@ public partial class GreetingWebApiEndpoint
 6. [Additional helper functions](#additional-helper-functions)
 7. [Comprehensive samples](#comprehensive-samples)
 8. [Convention Customisation](#convention-customisation)
-9. [Extendable GlobalExceptionHandler](#extenable-globalexceptionhandler)
+9. [Extendable GlobalExceptionHandler](#extendable-globalexceptionhandler)
 10. [Tips & Tricks](#tips--tricks)
 11. [Troubleshooting](#troubleshooting)
 12. [Roslyn Analysers](#roslyn-analysers)
@@ -76,8 +76,8 @@ public partial class GreetingWebApiEndpoint
 ## Easy setup
 Check out this section for a step-by-step guide to setting up the library for use in your development environment.
 
-- [x] Add the [NuGet package](https://www.nuget.org/packages/futurum.webapiendpoint.micro) ( futurum.webapiendpoint.micro ) to your project
-- [x] Update *program.cs* as per [here](#example-programcs)
+- ✅ Add the [NuGet package](https://www.nuget.org/packages/futurum.webapiendpoint.micro) ( futurum.webapiendpoint.micro ) to your project
+- ✅ Update *program.cs* as per [here](#example-programcs)
 
 ### Example program.cs
 Here's an example of how to update your *program.cs* file:
@@ -138,9 +138,9 @@ app.UseWebApiEndpointsOpenApi();
 You can *map* your minimal apis for this WebApiEndpoint in the *Build* method.
 
 The *IEndpointRouteBuilder* that the *Build* method receives has already:
-- been configured with [configuring for the entire API](#configuring-the-entire-api)
+- been configured with [configuring for the entire API](#1-configuring-the-entire-api)
 - been configured with the API versioning
-- been configured with [configuring a specific API version](#configuring-a-specific-api-version)
+- been configured with [configuring a specific API version](#2-configuring-a-specific-api-version)
 - been configured with the route prefix and tag
 - been through the *optional* *[Configure](#configure)* method in the same class
 
@@ -257,10 +257,10 @@ The configuration is applied in the following order:
 ```mermaid
 flowchart TB
    classDef blackText stroke:#000,color:#000;
-   entire-api[Entire API] -->|1| specific-version-api[Specific Version API]
-   specific-version-api -->|2| endpoint-configure[Web API Endpoint 'Configure' Method]
-   endpoint-configure -->|3| endpoint-build[Web API Endpoint 'Build' Method]
-   endpoint-build -->|4| minimal-api[Individual Minimal API]
+   entire-api[1. Entire API] --> specific-version-api[2. Specific Version API]
+   specific-version-api --> endpoint-configure[3. WebApiEndpoint 'Configure' Method]
+   endpoint-configure --> endpoint-build[4. WebApiEndpoint 'Build' Method]
+   endpoint-build --> minimal-api[5. Individual Minimal API]
 
    style entire-api fill:#f9d0c4
    style specific-version-api fill:#fcbf49
@@ -271,7 +271,7 @@ flowchart TB
    class entire-api,specific-version-api,endpoint-configure,endpoint-build,minimal-api blackText
 ```
 
-### Configuring the entire API
+### 1. Configuring the entire API
 The entire API can be configured to set global parameters. This is an ideal place to set configurations such as:  
 - Global route prefix: This is a common prefix for all routes in your API.
 - Global authorization: This is where you can set the authorization required for all endpoints in your API. Remember to use the AllowAnonymous attribute on individual WebApiEndpoints that should not be secured, such as a Login endpoint.
@@ -297,7 +297,7 @@ public class GlobalWebApiEndpoint : IGlobalWebApiEndpoint
 ```
 **See *[GlobalWebApiEndpoint](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/GlobalWebApiEndpoint.cs)* in sample project**
 
-### Configuring a specific API version
+### 2. Configuring a specific API version
 In the context of API development, it's often necessary to configure specific API versions. This configuration can include aspects such as:  
 - Authorization specific to the API version: This is where you can set the authorization required for all endpoints in a specific API version. Don't forget to use the AllowAnonymous attribute on individual WebApiEndpoints that should not be secured, such as a Login endpoint.
 
@@ -327,6 +327,15 @@ public class WebApiVersionEndpoint3_0a : IWebApiVersionEndpoint
 **See *[WebApiVersionEndpoint3_0a](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/WebApiVersionEndpoint3_0.cs)* in sample project**
 
 **Remember, the configuration of specific API versions is a crucial aspect of maintaining and managing your APIs, especially when dealing with different versions of the same API. It allows you to control the behavior of each version independently, providing flexibility and control over your API's functionality.**
+
+### 3. WebApiEndpoint 'Configure' Method
+See [here](#configure)
+
+### 4. WebApiEndpoint 'Build' Method
+See [here](#build).
+
+### 5. Individual Minimal API
+See [here](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/overview?view=aspnetcore-8.0).
 
 ## Sandbox runner
 The Sandbox Runner is a feature that provides a set of comprehensive extension methods to execute your code in a controlled environment or "sandbox".
@@ -540,23 +549,23 @@ ToAccepted<T>("/api/articles")
 
 ## Comprehensive samples
 There are examples showing the following:
-- [x] A basic blog CRUD implementation - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Blog/BlogWebApiEndpoint.cs)
-- [x] The *ToDo* sample from Damian Edwards [here](https://github.com/DamianEdwards/TrimmedTodo) - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Todo/TodoApiWebApiEndpoint.cs)
-- [x] AsyncEnumerable - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/AsyncEnumerableWebApiEndpoint.cs)
-- [x] Bytes file download - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/BytesWebApiEndpoint.cs)
-- [x] EndpointFilter on a specific WebApiEndpoint - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/EndpointFilterWebApiEndpoint.cs)
-- [x] Exception handling - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/ErrorWebApiEndpoint.cs)
-- [x] File(s) upload - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/FileWebApiEndpoint.cs)
-- [x] File(s) upload with Payload - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/FileWebApiEndpoint.cs)
-- [x] File download - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/FileWebApiEndpoint.cs)
-- [x] OpenApi versioning - [link v0](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/OpenApi/OpenApiVersionV0WebApiEndpoint.cs), [link v1, v1.20-beta, v3, v4-alpha](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/OpenApi/OpenApiVersionV1WebApiEndpoint.cs), [link v2](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/OpenApi/OpenApiVersionV2WebApiEndpoint.cs)
-- [x] Output Caching - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/OutputCachingWebApiEndpoint.cs)
-- [x] Rate Limiting - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/RateLimitingWebApiEndpoint.cs)
-- [x] [Security](#security-example) with a basic JWT example on a specific WebApiEndpoint - [login link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Security/SecurityLoginWebApiEndpoint.cs), [protected link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Security/SecurityProtectedWebApiEndpoint.cs)
-- [x] Weather Forecast - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/WeatherForecast/WeatherWebApiEndpoint.cs)
-- [x] Addition project containing WebApiEndpoints - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample.Addition/AdditionWebApiEndpoint.cs)
-- [x] Configuring setting for entire API - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/GlobalWebApiEndpoint.cs)
-- [x] Configuring setting for specific API version - [link v3, v1.20-beta](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/WebApiVersionEndpoint3_0.cs)
+- ✅ A basic blog CRUD implementation - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Blog/BlogWebApiEndpoint.cs)
+- ✅ The *ToDo* sample from Damian Edwards [here](https://github.com/DamianEdwards/TrimmedTodo) - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Todo/TodoApiWebApiEndpoint.cs)
+- ✅ AsyncEnumerable - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/AsyncEnumerableWebApiEndpoint.cs)
+- ✅ Bytes file download - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/BytesWebApiEndpoint.cs)
+- ✅ EndpointFilter on a specific WebApiEndpoint - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/EndpointFilterWebApiEndpoint.cs)
+- ✅ Exception handling - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/ErrorWebApiEndpoint.cs)
+- ✅ File(s) upload - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/FileWebApiEndpoint.cs)
+- ✅ File(s) upload with Payload - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/FileWebApiEndpoint.cs)
+- ✅ File download - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/FileWebApiEndpoint.cs)
+- ✅ OpenApi versioning - [link v0](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/OpenApi/OpenApiVersionV0WebApiEndpoint.cs), [link v1, v1.20-beta, v3, v4-alpha](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/OpenApi/OpenApiVersionV1WebApiEndpoint.cs), [link v2](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/OpenApi/OpenApiVersionV2WebApiEndpoint.cs)
+- ✅ Output Caching - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/OutputCachingWebApiEndpoint.cs)
+- ✅ Rate Limiting - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Features/RateLimitingWebApiEndpoint.cs)
+- ✅ [Security](#security-example) with a basic JWT example on a specific WebApiEndpoint - [login link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Security/SecurityLoginWebApiEndpoint.cs), [protected link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/Security/SecurityProtectedWebApiEndpoint.cs)
+- ✅ Weather Forecast - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/WeatherForecast/WeatherWebApiEndpoint.cs)
+- ✅ Addition project containing WebApiEndpoints - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample.Addition/AdditionWebApiEndpoint.cs)
+- ✅ Configuring setting for entire API - [link](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/GlobalWebApiEndpoint.cs)
+- ✅ Configuring setting for specific API version - [link v3, v1.20-beta](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/WebApiVersionEndpoint3_0.cs)
 
 ![Comprehensive samples](https://raw.githubusercontent.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/main/docs/Futurum.WebApiEndpoint.Micro.Sample-openapi.png)
 
@@ -565,11 +574,11 @@ How to use in Swagger UI:
 1. Run the Sample project
 2. In the Swagger UI, go to the 'Security' 'Login' endpoint
 3. Set the following
-Username = user1
-Password = password1
-SetPermissions = true
-SetClaim = true
-SetRole = true
+   - Username = user1 
+   - Password = password1 
+   - SetPermissions = true 
+   - SetClaim = true 
+   - SetRole = true
 4. Copy the value returned without double quotes.
 5. Go to the 'Security' 'Protected' endpoint
 6. Click on the padlock
@@ -707,8 +716,8 @@ public partial class OpenApiVersionV1WebApiEndpoint
 **See *[OpenApiVersionV1WebApiEndpoint.cs](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/OpenApi/OpenApiVersionV1WebApiEndpoint.cs)* in sample project**
 
 ## Troubleshooting
-### *No operations defined in spec!*
-If you see this error in the SwaggerUI - No operations defined in spec! - then it means you haven't added any WebApiEndpoint projects. You need to do this for each project, including the project that contains the *program.cs* file. See [this](#addwebapiendpointsfor-per-project-containing-webapiendpoints) section for more details.
+### No operations defined in spec!
+If you see this error in the SwaggerUI - *No operations defined in spec!* - then it means you haven't added any WebApiEndpoint projects. You need to do this for each project, including the project that contains the *program.cs* file. See [this](#addwebapiendpointsfor-per-project-containing-webapiendpoints) section for more details.
 
 ### If there are Rest Api's that are not being picked up
 If there are Rest Api's that are not being picked up, then it means you haven't added a WebApiEndpoint projects. You need to do this for each project, including the project that contains the *program.cs* file. See [this](#addwebapiendpointsfor-per-project-containing-webapiendpoints) section for more details.
