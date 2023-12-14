@@ -2,7 +2,8 @@ namespace Futurum.WebApiEndpoint.Micro.Generator;
 
 public abstract class WebApiEndpointApiVersion
 {
-    public class WebApiEndpointNumberApiVersion : WebApiEndpointApiVersion, IEquatable<WebApiEndpointNumberApiVersion>
+    public class WebApiEndpointNumberApiVersion : WebApiEndpointApiVersion,
+                                                  IEquatable<WebApiEndpointNumberApiVersion>
     {
         public WebApiEndpointNumberApiVersion(double version, string? status = default)
         {
@@ -35,9 +36,16 @@ public abstract class WebApiEndpointApiVersion
                 return (Version.GetHashCode() * 397) ^ (Status != null ? Status.GetHashCode() : 0);
             }
         }
+
+        public static bool operator ==(WebApiEndpointNumberApiVersion? left, WebApiEndpointNumberApiVersion? right) =>
+            Equals(left, right);
+
+        public static bool operator !=(WebApiEndpointNumberApiVersion? left, WebApiEndpointNumberApiVersion? right) =>
+            !Equals(left, right);
     }
 
-    public class WebApiEndpointStringApiVersion : WebApiEndpointApiVersion, IEquatable<WebApiEndpointStringApiVersion>
+    public class WebApiEndpointStringApiVersion : WebApiEndpointApiVersion,
+                                                  IEquatable<WebApiEndpointStringApiVersion>
     {
         public WebApiEndpointStringApiVersion(string version)
         {
@@ -63,5 +71,11 @@ public abstract class WebApiEndpointApiVersion
 
         public override int GetHashCode() =>
             Version.GetHashCode();
+
+        public static bool operator ==(WebApiEndpointStringApiVersion? left, WebApiEndpointStringApiVersion? right) =>
+            Equals(left, right);
+
+        public static bool operator !=(WebApiEndpointStringApiVersion? left, WebApiEndpointStringApiVersion? right) =>
+            !Equals(left, right);
     }
 }

@@ -68,7 +68,8 @@ public abstract class WebApiEndpoint : IWebApiEndpoint
     private static IEndpointRouteBuilder ConfigureWithWebApiVersionEndpoint(IEndpointRouteBuilder app, WebApiEndpointConfiguration configuration, WebApiEndpointVersion webApiEndpointVersion,
                                                                             IEndpointRouteBuilder workingEndpointRouteBuilder)
     {
-        var webApiVersionEndpoint = app.ServiceProvider.GetKeyedService<IWebApiVersionEndpoint>(webApiEndpointVersion);
+        var serviceKey = ((ApiVersion)webApiEndpointVersion).ToString();
+        var webApiVersionEndpoint = app.ServiceProvider.GetKeyedService<IWebApiVersionEndpoint>(serviceKey);
 
         if (webApiVersionEndpoint == null) return workingEndpointRouteBuilder;
 

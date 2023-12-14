@@ -1,5 +1,3 @@
-using Futurum.WebApiEndpoint.Micro.Sample.Security;
-
 namespace Futurum.WebApiEndpoint.Micro.Sample;
 
 [WebApiVersionEndpointVersion(WebApiEndpointVersions.V3_0.Number)]
@@ -8,7 +6,7 @@ public class WebApiVersionEndpoint3_0a : IWebApiVersionEndpoint
 {
     public RouteGroupBuilder Configure(IEndpointRouteBuilder builder, WebApiEndpointConfiguration configuration)
     {
-        return builder.MapGroup("test-api").RequireAuthorization(Authorization.Permission.Admin);
+        return builder.MapGroup("test-api1");
     }
 }
 
@@ -17,6 +15,6 @@ public class WebApiVersionEndpoint3_0a : IWebApiVersionEndpoint
 // {
 //     public RouteGroupBuilder Configure(IEndpointRouteBuilder builder, WebApiEndpointConfiguration configuration)
 //     {
-//         return builder.MapGroup("test-api").RequireAuthorization(Authorization.Permission.Admin);
+//         return builder.MapGroup("test-api");
 //     }
 // }
