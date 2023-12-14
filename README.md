@@ -278,7 +278,7 @@ The entire API can be configured to set global parameters. This is an ideal plac
 
 To configure the entire API, you need to create a class that implements the IGlobalWebApiEndpoint interface.
 
-**Note: There can only be one class that implements IGlobalWebApiEndpoint. This is enforced by an analyzer.**
+**Note: There can only be one class that implements IGlobalWebApiEndpoint. This is enforced by an analyzer. Analyzers work per project, so if you have *GlobalWebApiEndpoint* in more than 1 project, only the first will be registered. The order is dictated by the order of the *[AddWebApiEndpointsFor](#addwebapiendpointsfor-per-project-containing-webapiendpoints)* calls.**
 
 **Note: The configuration set in this class is applied before the version route is created.**
 
@@ -305,7 +305,7 @@ To configure a specific API version, you need to create a class that:
 - Implements the IWebApiVersionEndpoint interface.
 - Is decorated with at least one WebApiVersionEndpointVersion attribute, indicating the version(s) it applies to.
 
-**Note: There can only be one class that configures a specific API version. This is enforced by a Roslyn analyzer.**
+**Note: There can only be one class that configures a specific API version. This is enforced by a Roslyn analyzer. Analyzers work per project, so if you have the same *WebApiVersionEndpoint* for a version in more than 1 project, only the first will be registered. The order is dictated by the order of the *[AddWebApiEndpointsFor](#addwebapiendpointsfor-per-project-containing-webapiendpoints)* calls.**
 
 **Note: The configuration set in this class is applied after the version route is created, but before the specific WebApiEndpoint route is created.**
 

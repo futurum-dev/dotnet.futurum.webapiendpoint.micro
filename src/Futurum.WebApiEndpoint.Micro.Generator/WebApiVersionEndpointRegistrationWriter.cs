@@ -19,14 +19,14 @@ public static class WebApiVersionEndpointRegistrationWriter
 
                 if (webApiEndpointVersionDatum.ApiVersion is WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion webApiEndpointNumberApiVersion)
                 {
-                    version = $"new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(new global::Futurum.WebApiEndpoint.Micro.Generator.WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion({webApiEndpointNumberApiVersion.Version}d, {webApiEndpointNumberApiVersion.Status ?? "null"}))";
+                    version = $"((global::Asp.Versioning.ApiVersion)new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(new global::Futurum.WebApiEndpoint.Micro.Generator.WebApiEndpointApiVersion.WebApiEndpointNumberApiVersion({webApiEndpointNumberApiVersion.Version}d, {webApiEndpointNumberApiVersion.Status ?? "null"}))).ToString()";
                 }
                 else if (webApiEndpointVersionDatum.ApiVersion is WebApiEndpointApiVersion.WebApiEndpointStringApiVersion webApiEndpointStringApiVersion)
                 {
-                    version = $"new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(new global::Futurum.WebApiEndpoint.Micro.Generator.WebApiEndpointApiVersion.WebApiEndpointStringApiVersion(\"{webApiEndpointStringApiVersion.Version}\"))";
+                    version = $"((global::Asp.Versioning.ApiVersion)new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(new global::Futurum.WebApiEndpoint.Micro.Generator.WebApiEndpointApiVersion.WebApiEndpointStringApiVersion(\"{webApiEndpointStringApiVersion.Version}\"))).ToString()";
                 }
 
-                codeBuilder.AppendLine($"serviceCollection.AddKeyedSingleton(typeof(global::Futurum.WebApiEndpoint.Micro.IWebApiVersionEndpoint), {version}, typeof({webApiVersionEndpointDatum.NamespaceName}.{webApiVersionEndpointDatum.ImplementationType}));");
+                codeBuilder.AppendLine($"global::Futurum.WebApiEndpoint.Micro.ServiceCollectionUniqueKeyExtensions.TryAddEquatableKeyedSingleton(serviceCollection, typeof(global::Futurum.WebApiEndpoint.Micro.IWebApiVersionEndpoint), {version}, typeof({webApiVersionEndpointDatum.NamespaceName}.{webApiVersionEndpointDatum.ImplementationType}));");
             }
         }
     }
