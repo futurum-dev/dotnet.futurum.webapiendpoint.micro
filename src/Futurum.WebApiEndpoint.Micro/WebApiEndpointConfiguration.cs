@@ -5,10 +5,15 @@ namespace Futurum.WebApiEndpoint.Micro;
 /// <summary>
 /// Configuration for WebApiEndpoints
 /// </summary>
-/// <param name="DefaultWebApiEndpointVersion"></param>
-public record WebApiEndpointConfiguration(WebApiEndpointVersion DefaultWebApiEndpointVersion)
+public record WebApiEndpointConfiguration
 {
-    public required WebApiEndpointOpenApiConfiguration OpenApi { get; set; }
+    /// <summary>
+    /// Default WebApiEndpointVersion.
+    /// <remarks>This will be used, unless a specified version is specified.</remarks>
+    /// </summary>
+    public required WebApiEndpointVersion DefaultApiVersion { get; init; }
+
+    public required WebApiEndpointOpenApiConfiguration OpenApi { get; init; }
 
     public WebApiEndpointVersionConfiguration Version { get; } = new();
 
@@ -18,7 +23,7 @@ public record WebApiEndpointConfiguration(WebApiEndpointVersion DefaultWebApiEnd
         /// Default OpenApiInfo for all versions.
         /// <remarks>Unless overridden by <see cref="VersionedOverrideInfo"/>.</remarks>
         /// </summary>
-        public required WebApiEndpointOpenApiInfo DefaultInfo { get; set; }
+        public required WebApiEndpointOpenApiInfo DefaultInfo { get; init; }
 
         /// <summary>
         /// OpenApiInfo overrides for a specific version.

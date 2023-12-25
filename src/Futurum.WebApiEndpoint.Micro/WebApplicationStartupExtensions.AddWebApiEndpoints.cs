@@ -30,7 +30,7 @@ public static partial class WebApplicationStartupExtensions
 
         var webApiVersionConfigurationService = new TVersionConfigurationService();
 
-        serviceCollection.AddApiVersioning(webApiVersionConfigurationService, configuration, configuration.DefaultWebApiEndpointVersion);
+        serviceCollection.AddApiVersioning(webApiVersionConfigurationService, configuration, configuration.DefaultApiVersion);
 
         return serviceCollection;
     }

@@ -16,8 +16,9 @@ builder.Services.AddRateLimiters();
 builder.Services.AddOutputCaches();
 
 builder.Services
-       .AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0.Version)
+       .AddWebApiEndpoints(new WebApiEndpointConfiguration
        {
+           DefaultApiVersion = WebApiEndpointVersions.V1_0.Version,
            OpenApi = new()
            {
                DefaultInfo = new()

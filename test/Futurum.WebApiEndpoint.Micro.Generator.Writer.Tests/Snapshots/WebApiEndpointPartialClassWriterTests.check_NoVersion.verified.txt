@@ -14,7 +14,7 @@ namespace Futurum.WebApiEndpoint.Micro.Generator.Writer.Tests
 
         private void RegisterNoVersion(global::Microsoft.AspNetCore.Routing.IEndpointRouteBuilder builder, global::Futurum.WebApiEndpoint.Micro.WebApiEndpointConfiguration configuration)
         {
-            var webApiEndpointVersion = configuration.DefaultWebApiEndpointVersion;
+            var webApiEndpointVersion = configuration.DefaultApiVersion;
 
             var webapiEndpointRouteBuilder = CreateWebApiEndpoint(builder, configuration, webApiEndpointVersion, "/api", "group");
 

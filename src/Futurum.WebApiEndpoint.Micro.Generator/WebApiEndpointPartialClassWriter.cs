@@ -56,7 +56,7 @@ public static class WebApiEndpointPartialClassWriter
         codeBuilder.AppendLine("{");
         codeBuilder.IncrementIndent();
 
-        codeBuilder.AppendLine($"var webApiEndpointVersion = configuration.DefaultWebApiEndpointVersion;");
+        codeBuilder.AppendLine($"var webApiEndpointVersion = configuration.DefaultApiVersion;");
 
         codeBuilder.AppendLine();
         var tag = !string.IsNullOrEmpty(webApiEndpointDatum.Tag) ? webApiEndpointDatum.Tag : webApiEndpointDatum.Prefix;

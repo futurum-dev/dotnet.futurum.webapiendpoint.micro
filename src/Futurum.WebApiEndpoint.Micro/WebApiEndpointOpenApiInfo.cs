@@ -8,7 +8,7 @@ public class WebApiEndpointOpenApiInfo
     /// <summary>
     /// REQUIRED. The title of the application.
     /// </summary>
-    public required string Title { get; set; }
+    public required string Title { get; init; }
 
     /// <summary>
     /// A short description of the application.

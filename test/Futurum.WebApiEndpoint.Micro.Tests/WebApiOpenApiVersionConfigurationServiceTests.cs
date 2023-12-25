@@ -12,8 +12,9 @@ public class WebApiOpenApiVersionConfigurationServiceTests
     [Fact]
     public void when_IsDeprecated()
     {
-        var webApiEndpointConfiguration = new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d))
+        var webApiEndpointConfiguration = new WebApiEndpointConfiguration
         {
+            DefaultApiVersion = WebApiEndpointVersion.Create(1.0d),
             OpenApi = new()
             {
                 DefaultInfo = new()
@@ -24,7 +25,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
         };
         var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(webApiEndpointConfiguration);
 
-        var apiVersionDescription = new ApiVersionDescription(new ApiVersion(1, 0), string.Empty, true, null);
+        var apiVersionDescription = new ApiVersionDescription(new ApiVersion(1, 0), string.Empty, true);
 
         var openApiInfo = webApiOpenApiVersionConfigurationService.CreateOpenApiInfo(apiVersionDescription);
 
@@ -34,8 +35,9 @@ public class WebApiOpenApiVersionConfigurationServiceTests
     [Fact]
     public void when_SunsetPolicy()
     {
-        var webApiEndpointConfiguration = new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d))
+        var webApiEndpointConfiguration = new WebApiEndpointConfiguration
         {
+            DefaultApiVersion = WebApiEndpointVersion.Create(1.0d),
             OpenApi = new()
             {
                 DefaultInfo = new()
@@ -70,8 +72,9 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 var titleDefault = Guid.NewGuid().ToString();
                 var titleV3 = Guid.NewGuid().ToString();
 
-                var webApiEndpointConfiguration = new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d))
+                var webApiEndpointConfiguration = new WebApiEndpointConfiguration
                 {
+                    DefaultApiVersion = WebApiEndpointVersion.Create(1.0d),
                     OpenApi = new()
                     {
                         DefaultInfo = new()
@@ -92,7 +95,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 };
                 var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(webApiEndpointConfiguration);
 
-                var apiVersionDescription = new ApiVersionDescription(new ApiVersion(2, 0), string.Empty, false, null);
+                var apiVersionDescription = new ApiVersionDescription(new ApiVersion(2, 0), string.Empty);
 
                 var openApiInfo = webApiOpenApiVersionConfigurationService.CreateOpenApiInfo(apiVersionDescription);
 
@@ -106,8 +109,9 @@ public class WebApiOpenApiVersionConfigurationServiceTests
 
                 var titleVersionOverride = Guid.NewGuid().ToString();
 
-                var webApiEndpointConfiguration = new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d))
+                var webApiEndpointConfiguration = new WebApiEndpointConfiguration
                 {
+                    DefaultApiVersion = WebApiEndpointVersion.Create(1.0d),
                     OpenApi = new()
                     {
                         DefaultInfo = new()
@@ -128,7 +132,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 };
                 var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(webApiEndpointConfiguration);
 
-                var apiVersionDescription = new ApiVersionDescription(apiVersion, string.Empty, false, null);
+                var apiVersionDescription = new ApiVersionDescription(apiVersion, string.Empty);
 
                 var openApiInfo = webApiOpenApiVersionConfigurationService.CreateOpenApiInfo(apiVersionDescription);
 
@@ -144,8 +148,9 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 var descriptionDefault = Guid.NewGuid().ToString();
                 var descriptionV3 = Guid.NewGuid().ToString();
 
-                var webApiEndpointConfiguration = new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d))
+                var webApiEndpointConfiguration = new WebApiEndpointConfiguration
                 {
+                    DefaultApiVersion = WebApiEndpointVersion.Create(1.0d),
                     OpenApi = new()
                     {
                         DefaultInfo = new()
@@ -168,7 +173,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 };
                 var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(webApiEndpointConfiguration);
 
-                var apiVersionDescription = new ApiVersionDescription(new ApiVersion(2, 0), string.Empty, false, null);
+                var apiVersionDescription = new ApiVersionDescription(new ApiVersion(2, 0), string.Empty);
 
                 var openApiInfo = webApiOpenApiVersionConfigurationService.CreateOpenApiInfo(apiVersionDescription);
 
@@ -182,8 +187,9 @@ public class WebApiOpenApiVersionConfigurationServiceTests
 
                 var descriptionVersionOverride = Guid.NewGuid().ToString();
 
-                var webApiEndpointConfiguration = new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d))
+                var webApiEndpointConfiguration = new WebApiEndpointConfiguration
                 {
+                    DefaultApiVersion = WebApiEndpointVersion.Create(1.0d),
                     OpenApi = new()
                     {
                         DefaultInfo = new()
@@ -205,7 +211,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 };
                 var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(webApiEndpointConfiguration);
 
-                var apiVersionDescription = new ApiVersionDescription(apiVersion, string.Empty, false, null);
+                var apiVersionDescription = new ApiVersionDescription(apiVersion, string.Empty);
 
                 var openApiInfo = webApiOpenApiVersionConfigurationService.CreateOpenApiInfo(apiVersionDescription);
 
@@ -221,8 +227,9 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 var termsOfServiceDefault = new Uri("https://www.google.com");
                 var termsOfServiceV3 = new Uri("https://www.bing.com");
 
-                var webApiEndpointConfiguration = new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d))
+                var webApiEndpointConfiguration = new WebApiEndpointConfiguration
                 {
+                    DefaultApiVersion = WebApiEndpointVersion.Create(1.0d),
                     OpenApi = new()
                     {
                         DefaultInfo = new()
@@ -245,7 +252,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 };
                 var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(webApiEndpointConfiguration);
 
-                var apiVersionDescription = new ApiVersionDescription(new ApiVersion(2, 0), string.Empty, false, null);
+                var apiVersionDescription = new ApiVersionDescription(new ApiVersion(2, 0), string.Empty);
 
                 var openApiInfo = webApiOpenApiVersionConfigurationService.CreateOpenApiInfo(apiVersionDescription);
 
@@ -259,8 +266,9 @@ public class WebApiOpenApiVersionConfigurationServiceTests
 
                 var termsOfServiceVersionOverride = new Uri("https://www.bing.com");
 
-                var webApiEndpointConfiguration = new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d))
+                var webApiEndpointConfiguration = new WebApiEndpointConfiguration
                 {
+                    DefaultApiVersion = WebApiEndpointVersion.Create(1.0d),
                     OpenApi = new()
                     {
                         DefaultInfo = new()
@@ -282,7 +290,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 };
                 var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(webApiEndpointConfiguration);
 
-                var apiVersionDescription = new ApiVersionDescription(apiVersion, string.Empty, false, null);
+                var apiVersionDescription = new ApiVersionDescription(apiVersion, string.Empty);
 
                 var openApiInfo = webApiOpenApiVersionConfigurationService.CreateOpenApiInfo(apiVersionDescription);
 
@@ -308,8 +316,9 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                     Url = new Uri("https://www.bing.com")
                 };
 
-                var webApiEndpointConfiguration = new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d))
+                var webApiEndpointConfiguration = new WebApiEndpointConfiguration
                 {
+                    DefaultApiVersion = WebApiEndpointVersion.Create(1.0d),
                     OpenApi = new()
                     {
                         DefaultInfo = new()
@@ -332,7 +341,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 };
                 var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(webApiEndpointConfiguration);
 
-                var apiVersionDescription = new ApiVersionDescription(new ApiVersion(2, 0), string.Empty, false, null);
+                var apiVersionDescription = new ApiVersionDescription(new ApiVersion(2, 0), string.Empty);
 
                 var openApiInfo = webApiOpenApiVersionConfigurationService.CreateOpenApiInfo(apiVersionDescription);
 
@@ -351,8 +360,9 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                     Url = new Uri("https://www.bing.com")
                 };
 
-                var webApiEndpointConfiguration = new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d))
+                var webApiEndpointConfiguration = new WebApiEndpointConfiguration
                 {
+                    DefaultApiVersion = WebApiEndpointVersion.Create(1.0d),
                     OpenApi = new()
                     {
                         DefaultInfo = new()
@@ -374,7 +384,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 };
                 var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(webApiEndpointConfiguration);
 
-                var apiVersionDescription = new ApiVersionDescription(apiVersion, string.Empty, false, null);
+                var apiVersionDescription = new ApiVersionDescription(apiVersion, string.Empty);
 
                 var openApiInfo = webApiOpenApiVersionConfigurationService.CreateOpenApiInfo(apiVersionDescription);
 
@@ -398,8 +408,9 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                     Url = new Uri("https://www.bing.com")
                 };
 
-                var webApiEndpointConfiguration = new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d))
+                var webApiEndpointConfiguration = new WebApiEndpointConfiguration
                 {
+                    DefaultApiVersion = WebApiEndpointVersion.Create(1.0d),
                     OpenApi = new()
                     {
                         DefaultInfo = new()
@@ -422,7 +433,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 };
                 var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(webApiEndpointConfiguration);
 
-                var apiVersionDescription = new ApiVersionDescription(new ApiVersion(2, 0), string.Empty, false, null);
+                var apiVersionDescription = new ApiVersionDescription(new ApiVersion(2, 0), string.Empty);
 
                 var openApiInfo = webApiOpenApiVersionConfigurationService.CreateOpenApiInfo(apiVersionDescription);
 
@@ -440,8 +451,9 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                     Url = new Uri("https://www.bing.com")
                 };
 
-                var webApiEndpointConfiguration = new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d))
+                var webApiEndpointConfiguration = new WebApiEndpointConfiguration
                 {
+                    DefaultApiVersion = WebApiEndpointVersion.Create(1.0d),
                     OpenApi = new()
                     {
                         DefaultInfo = new()
@@ -463,7 +475,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 };
                 var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(webApiEndpointConfiguration);
 
-                var apiVersionDescription = new ApiVersionDescription(apiVersion, string.Empty, false, null);
+                var apiVersionDescription = new ApiVersionDescription(apiVersion, string.Empty);
 
                 var openApiInfo = webApiOpenApiVersionConfigurationService.CreateOpenApiInfo(apiVersionDescription);
 
@@ -482,8 +494,9 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 var versionedKey = Guid.NewGuid().ToString();
                 var versionedValue = Guid.NewGuid().ToString();
 
-                var webApiEndpointConfiguration = new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d))
+                var webApiEndpointConfiguration = new WebApiEndpointConfiguration
                 {
+                    DefaultApiVersion = WebApiEndpointVersion.Create(1.0d),
                     OpenApi = new()
                     {
                         DefaultInfo = new()
@@ -512,7 +525,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 };
                 var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(webApiEndpointConfiguration);
 
-                var apiVersionDescription = new ApiVersionDescription(new ApiVersion(2, 0), string.Empty, false, null);
+                var apiVersionDescription = new ApiVersionDescription(new ApiVersion(2, 0), string.Empty);
 
                 var openApiInfo = webApiOpenApiVersionConfigurationService.CreateOpenApiInfo(apiVersionDescription);
 
@@ -533,8 +546,9 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 var versionedKey = Guid.NewGuid().ToString();
                 var versionedValue = Guid.NewGuid().ToString();
 
-                var webApiEndpointConfiguration = new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d))
+                var webApiEndpointConfiguration = new WebApiEndpointConfiguration
                 {
+                    DefaultApiVersion = WebApiEndpointVersion.Create(1.0d),
                     OpenApi = new()
                     {
                         DefaultInfo = new()
@@ -563,7 +577,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 };
                 var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(webApiEndpointConfiguration);
 
-                var apiVersionDescription = new ApiVersionDescription(apiVersion, string.Empty, false, null);
+                var apiVersionDescription = new ApiVersionDescription(apiVersion, string.Empty);
 
                 var openApiInfo = webApiOpenApiVersionConfigurationService.CreateOpenApiInfo(apiVersionDescription);
 
@@ -584,8 +598,9 @@ public class WebApiOpenApiVersionConfigurationServiceTests
 
                 var versionedValue = Guid.NewGuid().ToString();
 
-                var webApiEndpointConfiguration = new WebApiEndpointConfiguration(WebApiEndpointVersion.Create(1.0d))
+                var webApiEndpointConfiguration = new WebApiEndpointConfiguration
                 {
+                    DefaultApiVersion = WebApiEndpointVersion.Create(1.0d),
                     OpenApi = new()
                     {
                         DefaultInfo = new()
@@ -614,7 +629,7 @@ public class WebApiOpenApiVersionConfigurationServiceTests
                 };
                 var webApiOpenApiVersionConfigurationService = new WebApiOpenApiVersionConfigurationService(webApiEndpointConfiguration);
 
-                var apiVersionDescription = new ApiVersionDescription(apiVersion, string.Empty, false, null);
+                var apiVersionDescription = new ApiVersionDescription(apiVersion, string.Empty);
 
                 var openApiInfo = webApiOpenApiVersionConfigurationService.CreateOpenApiInfo(apiVersionDescription);
 
