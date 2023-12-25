@@ -234,8 +234,9 @@ This allows you to configure:
 #### Example in *program.cs*
 ```csharp
 builder.Services
-       .AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0.Version)
+       .AddWebApiEndpoints(new WebApiEndpointConfiguration
        {
+           DefaultApiVersion = WebApiEndpointVersions.V1_0.Version,
            OpenApi = new()
            {
                DefaultInfo = new()
