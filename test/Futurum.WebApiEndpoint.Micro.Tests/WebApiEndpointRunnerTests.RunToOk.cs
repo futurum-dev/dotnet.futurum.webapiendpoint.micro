@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Futurum.WebApiEndpoint.Micro.Tests;
 
@@ -361,6 +364,15 @@ public class WebApiEndpointRunnerRunToOkTests
         }
     }
 
-    private static DefaultHttpContext CreateHttpContext() =>
-        new() { Request = { Path = REQUEST_PATH } };
+    private static DefaultHttpContext CreateHttpContext()
+    {
+        var services = new ServiceCollection();
+        services.AddSingleton<ILogger<WebApiEndpointRunner.Logger>>(new Logger<WebApiEndpointRunner.Logger>(new NullLoggerFactory()));
+
+        return new DefaultHttpContext
+        {
+            Request = { Path = REQUEST_PATH },
+            RequestServices = services.BuildServiceProvider()
+        };
+    }
 }
