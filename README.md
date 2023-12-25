@@ -218,10 +218,14 @@ This allows you to configure:
 - DefaultApiVersion *(mandatory)*
   - This is used if a ApiVersion is not provided for a specific WebApiEndpoint.
 - OpenApi
-  - DefaultInfo *(optional)*
+  - DefaultInfo
     - This is used if a OpenApiInfo is not provided for a specific ApiVersion
-  - VersionedInfo *(optional)*
-    - Allowing you to have an OpenApiInfo per a specific ApiVersion. If you do not provide an OpenApiInfo for a specific ApiVersion, then the DefaultInfo is used.
+  - VersionedOverrideInfo *(optional)*
+    - Allows you to have an OpenApiInfo per a specific ApiVersion.
+      - If you *do not* provide an OpenApiInfo for a specific ApiVersion, then the DefaultInfo is used.
+      - If you *do* provide an OpenApiInfo for a specific ApiVersion and provide a property, then that versioned property is used.
+      - If you *do* provide an OpenApiInfo for a specific ApiVersion, but don't provide a property, then the DefaultInfo property is used.
+      - **NOTE: *Extensions* is a dictionary, an Extensions for a specific ApiVersion is merged with the default *Extensions*, with the specific ApiVersion being used as the override (by key) if necessary.**
 - Version
   - Prefix *(optional)*
   - Format *(optional)*
@@ -232,17 +236,17 @@ This allows you to configure:
 builder.Services
        .AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0.Version)
        {
-           OpenApi =
+           OpenApi = new()
            {
-               DefaultInfo =
+               DefaultInfo = new()
                {
                    Title = "Futurum.WebApiEndpoint.Micro.Sample",
                },
-               VersionedInfo =
+               VersionedOverrideInfo =
                {
                    {
                        WebApiEndpointVersions.V3_0.Version,
-                       new OpenApiInfo
+                       new WebApiEndpointOpenApiInfo
                        {
                            Title = "Futurum.WebApiEndpoint.Micro.Sample v3"
                        }
