@@ -1,5 +1,3 @@
-using Futurum.WebApiEndpoint.Micro.Generator;
-
 namespace Futurum.WebApiEndpoint.Micro.Sample;
 
 public static class WebApiEndpointVersions

@@ -3,6 +3,7 @@ using System.Text;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 
+using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
 
 namespace Futurum.WebApiEndpoint.Micro;
@@ -16,71 +17,127 @@ public class WebApiOpenApiVersionConfigurationService(WebApiEndpointConfiguratio
 {
     public OpenApiInfo CreateOpenApiInfo(ApiVersionDescription apiVersionDescription)
     {
-        var description = new StringBuilder();
+        var openApiInfo = GetVersionedOpenApiInfo(apiVersionDescription);
 
         if (apiVersionDescription.IsDeprecated)
         {
-            ConfigureDescriptionForDeprecatedOpenApi(description);
+            openApiInfo.Description += GetDeprecatedOpenApiDescription();
         }
 
         if (apiVersionDescription.SunsetPolicy != null)
         {
-            ConfigureDescriptionForSunsetPolicyOpenApi(apiVersionDescription.SunsetPolicy, description);
+            openApiInfo.Description += GetSunsetPolicyOpenApiDescription(apiVersionDescription.SunsetPolicy);
         }
-
-        var openApiInfo = GetVersionedOpenApiInfo(apiVersionDescription);
-        openApiInfo.Description = description.ToString();
 
         return openApiInfo;
     }
 
     private OpenApiInfo GetVersionedOpenApiInfo(ApiVersionDescription apiVersionDescription)
     {
-        if (configuration.OpenApi.VersionedInfo.TryGetValue(apiVersionDescription.ApiVersion, out var openApiInfoForVersion))
+        if (configuration.OpenApi.VersionedOverrideInfo.TryGetValue(apiVersionDescription.ApiVersion, out var openApiInfoForVersion))
         {
-            return openApiInfoForVersion;
+            return TransformToOpenApiInfo(configuration.OpenApi.DefaultInfo, openApiInfoForVersion, apiVersionDescription.ApiVersion);
         }
 
-        return configuration.OpenApi.DefaultInfo;
-    }
+        return TransformToOpenApiInfo(configuration.OpenApi.DefaultInfo, configuration.OpenApi.DefaultInfo, apiVersionDescription.ApiVersion);
 
-    private static void ConfigureDescriptionForDeprecatedOpenApi(StringBuilder description)
-    {
-        description.Append(" This API version has been deprecated.");
-    }
-
-    private static void ConfigureDescriptionForSunsetPolicyOpenApi(SunsetPolicy sunsetPolicy, StringBuilder description)
-    {
-        if (sunsetPolicy.Date is DateTimeOffset when)
+        OpenApiInfo TransformToOpenApiInfo(WebApiEndpointOpenApiInfo defaultWebApiEndpointOpenApiInfo, WebApiEndpointOpenApiInfo? versionedWebApiEndpointOpenApiInfo, ApiVersion apiVersion)
         {
-            description.Append(" The API will be sunset on ")
-                       .Append(when.Date.ToShortDateString())
-                       .Append('.');
+            var title = versionedWebApiEndpointOpenApiInfo != null
+                ? versionedWebApiEndpointOpenApiInfo.Title
+                : defaultWebApiEndpointOpenApiInfo.Title;
+
+            var description = versionedWebApiEndpointOpenApiInfo != null
+                ? versionedWebApiEndpointOpenApiInfo.Description
+                : defaultWebApiEndpointOpenApiInfo.Description ?? string.Empty;
+
+            var version = $"{configuration.Version.Prefix}{apiVersion.ToString(configuration.Version.Format, new ApiVersionFormatProvider())}";
+
+            var termsOfService = versionedWebApiEndpointOpenApiInfo is { TermsOfService: not null }
+                ? versionedWebApiEndpointOpenApiInfo.TermsOfService
+                : defaultWebApiEndpointOpenApiInfo.TermsOfService ?? null;
+
+            var contact = versionedWebApiEndpointOpenApiInfo is { Contact: not null }
+                ? versionedWebApiEndpointOpenApiInfo.Contact
+                : defaultWebApiEndpointOpenApiInfo.Contact ?? null;
+
+            var license = versionedWebApiEndpointOpenApiInfo is { License: not null }
+                ? versionedWebApiEndpointOpenApiInfo.License
+                : defaultWebApiEndpointOpenApiInfo.License ?? null;
+
+            var extensions = GetExtensions(defaultWebApiEndpointOpenApiInfo, versionedWebApiEndpointOpenApiInfo);
+
+            return new()
+            {
+                Title = title,
+                Description = description,
+                Version = version,
+                TermsOfService = termsOfService,
+                Contact = contact,
+                License = license,
+                Extensions = extensions
+            };
+        }
+
+        IDictionary<string, IOpenApiExtension> GetExtensions(WebApiEndpointOpenApiInfo defaultWebApiEndpointOpenApiInfo, WebApiEndpointOpenApiInfo? versionedWebApiEndpointOpenApiInfo)
+        {
+            if (versionedWebApiEndpointOpenApiInfo == null)
+            {
+                return defaultWebApiEndpointOpenApiInfo.Extensions;
+            }
+
+            var extensions = defaultWebApiEndpointOpenApiInfo.Extensions
+                                                             .ToDictionary(kvp => kvp.Key,
+                                                                           kvp => kvp.Value);
+
+            foreach (var kvp in versionedWebApiEndpointOpenApiInfo.Extensions)
+            {
+                extensions[kvp.Key] = kvp.Value;
+            }
+
+            return extensions;
+        }
+    }
+
+    private static string GetDeprecatedOpenApiDescription() =>
+        " This API version has been deprecated.";
+
+    private static string GetSunsetPolicyOpenApiDescription(SunsetPolicy sunsetPolicy)
+    {
+        var stringBuilder = new StringBuilder();
+
+        if (sunsetPolicy.Date is { } when)
+        {
+            stringBuilder.Append(" The API will be sunset on ")
+                         .Append(when.Date.ToShortDateString())
+                         .Append('.');
         }
 
         if (sunsetPolicy.HasLinks)
         {
-            description.AppendLine();
+            stringBuilder.AppendLine();
 
             foreach (var link in sunsetPolicy.Links)
             {
-                LinkToDescription(description, link);
+                LinkToDescription(stringBuilder, link);
             }
         }
-    }
 
-    private static void LinkToDescription(StringBuilder description, LinkHeaderValue link)
-    {
-        if (link.Type == "text/html")
+        return stringBuilder.ToString();
+
+        static void LinkToDescription(StringBuilder description, LinkHeaderValue link)
         {
-            description.AppendLine();
-
-            if (link.Title.HasValue)
+            if (link.Type == "text/html")
             {
-                description.Append(link.Title.Value).Append(": ");
-            }
+                description.AppendLine();
 
-            description.Append(link.LinkTarget.OriginalString);
+                if (link.Title.HasValue)
+                {
+                    description.Append(link.Title.Value).Append(": ");
+                }
+
+                description.Append(link.LinkTarget.OriginalString);
+            }
         }
     }
 }

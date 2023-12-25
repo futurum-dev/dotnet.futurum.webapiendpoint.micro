@@ -2,8 +2,6 @@ using Futurum.Microsoft.Extensions.DependencyInjection;
 using Futurum.WebApiEndpoint.Micro;
 using Futurum.WebApiEndpoint.Micro.Sample;
 
-using Microsoft.OpenApi.Models;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
@@ -20,21 +18,35 @@ builder.Services.AddOutputCaches();
 builder.Services
        .AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0.Version)
        {
-           OpenApi =
+           OpenApi = new()
            {
-               DefaultInfo =
+               DefaultInfo = new()
                {
                    Title = "Futurum.WebApiEndpoint.Micro.Sample",
+                   Description = "OpenAPI description default",
+                   Contact = new()
+                   {
+                       Email = "a@b.com",
+                       Name = "A B",
+                       Url = new Uri("https://www.google.com")
+                   },
+                   License = new()
+                   {
+                       Name = "MIT"
+                   },
+                   TermsOfService = new Uri("https://www.google.com")
                },
-               VersionedInfo =
+               VersionedOverrideInfo =
                {
                    {
                        WebApiEndpointVersions.V3_0.Version,
-                       new OpenApiInfo
+                       new WebApiEndpointOpenApiInfo
                        {
-                           Title = "Futurum.WebApiEndpoint.Micro.Sample v3"
+                           Title = "Futurum.WebApiEndpoint.Micro.Sample v3",
+                           Description = "OpenAPI description v3",
+                           TermsOfService = new Uri("https://www.bing.com")
                        }
-                   }
+                   },
                }
            }
        })
