@@ -1,7 +1,5 @@
 using Asp.Versioning;
 
-using Microsoft.OpenApi.Models;
-
 namespace Futurum.WebApiEndpoint.Micro;
 
 /// <summary>
@@ -10,7 +8,7 @@ namespace Futurum.WebApiEndpoint.Micro;
 /// <param name="DefaultWebApiEndpointVersion"></param>
 public record WebApiEndpointConfiguration(WebApiEndpointVersion DefaultWebApiEndpointVersion)
 {
-    public WebApiEndpointOpenApiConfiguration OpenApi { get; } = new();
+    public required WebApiEndpointOpenApiConfiguration OpenApi { get; set; }
 
     public WebApiEndpointVersionConfiguration Version { get; } = new();
 
@@ -18,15 +16,16 @@ public record WebApiEndpointConfiguration(WebApiEndpointVersion DefaultWebApiEnd
     {
         /// <summary>
         /// Default OpenApiInfo for all versions.
-        /// <remarks>Unless overridden by <see cref="VersionedInfo"/>.</remarks>
+        /// <remarks>Unless overridden by <see cref="VersionedOverrideInfo"/>.</remarks>
         /// </summary>
-        public OpenApiInfo DefaultInfo { get; } = new();
+        public required WebApiEndpointOpenApiInfo DefaultInfo { get; set; }
 
         /// <summary>
-        /// OpenApiInfo for a specific version.
-        /// <remarks>If version is not specified, <see cref="DefaultInfo"/> is used.</remarks>
+        /// OpenApiInfo overrides for a specific version.
+        /// <remarks>If a version is not specified, <see cref="DefaultInfo"/> is used.</remarks>
+        /// <remarks>If a property on a version is not specified, that property from <see cref="DefaultInfo"/> is used.</remarks>
         /// </summary>
-        public IDictionary<ApiVersion, OpenApiInfo> VersionedInfo { get; } = new Dictionary<ApiVersion, OpenApiInfo>();
+        public IDictionary<ApiVersion, WebApiEndpointOpenApiInfo> VersionedOverrideInfo { get; } = new Dictionary<ApiVersion, WebApiEndpointOpenApiInfo>();
     }
 
     public class WebApiEndpointVersionConfiguration
