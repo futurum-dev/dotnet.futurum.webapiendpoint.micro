@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 
-using static Microsoft.Extensions.Logging.LoggerMessage;
-
 namespace Futurum.WebApiEndpoint.Micro;
 
 public static partial class WebApiEndpointRunner
@@ -32,12 +30,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage);
         }
     }
 
@@ -67,12 +61,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage());
         }
     }
 
@@ -108,12 +98,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage);
         }
     }
 
@@ -149,12 +135,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage());
         }
     }
 
@@ -192,12 +174,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage);
         }
     }
 
@@ -235,12 +213,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage());
         }
     }
 
@@ -280,12 +254,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage);
         }
     }
 
@@ -325,12 +295,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage());
         }
     }
 
@@ -372,12 +338,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage);
         }
     }
 
@@ -419,12 +381,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage());
         }
     }
 
@@ -454,12 +412,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage);
         }
     }
 
@@ -489,12 +443,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage());
         }
     }
 
@@ -530,12 +480,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage);
         }
     }
 
@@ -571,12 +517,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage());
         }
     }
 
@@ -614,12 +556,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage);
         }
     }
 
@@ -657,12 +595,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage());
         }
     }
 
@@ -702,12 +636,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage);
         }
     }
 
@@ -747,12 +677,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage());
         }
     }
 
@@ -794,12 +720,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage);
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage);
         }
     }
 
@@ -841,16 +763,8 @@ public static partial class WebApiEndpointRunner
         }
         catch (Exception exception)
         {
-            var logger = context.RequestServices.GetRequiredService<ILogger<Logger>>();
-            LogErrorMessage(logger, exception.Message, exception);
-
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, context, errorMessage());
-
-            return TypedResults.BadRequest(problemDetails);
+            var exceptionHandlerService = context.RequestServices.GetRequiredService<IWebApiEndpointRunnerExceptionHandlerService>();
+            return exceptionHandlerService.Handle(context, exception, errorMessage());
         }
     }
-
-    public class Logger;
-
-    private static readonly Action<ILogger, string, Exception> LogErrorMessage = Define<string>(LogLevel.Error, eventId: new EventId(id: 0, name: "ERROR"), formatString: "Exception occurred: {Message}");
 }

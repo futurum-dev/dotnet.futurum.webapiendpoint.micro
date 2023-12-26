@@ -21,7 +21,8 @@ public static partial class WebApplicationStartupExtensions
     public static IServiceCollection AddWebApiEndpoints<TVersionConfigurationService>(this IServiceCollection serviceCollection, WebApiEndpointConfiguration configuration)
         where TVersionConfigurationService : class, IWebApiVersionConfigurationService, new()
     {
-        serviceCollection.AddSingleton<IExceptionToProblemDetailsMapperService>(ExceptionToProblemDetailsMapperService.Instance);
+        serviceCollection.AddSingleton<IWebApiEndpointRunnerExceptionHandlerService, WebApiEndpointRunnerExceptionHandlerService>();
+        serviceCollection.AddSingleton<IExceptionToProblemDetailsMapperService, ExceptionToProblemDetailsMapperService>();
 
         serviceCollection.AddEndpointsApiExplorer();
         serviceCollection.AddSwaggerGen();

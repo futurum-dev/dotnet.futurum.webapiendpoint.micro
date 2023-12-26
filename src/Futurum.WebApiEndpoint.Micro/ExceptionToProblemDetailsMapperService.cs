@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace Futurum.WebApiEndpoint.Micro;
+
 /// <summary>
 /// Maps exceptions to <see cref="ProblemDetails"/> based on registered mappers.
 /// </summary>
@@ -29,13 +30,11 @@ public interface IExceptionToProblemDetailsMapperService
 /// <inheritdoc/>
 public class ExceptionToProblemDetailsMapperService : IExceptionToProblemDetailsMapperService
 {
-    public static readonly IExceptionToProblemDetailsMapperService Instance = new ExceptionToProblemDetailsMapperService();
-
     private readonly Dictionary<Type, Func<Exception, HttpContext, string?, ProblemDetails>> _mappers;
 
     private Func<Exception, HttpContext, string?, ProblemDetails> _default;
 
-    private ExceptionToProblemDetailsMapperService()
+    public ExceptionToProblemDetailsMapperService()
     {
         _mappers = new Dictionary<Type, Func<Exception, HttpContext, string?, ProblemDetails>>
         {

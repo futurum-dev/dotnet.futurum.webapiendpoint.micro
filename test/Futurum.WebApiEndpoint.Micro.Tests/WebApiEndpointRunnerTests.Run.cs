@@ -1391,7 +1391,9 @@ public class WebApiEndpointRunnerRunTests
     private static DefaultHttpContext CreateHttpContext()
     {
         var services = new ServiceCollection();
-        services.AddSingleton<ILogger<WebApiEndpointRunner.Logger>>(new Logger<WebApiEndpointRunner.Logger>(new NullLoggerFactory()));
+        services.AddSingleton<IWebApiEndpointRunnerExceptionHandlerService>(new WebApiEndpointRunnerExceptionHandlerService(
+                                                                                new Logger<WebApiEndpointRunnerExceptionHandlerService>(new NullLoggerFactory()),
+                                                                                new ExceptionToProblemDetailsMapperService()));
 
         return new DefaultHttpContext
         {

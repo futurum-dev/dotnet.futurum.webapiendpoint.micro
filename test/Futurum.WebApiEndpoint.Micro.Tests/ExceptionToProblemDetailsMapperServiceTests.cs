@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace Futurum.WebApiEndpoint.Micro.Tests;
 
-[Collection("Sequential")]
 public class ExceptionToProblemDetailsMapperServiceTests
 {
     public class default_exception
@@ -13,7 +12,7 @@ public class ExceptionToProblemDetailsMapperServiceTests
         public void without_error_message()
         {
             // Arrange
-            var exceptionToProblemDetailsMapperService = ExceptionToProblemDetailsMapperService.Instance;
+            var exceptionToProblemDetailsMapperService = new ExceptionToProblemDetailsMapperService();
             exceptionToProblemDetailsMapperService.OverrideDefault(ExceptionToProblemDetailsMapperService.DefaultException);
             var exception = new Exception("Test exception message");
             var requestPath = "/test";
@@ -33,7 +32,7 @@ public class ExceptionToProblemDetailsMapperServiceTests
         public void with_error_message()
         {
             // Arrange
-            var exceptionToProblemDetailsMapperService = ExceptionToProblemDetailsMapperService.Instance;
+            var exceptionToProblemDetailsMapperService = new ExceptionToProblemDetailsMapperService();
             exceptionToProblemDetailsMapperService.OverrideDefault(ExceptionToProblemDetailsMapperService.DefaultException);
             var exception = new Exception("Test exception message");
             var requestPath = "/test";
@@ -59,7 +58,7 @@ public class ExceptionToProblemDetailsMapperServiceTests
             var exception = new KeyNotFoundException("Test exception message");
             var requestPath = "/test";
 
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, CreateHttpContext(requestPath));
+            var problemDetails = new ExceptionToProblemDetailsMapperService().Map(exception, CreateHttpContext(requestPath));
 
             problemDetails.Should().NotBeNull();
             problemDetails.Detail.Should().Be(exception.Message);
@@ -75,7 +74,7 @@ public class ExceptionToProblemDetailsMapperServiceTests
             var requestPath = "/test";
             var errorMessage = "Test error message";
 
-            var problemDetails = ExceptionToProblemDetailsMapperService.Instance.Map(exception, CreateHttpContext(requestPath), errorMessage);
+            var problemDetails = new ExceptionToProblemDetailsMapperService().Map(exception, CreateHttpContext(requestPath), errorMessage);
 
             problemDetails.Should().NotBeNull();
             problemDetails.Detail.Should().Be($"{errorMessage};{exception.Message}");
@@ -91,7 +90,7 @@ public class ExceptionToProblemDetailsMapperServiceTests
         public void without_error_message()
         {
             // Arrange
-            var exceptionToProblemDetailsMapperService = ExceptionToProblemDetailsMapperService.Instance;
+            var exceptionToProblemDetailsMapperService = new ExceptionToProblemDetailsMapperService();
             exceptionToProblemDetailsMapperService.OverrideDefault(DefaultException);
             var exception = new Exception("Test exception message");
             var requestPath = "/test";
@@ -111,7 +110,7 @@ public class ExceptionToProblemDetailsMapperServiceTests
         public void with_error_message()
         {
             // Arrange
-            var exceptionToProblemDetailsMapperService = ExceptionToProblemDetailsMapperService.Instance;
+            var exceptionToProblemDetailsMapperService = new ExceptionToProblemDetailsMapperService();
             exceptionToProblemDetailsMapperService.OverrideDefault(DefaultException);
             var exception = new Exception("Test exception message");
             var requestPath = "/test";
@@ -144,7 +143,7 @@ public class ExceptionToProblemDetailsMapperServiceTests
         public void without_error_message()
         {
             // Arrange
-            var exceptionToProblemDetailsMapperService = ExceptionToProblemDetailsMapperService.Instance;
+            var exceptionToProblemDetailsMapperService = new ExceptionToProblemDetailsMapperService();
             exceptionToProblemDetailsMapperService.Add<CustomException>(DefaultException);
             var exception = new CustomException("Test exception message");
             var requestPath = "/test";
@@ -164,7 +163,7 @@ public class ExceptionToProblemDetailsMapperServiceTests
         public void with_error_message()
         {
             // Arrange
-            var exceptionToProblemDetailsMapperService = ExceptionToProblemDetailsMapperService.Instance;
+            var exceptionToProblemDetailsMapperService = new ExceptionToProblemDetailsMapperService();
             exceptionToProblemDetailsMapperService.Add<CustomException>(DefaultException);
             var exception = new CustomException("Test exception message");
             var requestPath = "/test";
