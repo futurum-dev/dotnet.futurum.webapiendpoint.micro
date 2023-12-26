@@ -26,7 +26,7 @@ public static class WebApiVersionEndpointRegistrationWriter
                     version = $"((global::Asp.Versioning.ApiVersion)new global::Futurum.WebApiEndpoint.Micro.WebApiEndpointVersion(new global::Futurum.WebApiEndpoint.Micro.Generator.WebApiEndpointApiVersion.WebApiEndpointStringApiVersion(\"{webApiEndpointStringApiVersion.Version}\"))).ToString()";
                 }
 
-                codeBuilder.AppendLine($"global::Futurum.WebApiEndpoint.Micro.ServiceCollectionUniqueKeyExtensions.TryAddEquatableKeyedSingleton(serviceCollection, typeof(global::Futurum.WebApiEndpoint.Micro.IWebApiVersionEndpoint), {version}, typeof({webApiVersionEndpointDatum.NamespaceName}.{webApiVersionEndpointDatum.ImplementationType}));");
+                codeBuilder.AppendLine($"global::Futurum.Microsoft.Extensions.DependencyInjection.ServiceCollectionDescriptorExtensions.TryAddEquatableKeyedSingleton(serviceCollection, typeof(global::Futurum.WebApiEndpoint.Micro.IWebApiVersionEndpoint), {version}, typeof({webApiVersionEndpointDatum.NamespaceName}.{webApiVersionEndpointDatum.ImplementationType}));");
             }
         }
     }
