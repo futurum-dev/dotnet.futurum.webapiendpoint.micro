@@ -65,8 +65,9 @@ public partial class GreetingWebApiEndpoint
 8. [Convention Customisation](#convention-customisation)
 9. [Extendable GlobalExceptionHandler](#extendable-globalexceptionhandler)
 10. [Tips & Tricks](#tips--tricks)
-11. [Troubleshooting](#troubleshooting)
-12. [Roslyn Analysers](#roslyn-analysers)
+11. [FAQ](#faq-frequently-asked-questions)
+12. [Troubleshooting](#troubleshooting)
+13. [Roslyn Analysers](#roslyn-analysers)
 
 ## What is a WebApiEndpoint?
 - It represents a vertical slice or a distinct feature of your application.
@@ -89,7 +90,17 @@ using Futurum.WebApiEndpoint.Micro.Sample;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-       .AddWebApiEndpoints(new WebApiEndpointConfiguration(WebApiEndpointVersions.V1_0))
+       .AddWebApiEndpoints(new WebApiEndpointConfiguration
+       {
+           DefaultApiVersion = WebApiEndpointVersions.V1_0.Version,
+           OpenApi = new()
+           {
+               DefaultInfo = new()
+               {
+                   Title = "Futurum.WebApiEndpoint.Micro.Sample",
+               }
+           }
+       })
        .AddWebApiEndpointsForFuturumWebApiEndpointMicroSample();
 
 var app = builder.Build();
@@ -283,7 +294,7 @@ The entire API can be configured to set global parameters. This is an ideal plac
 
 To configure the entire API, you need to create a class that implements the IGlobalWebApiEndpoint interface.
 
-**Note: There can only be one class that implements IGlobalWebApiEndpoint. This is enforced by an analyzer. Analyzers work per project, so if you have *GlobalWebApiEndpoint* in more than 1 project, only the first will be registered. The order is dictated by the order of the *[AddWebApiEndpointsFor](#addwebapiendpointsfor-per-project-containing-webapiendpoints)* calls.**
+**Note: There can only be one class that implements IGlobalWebApiEndpoint. This is enforced by an analyzer. Analyzers work per project, so if you have *GlobalWebApiEndpoint* in more than 1 project, only the first will be registered. The order is dictated by the order of the *[AddWebApiEndpointsFor](#addwebapiendpointsfor-per-project-containing-webapiendpoints)* calls. See [here](#fwaem0003---multiple-instances-found-of-globalwebapiendpoint)**
 
 **Note: The configuration set in this class is applied before the version route is created.**
 
@@ -310,7 +321,7 @@ To configure a specific API version, you need to create a class that:
 - Implements the IWebApiVersionEndpoint interface.
 - Is decorated with at least one WebApiVersionEndpointVersion attribute, indicating the version(s) it applies to.
 
-**Note: There can only be one class that configures a specific API version. This is enforced by a Roslyn analyzer. Analyzers work per project, so if you have the same *WebApiVersionEndpoint* for a version in more than 1 project, only the first will be registered. The order is dictated by the order of the *[AddWebApiEndpointsFor](#addwebapiendpointsfor-per-project-containing-webapiendpoints)* calls.**
+**Note: There can only be one class that configures a specific API version. This is enforced by a Roslyn analyzer. Analyzers work per project, so if you have the same *WebApiVersionEndpoint* for a version in more than 1 project, only the first will be registered. The order is dictated by the order of the *[AddWebApiEndpointsFor](#addwebapiendpointsfor-per-project-containing-webapiendpoints)* calls. See [here](#fwaem0004---multiple-instances-found-of-webapiversionendpoint-for-the-same-version)**
 
 **Note: The configuration set in this class is applied after the version route is created, but before the specific WebApiEndpoint route is created.**
 
@@ -723,6 +734,13 @@ public partial class OpenApiVersionV1WebApiEndpoint
 ```
 **See *[OpenApiVersionV1WebApiEndpoint.cs](https://github.com/futurum-dev/dotnet.futurum.webapiendpoint.micro/blob/main/sample/Futurum.WebApiEndpoint.Micro.Sample/OpenApi/OpenApiVersionV1WebApiEndpoint.cs)* in sample project**
 
+## FAQ (Frequently Asked Questions)
+### When to use WebApiEndpointRunner?
+- ✅ when you want the OpenApi specification to correctly reflect error handling via *BadRequest&lt;ProblemDetails&gt;*
+- ✅ when you want to set a custom *error message*
+
+**Our recommendation is to use *WebApiEndpointRunner* for all your WebApiEndpoints.**
+
 ## Troubleshooting
 ### No operations defined in spec!
 If you see this error in the SwaggerUI - *No operations defined in spec!* - then it means you haven't added any WebApiEndpoint projects. You need to do this for each project, including the project that contains the *program.cs* file. See [this](#addwebapiendpointsfor-per-project-containing-webapiendpoints) section for more details.
@@ -731,7 +749,20 @@ If you see this error in the SwaggerUI - *No operations defined in spec!* - then
 If there are Rest Api's that are not being picked up, then it means you haven't added a WebApiEndpoint projects. You need to do this for each project, including the project that contains the *program.cs* file. See [this](#addwebapiendpointsfor-per-project-containing-webapiendpoints) section for more details.
 
 ## Roslyn Analysers
-- FWAEM0001 - Non empty constructor found on WebApiEndpoint
-- FWAEM0002 - BadRequest without 'ProblemDetails' use found on WebApiEndpoint
-- FWAEM0003 - Multiple instances found of GlobalWebApiEndpoint
-- FWAEM0004 - Multiple instances found of WebApiVersionEndpoint for the same version
+### FWAEM0001 - Non empty constructor found on WebApiEndpoint
+We recommend that WebApiEndpoint's have an empty constructor and to take any injectable dependencies as parameters via the minimal API method itself.
+
+Constructor dependencies will have a lifetime outside of the minimal API lifetime and could have unintended consequences.
+
+### FWAEM0002 - BadRequest without 'ProblemDetails' use found on WebApiEndpoint
+Minimal API methods returning a 'BadRequest', should ensure that the 'BadRequest' is created with a 'ProblemDetails' instance.
+
+### FWAEM0003 - Multiple instances found of GlobalWebApiEndpoint
+Checks to ensure that there is only one instance of GlobalWebApiEndpoint.
+
+**Analyzers work per project, so if you have *GlobalWebApiEndpoint* in more than 1 project, only the first will be registered. The order is dictated by the order of the *[AddWebApiEndpointsFor](#addwebapiendpointsfor-per-project-containing-webapiendpoints)* calls.**
+
+### FWAEM0004 - Multiple instances found of WebApiVersionEndpoint for the same version
+Checks to ensure that there is only one instance of WebApiVersionEndpoint.
+
+**Analyzers work per project, so if you have the same *WebApiVersionEndpoint* for a version in more than 1 project, only the first will be registered. The order is dictated by the order of the *[AddWebApiEndpointsFor](#addwebapiendpointsfor-per-project-containing-webapiendpoints)* calls.**
