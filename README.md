@@ -453,6 +453,9 @@ global using static Futurum.WebApiEndpoint.Micro.WebApiEndpointRunner;
 
 This allows you to use the helper functions without having to specify the namespace, as demonstrated in the examples.
 
+### Exception Handler behavior customization
+Implement and register in DI you're own *IWebApiEndpointRunnerExceptionHandlerService*.
+
 ## Uploading file(s) with additional JSON payload
 This section guides you on how to upload files with additional JSON payload using Futurum.WebApiEndpoint.Micro.
 
